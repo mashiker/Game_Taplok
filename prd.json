@@ -960,8 +960,8 @@
         "ASO keywords: game balita, edukasi anak, game anak Indonesia, belajar anak",
         "Privacy policy URL: valid link or in-app document"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [],
       "dependencies": []
     },
