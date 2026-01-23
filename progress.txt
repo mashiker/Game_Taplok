@@ -410,3 +410,29 @@
 - Session category "musical" for rhythm games (consistent with Piano Hewan)
 - Prevent duplicate beats: track tapped beats in array and check before counting
 - .gdignore in assets/sounds/music/ prevents import errors for placeholder files
+
+## [2026-01-23] - US-007
+- Completed Main Menu Scene Layout with proper labels and tap count display
+- Updated game buttons with localized labels using TranslationManager.get_text()
+- All 8 game buttons now display translated names: Tap Pop, Drag Match, Memory Flip, Piano Hewan, Finger Paint, Shape Silhouette, Coloring Book, Music Rhythm
+- Tap count label now shows actual play count from Database.get_todays_play_count()
+- Added gear icon (⚙) to Parent button for settings access
+- Added tap_count_label translation key to both id.json ("Main %dx hari ini") and en.json ("Played %dx today")
+- All buttons already have min_size 120x120px for toddler touch targets (setup in previous iteration)
+- MainMenu.tscn structure: VBoxContainer with LogoContainer, GameGrid (2 columns), BottomBar
+- Parent button positioned at bottom-right with alignment=2
+
+**Files changed:**
+- scenes/MainMenu.tscn (updated Parent button with gear icon text)
+- scripts/MainMenu.gd (added _setup_ui() with game button labels, updated _update_tap_count() with Database call)
+- assets/locales/id.json (added tap_count_label key)
+- assets/locales/en.json (added tap_count_label key)
+
+**Learnings for future iterations:**
+- Use TranslationManager.get_text() for all UI labels to support localization
+- Database.get_todays_play_count() queries sessions table with date('now') filter
+- String formatting in GDScript: "Main %dx hari ini" % count (Python-style)
+- Gear icon Unicode character ⚙ works in Godot Button text property
+- MainMenu already had proper structure from US-004, just needed label population
+- Game button labels should be set in _ready() via _setup_ui() to ensure translations load first
+---
