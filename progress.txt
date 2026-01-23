@@ -11,6 +11,14 @@
 - Session tracking via SessionManager: start_session() -> record_tap() -> end_session()
 - Audio playback via AudioManager: play_sfx(), play_voice(), play_music()
 - Audio bus ducking: voice automatically reduces SFX volume by 12dB during playback
+- Drag and drop pattern: 10px deadzone, modulate.a=0.7 opacity, scale=1.1, z_index=100 during drag
+- AABB overlap check for drop detection: compare global_position and size rectangles
+- Content progression: session_number based content sets, shuffle on load, track completion count
+- Meta data storage: set_meta("key", value) / get_meta("key", default) on nodes for answer validation
+- Tween sequences: use tween.set_parallel(true) for simultaneous animations, await tween.finished for sequential
+- Session categories: "cognitive" (puzzles), "creative" (painting), "musical" (piano) for analytics
+- Game scenes extend Control with GameSceneBase pattern: _on_game_start(), _on_game_end(), _get_game_metrics() hooks
+- Input handling: connect gui_input signals in _ready(), use is_transitioning flag to block during animations
 
 ## [2025-01-23] - US-001
 - Created Godot 4.2 project with project.godot configured (config_version=5)
@@ -266,4 +274,46 @@
 - Color content mapping: 0=red, 1=blue, 2=yellow, 3=green, 4=pink, 5=orange
 - Use TranslationManager.get_text() for localized celebration messages
 - SessionManager.set_auto_end_conditions(600, 0) for 10-minute limit, no tap limit
+---
+
+## [2026-01-23] - US-026, US-027
+- Created ShapeMatchGame.tscn scene with Control root extending GameSceneBase structure
+- Silhouette placeholder: ColorRect 100x100px at center with dark blue outline (Color(0.1, 0.1, 0.4, 1))
+- Draggable options: 4 ColorRect shapes (60x60px) at bottom with Area2D for collision
+- Content sets defined: Rumah Adat (joglo, gadang, tongkonan, kampoeng) for sessions 1-2
+- Hewan content (komodo, orangutan, burung, paus) for sessions 3-4
+- Mix content (combined) for sessions 5+
+- Drag detection: 10px deadzone (DRAG_DEADZONE), 0.7 opacity, 1.1x scale during drag
+- Drop detection: AABB overlap check between shape and silhouette using global_position
+- Correct answer animation: 0.5s slide + scale tween to silhouette center (CORRECT_ANIMATION_DURATION)
+- Silhouette color fill: 0.3s fade animation (COLOR_FILL_DURATION)
+- Success SFX: AudioManager.play_sfx("success.ogg")
+- Voice callout: AudioManager.play_voice("words/id/{id}.ogg")
+- Wayang celebration: trigger via _trigger_wayang_celebration() if "celebrate" animation exists
+- Auto-transition: 1.5s delay (AUTO_TRANSITION_DELAY) then next puzzle
+- Incorrect drop: bounce back with TRANS_BOUNCE tween over 0.3s, gentle.ogg SFX
+- Session: 5-7 puzzles (PUZZLES_PER_SESSION_MIN/MAX), 10 minute max (MAX_SESSION_DURATION = 600s)
+- Session tracking: "cognitive" category, metrics include puzzles_completed, session_number
+- gui_input signals connected for each option in _ready()
+- Shape answer_id and color stored in Area2D meta data for validation
+
+**Files changed:**
+- scenes/ShapeMatchGame.tscn (new)
+- scripts/ShapeMatchGame.gd (new)
+- prd.json (updated US-026, US-027 to passes: true)
+
+**Learnings for future iterations:**
+- For drag detection with deadzone: calculate distance between drag_start_pos and current event_pos
+- Use modulate.a for opacity changes during drag (0.7 for active drag state)
+- Bring dragged items to front with z_index = 100 during drag
+- Store original_position to return items on incorrect drop or cancel
+- AABB overlap check: (shape.x < silhouette.x + silhouette.width) AND (shape.x + shape.width > silhouette.x)
+- Content progression by session: use arrays of content, shuffle on load, track session_number
+- Store answer metadata in node meta data: set_meta("answer_id", value), get_meta("answer_id", default)
+- Slide to center animation: target_pos = silhouette.to_local(silhouette_center) - drag_target.size / 2
+- Parallel tweens: tween.set_parallel(true) for simultaneous animations
+- Session category "cognitive" for puzzle/matching games
+- Use await tween.finished for sequential animations (slide then color fill)
+- Use is_transitioning flag to prevent input during animations
+- SessionManager.start_session(game_name, "cognitive") for proper category tracking
 ---
