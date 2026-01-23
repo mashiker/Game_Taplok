@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 GameManager="*res://scripts/GameManager.gd"
 TranslationManager="*res://scripts/TranslationManager.gd"
 Database="*res://scripts/Database.gd"
+SessionManager="*res://scripts/SessionManager.gd"
 
 [display]
 
