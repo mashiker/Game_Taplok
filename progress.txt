@@ -178,3 +178,48 @@
 - Voice ducking uses previous volume storage to restore after playback
 - Fade in/out uses create_tween().tween_property() for smooth transitions
 ---
+
+## [2025-01-23] - US-017, US-018, US-019
+- Created Card.tscn scene with Control node (60x60px)
+- Card has CardPivot child with pivot_offset at center for rotation
+- Front: ColorRect (blue) with Label "?" icon
+- Back: ColorRect (white) with Content ColorRect for card content
+- GlowEffect ColorRect for match celebration (yellow glow)
+- Created Card.gd with flipped, matched, content_id, content_color variables
+- Card flip animation: rotate Y axis 0->180 degrees over 0.3s using tween
+- Flip plays flip_soft.ogg SFX via AudioManager
+- show_glow() method for matched cards (0.5 opacity, yellow glow)
+- Created MemoryFlipGame.tscn extending GameSceneBase
+- GridContainer for card layout (2x2 for ages 2-3, 2x3 for ages 4+)
+- WinLabel for celebration message
+- Three timers: CheckTimer (0.5s), ResetTimer (0.5s), WinTimer (3s)
+- Created MemoryFlipGame.gd with game state machine (IDLE, FLIPPING, WAITING, RESET, WON)
+- Loads child_age from user://child_profile.json for age gating
+- Creates card pairs with matching content_id, shuffles them
+- Max 2 cards flipped simultaneously (stored in flipped_cards array)
+- Match check after 0.5s delay when 2 cards flipped
+- Match: plays match_success.ogg, word callout based on color, glow effect
+- No match: plays match_fail.ogg, flips back after 0.5s
+- Win condition: all pairs matched -> celebration.ogg + "Wah hebat!" message
+- Auto-transition to MainMenu after 3 seconds on win
+- Session tracking: records taps, sets category to "cognitive"
+
+**Files changed:**
+- scenes/Card.tscn (new)
+- scripts/Card.gd (new)
+- scenes/MemoryFlipGame.tscn (new)
+- scripts/MemoryFlipGame.gd (new)
+
+**Learnings for future iterations:**
+- Use pivot_offset for center-based rotation (set pivot to half of node size)
+- Card flip: rotate Y axis with tween, use callback to swap front/back visibility at 90 degrees
+- For 3D-like flip in 2D, set back.rotation_degrees.y = 180 initially, then rotate parent pivot
+- State machine prevents clicking while animating (is_flipping flag)
+- Match detection: compare content_id values, use Timer.delay for visual confirmation
+- Age gating: read child_profile.json from user://, default to age 3 if file doesn't exist
+- GridContainer.columns must be set dynamically based on card count
+- Center grid by calculating container size and setting offset_left/right/top/bottom to negative/positive half
+- Color content mapping: 0=red, 1=blue, 2=yellow, 3=green, 4=pink, 5=orange
+- Use TranslationManager.get_text() for localized celebration messages
+- SessionManager.set_auto_end_conditions(600, 0) for 10-minute limit, no tap limit
+---

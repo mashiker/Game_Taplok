@@ -337,8 +337,8 @@
         "Card size: 60x60px, 10px spacing between cards",
         "Grid centered on screen with 40px margins"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-007"],
       "dependencies": ["US-007"]
     },
@@ -357,8 +357,8 @@
         "Flipped cards stored in array for match comparison",
         "Match check triggered after 0.5s delay when 2 cards flipped"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-017"],
       "dependencies": ["US-017"]
     },
@@ -377,8 +377,8 @@
         "Win condition: all pairs matched → celebration SFX + 'Wah hebat!' label",
         "Auto-transition to menu after 3 seconds on win"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-018"],
       "dependencies": ["US-018"]
     },
@@ -397,8 +397,8 @@
         "Key colors: distinct colors (red, blue, yellow, green, orange)",
         "2px spacing between keys"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-007"],
       "dependencies": ["US-007"]
     },
@@ -417,8 +417,8 @@
         "Key highlight: brightness +30% on press, fade out on release",
         "Haptic: 30ms vibrate on press, 50ms on release"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-020"],
       "dependencies": ["US-020"]
     },
@@ -436,8 +436,8 @@
         "After 15 min inactivity: fade to menu with 'Sampai jumpa!' message",
         "No time limit displayed to child during play"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-021"],
       "dependencies": ["US-021"]
     },

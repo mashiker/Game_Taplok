@@ -14,6 +14,7 @@ const TRANSITION_DURATION: float = 1.0
 ## Variables ##
 var current_game: String = ""
 var is_transitioning: bool = false
+var child_age: int = 3  # Default age for age-gating content
 
 ## Built-in Functions ##
 func _ready() -> void:
@@ -77,3 +78,17 @@ func end_game(metrics: Dictionary = {}) -> void:
 func trigger_reward(type: String) -> void:
 	reward_trigger.emit(type)
 	print("Reward triggered: ", type)
+
+# Get the child's age from settings (for age-gated content)
+# @return: Child's age (2-5), defaults to 3 if not set
+func get_child_age() -> int:
+	return child_age
+
+# Set the child's age (called from parent dashboard)
+# @param age: Child's age (should be 2-5)
+func set_child_age(age: int) -> void:
+	if age >= 2 and age <= 5:
+		child_age = age
+		print("Child age set to: ", age)
+	else:
+		push_warning("Invalid child age: ", age, ". Should be 2-5.")

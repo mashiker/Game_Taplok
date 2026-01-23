@@ -1,0 +1,158 @@
+[gd_scene load_steps=3 format=3 uid="uid://shapematchgame"]
+
+[ext_resource type="Script" path="res://scripts/ShapeMatchGame.gd" id="1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(100, 100)
+
+[node name="ShapeMatchGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(1, 1, 1, 1)
+
+[node name="GameContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="HBoxContainer" parent="GameContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="GameContainer/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 50)
+text = "<"
+
+[node name="Spacer" type="Control" parent="GameContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WayangMascot" type="AnimatedSprite2D" parent="GameContainer/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 60)
+
+[node name="GameContent" type="Control" parent="GameContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SilhouetteContainer" type="CenterContainer" parent="GameContent"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 50.0
+offset_right = -20.0
+offset_bottom = -200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SilhouettePlaceholder" type="ColorRect" parent="GameContent/SilhouetteContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(100, 100)
+color = Color(0.1, 0.1, 0.4, 1)
+
+[node name="SilhouetteArea" type="Area2D" parent="GameContent/SilhouetteContainer/SilhouettePlaceholder"]
+position = Vector2(50, 50)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameContent/SilhouetteContainer/SilhouettePlaceholder/SilhouetteArea"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="OptionsContainer" type="HBoxContainer" parent="GameContent"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -130.0
+offset_right = 130.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="Option1" type="Control" parent="GameContent/OptionsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 60)
+
+[node name="ShapeRect" type="ColorRect" parent="GameContent/OptionsContainer/Option1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.8, 0.3, 0.3, 1)
+
+[node name="ShapeArea" type="Area2D" parent="GameContent/OptionsContainer/Option1"]
+position = Vector2(30, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameContent/OptionsContainer/Option1/ShapeArea"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Option2" type="Control" parent="GameContent/OptionsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 60)
+
+[node name="ShapeRect" type="ColorRect" parent="GameContent/OptionsContainer/Option2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.3, 0.5, 0.8, 1)
+
+[node name="ShapeArea" type="Area2D" parent="GameContent/OptionsContainer/Option2"]
+position = Vector2(30, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameContent/OptionsContainer/Option2/ShapeArea"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Option3" type="Control" parent="GameContent/OptionsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 60)
+
+[node name="ShapeRect" type="ColorRect" parent="GameContent/OptionsContainer/Option3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.9, 0.7, 0.2, 1)
+
+[node name="ShapeArea" type="Area2D" parent="GameContent/OptionsContainer/Option3"]
+position = Vector2(30, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameContent/OptionsContainer/Option3/ShapeArea"]
+shape = SubResource("RectangleShape2D_1")
+
+[node name="Option4" type="Control" parent="GameContent/OptionsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 60)
+
+[node name="ShapeRect" type="ColorRect" parent="GameContent/OptionsContainer/Option4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.4, 0.8, 0.5, 1)
+
+[node name="ShapeArea" type="Area2D" parent="GameContent/OptionsContainer/Option4"]
+position = Vector2(30, 30)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameContent/OptionsContainer/Option4/ShapeArea"]
+shape = SubResource("RectangleShape2D_1")

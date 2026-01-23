@@ -193,6 +193,79 @@ func get_todays_play_count() -> int:
 
 	return 0
 
+# Get the number of times a game has been played
+# @param game_type: Type of game to check
+# @return: Number of sessions for this game
+func get_game_play_count(game_type: String) -> int:
+	if not db:
+		push_error("Database not initialized")
+		return 0
+
+	var query = "SELECT COUNT(*) FROM sessions WHERE game_type = ?"
+	var result = db.query(query, [game_type])
+
+	if result and result is Array and result.size() > 0:
+		return result[0][0]
+
+	return 0
+
+# Increment the progress counter for a specific item in a game
+# @param game_type: Type of game
+# @param item_id: ID of the item (e.g., shape type)
+func increment_progress(game_type: String, item_id: String) -> void:
+	if not db:
+		push_error("Database not initialized")
+		return
+
+	# First try to update existing record
+	var update_query = """
+		UPDATE game_progress
+		SET times_played = times_played + 1, last_played = datetime('now')
+		WHERE game_type = ? AND item_id = ?
+	"""
+	var result = db.execute(update_query, [game_type, item_id])
+
+	# If no rows were updated, insert new record
+	if not result or not db.get_last_insert_row_id():
+		var insert_query = """
+			INSERT INTO game_progress (game_type, item_id, times_played, last_played)
+			VALUES (?, ?, 1, datetime('now'))
+		"""
+		db.execute(insert_query, [game_type, item_id])
+
+# Get the progress for a specific item
+# @param game_type: Type of game
+# @param item_id: ID of the item
+# @return: Number of times this item has been played
+func get_item_progress(game_type: String, item_id: String) -> int:
+	if not db:
+		push_error("Database not initialized")
+		return 0
+
+	var query = "SELECT times_played FROM game_progress WHERE game_type = ? AND item_id = ?"
+	var result = db.query(query, [game_type, item_id])
+
+	if result and result is Array and result.size() > 0:
+		return result[0][0]
+
+	return 0
+
+# Get total progress for a game (sum of all item plays)
+# @param game_type: Type of game
+# @return: Total number of plays across all items
+func get_total_game_progress(game_type: String) -> int:
+	if not db:
+		push_error("Database not initialized")
+		return 0
+
+	var query = "SELECT SUM(times_played) FROM game_progress WHERE game_type = ?"
+	var result = db.query(query, [game_type])
+
+	if result and result is Array and result.size() > 0 and result[0][0] != null:
+		return result[0][0]
+
+	return 0
+
 ## Private Functions ##
 
 # Initialize the database and create tables
@@ -250,8 +323,22 @@ func _create_tables() -> void:
 	"""
 	db.execute(paintings_table)
 
+	# Create game_progress table for tracking progression
+	var game_progress_table = """
+		CREATE TABLE IF NOT EXISTS game_progress (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			game_type TEXT NOT NULL,
+			item_id TEXT NOT NULL,
+			times_played INTEGER NOT NULL DEFAULT 1,
+			last_played TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			UNIQUE(game_type, item_id)
+		)
+	"""
+	db.execute(game_progress_table)
+
 	# Create indexes for better query performance
 	db.execute("CREATE INDEX IF NOT EXISTS idx_sessions_start_time ON sessions(start_time)")
 	db.execute("CREATE INDEX IF NOT EXISTS idx_paintings_created_at ON paintings(created_at)")
+	db.execute("CREATE INDEX IF NOT EXISTS idx_game_progress_type ON game_progress(game_type)")
 
 	print("Database tables created/verified")
