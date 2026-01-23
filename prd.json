@@ -96,8 +96,8 @@
         "Database initialized in user://playtap.db path",
         "Helper functions: log_session(), get_paintings(), delete_old_sessions()"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-001"],
       "dependencies": ["US-001"]
     },

@@ -3,9 +3,11 @@
 - Export presets configured in export_presets.cfg (separate from project.godot)
 - Audio bus layout stored in default_bus_layout.tres with dB volume levels
 - Project uses config_version=5 for Godot 4.2+
-- Use autoload (singletons) in project.godot for global managers like GameManager, TranslationManager
+- Use autoload (singletons) in project.godot for global managers (GameManager, TranslationManager, Database)
 - Localization files use JSON format in /assets/locales/{locale}.json
 - Translation keys use snake_case format for consistency
+- Persistent data stored in user:// directory (cross-platform)
+- SQLite operations require gdsqlite plugin (not built into Godot 4.2)
 
 ## [2025-01-23] - US-001
 - Created Godot 4.2 project with project.godot configured (config_version=5)
@@ -95,5 +97,30 @@
 - GameSceneBase.virtual functions: override _on_game_start() for init, _on_game_end() for cleanup
 - Back button in games should return to MainMenu.tscn
 - All game scenes should set game_name variable for proper session tracking
+
+## [2025-01-23] - US-005
+- Created Database.gd script with connection logic for gdsqlite plugin
+- Created sessions table with schema: id INTEGER PRIMARY KEY, game_type TEXT, start_time TIMESTAMP, duration_seconds INTEGER, metrics TEXT
+- Created paintings table with schema: id INTEGER PRIMARY KEY, source TEXT, filepath TEXT, created_at TIMESTAMP
+- Database initialized in user://playtap.db path
+- Implemented helper functions: log_session(), get_paintings(), delete_old_sessions()
+- Added additional functions: save_painting(), delete_painting(), get_session_stats(), get_todays_play_count()
+- Created indexes on start_time and created_at for query performance
+- Added Database to autoloads in project.godot
+- Database emits signals: database_initialized(success), session_logged(game_type), painting_saved(filepath)
+- NOTE: Requires gdsqlite plugin (https://github.com/godotot/gdsqlite) - not built into Godot 4.2
+
+**Files changed:**
+- scripts/Database.gd (new)
+- project.godot (updated with Database autoload)
+
+**Learnings for future iterations:**
+- Godot 4.2 doesn't include SQLite support - requires gdsqlite plugin
+- Use user:// path for all persistent data (cross-platform)
+- SQLite datetime('now') uses UTC, date('now') for dates only
+- Use indexes on timestamp columns for better query performance
+- Metrics stored as JSON string in database - use JSON.stringify() and JSON.parse()
+- ClassDB.class_exists("SQLite") checks if gdsqlite is available
+- Always handle database connection failures gracefully with error messages
 ---
 
