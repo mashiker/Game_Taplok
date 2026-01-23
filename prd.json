@@ -941,8 +941,8 @@
         "GDPR clause: parental consent for any future data features",
         "Indonesian privacy law (PDP Law) compliance statement"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [],
       "dependencies": []
     },
