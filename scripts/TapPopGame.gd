@@ -8,6 +8,7 @@ const MAX_BALLOONS_YOUNG: int = 2  # Ages 2-3
 const MAX_BALLOONS_OLDER: int = 3  # Ages 4-5
 const RESPAWN_DELAY: float = 1.0  # Seconds before respawn
 const SCREEN_MARGIN: int = 200    # Pixels from screen edge
+const POOL_SIZE: int = 6          # Pre-allocate balloons for performance
 
 ## Balloon Colors ##
 const BALLOON_COLORS = {
@@ -31,6 +32,7 @@ const COLOR_WORD_PATH_TEMPLATE: String = "words/id/warna_{color}.ogg"
 ## Variables ##
 var balloon_scene: PackedScene = null
 var active_balloons: Array[Node] = []
+var balloon_pool: Array[Node] = []  # Object pool for balloons
 var max_balloons: int = MAX_BALLOONS_YOUNG
 var child_age: int = 3
 var available_colors: Array[String] = []
@@ -51,6 +53,9 @@ func _ready() -> void:
 	child_age = _get_child_age()
 	_setup_age_gating()
 
+	# Initialize object pool for performance
+	_initialize_balloon_pool()
+
 	# Create respawn timer
 	respawn_timer = Timer.new()
 	respawn_timer.wait_time = RESPAWN_DELAY
@@ -70,10 +75,10 @@ func _on_game_start() -> void:
 
 # Called when game ends
 func _on_game_end() -> void:
-	# Clean up balloons
+	# Return all balloons to pool
 	for balloon in active_balloons:
 		if is_instance_valid(balloon):
-			balloon.queue_free()
+			_return_balloon_to_pool(balloon)
 	active_balloons.clear()
 
 	# End session
@@ -88,6 +93,46 @@ func _get_game_metrics() -> Dictionary:
 	return base_metrics
 
 ## Private Functions ##
+
+# Initialize balloon object pool for performance optimization
+func _initialize_balloon_pool() -> void:
+	var container = $GameContainer/GameContent/BalloonContainer
+	if not container:
+		push_error("BalloonContainer not found for pool initialization")
+		return
+
+	for i in range(POOL_SIZE):
+		var balloon = balloon_scene.instantiate()
+		balloon.visible = false  # Hide pooled balloons
+		balloon.set_process(false)  # Disable processing when pooled
+		balloon.set_physics_process(false)
+		container.add_child(balloon)
+		balloon_pool.append(balloon)
+
+	print("Balloon pool initialized with ", balloon_pool.size(), " balloons")
+
+# Get a balloon from pool or create new if pool empty
+func _get_balloon_from_pool() -> Node:
+	if balloon_pool.size() > 0:
+		var balloon = balloon_pool.pop_back()
+		balloon.visible = true
+		balloon.set_process(true)
+		balloon.set_physics_process(true)
+		return balloon
+
+	# Pool exhausted, create new (fallback)
+	return balloon_scene.instantiate()
+
+# Return balloon to pool for reuse
+func _return_balloon_to_pool(balloon: Node) -> void:
+	if balloon_pool.size() < POOL_SIZE:
+		balloon.visible = false
+		balloon.set_process(false)
+		balloon.set_physics_process(false)
+		balloon.position = Vector2(-1000, -1000)  # Move off-screen
+		balloon_pool.append(balloon)
+	else:
+		balloon.queue_free()  # Pool full, destroy
 
 # Get the child's age from GameManager (default to 3 if not set)
 func _get_child_age() -> int:
@@ -119,7 +164,7 @@ func _spawn_balloon() -> void:
 	if not balloon_scene:
 		return
 
-	var balloon = balloon_scene.instantiate()
+	var balloon = _get_balloon_from_pool()
 	var container = $GameContainer/GameContent/BalloonContainer
 
 	if not container:
@@ -127,7 +172,9 @@ func _spawn_balloon() -> void:
 		balloon.queue_free()
 		return
 
-	# Connect pop signal
+	# Connect pop signal (disconnect first to avoid duplicates)
+	if balloon.balloon_popped.is_connected(_on_balloon_popped):
+		balloon.balloon_popped.disconnect(_on_balloon_popped)
 	balloon.balloon_popped.connect(_on_balloon_popped)
 
 	# Set random color from available options
@@ -150,24 +197,28 @@ func _spawn_balloon() -> void:
 		# Fallback to center if bounds are too small
 		balloon.position = container_size / 2.0
 
-	container.add_child(balloon)
+	# Only add to container if not already a child (pooled balloons are already in container)
+	if balloon.get_parent() != container:
+		container.add_child(balloon)
 	active_balloons.append(balloon)
 
 # Handle balloon pop event
-func _on_balloon_popped(color_name: String) -> void:
+func _on_balloon_popped(color_name: String, balloon: Node = null) -> void:
 	# Record the tap
 	SessionManager.record_tap()
 
 	# Find and remove the popped balloon from active list
-	var popped_balloon = null
-	for balloon in active_balloons:
-		if is_instance_valid(balloon) and balloon.get_color_name() == color_name:
-			popped_balloon = balloon
-			break
+	var popped_balloon = balloon
+	if not popped_balloon:
+		for b in active_balloons:
+			if is_instance_valid(b) and b.has_method("get_color_name") and b.get_color_name() == color_name:
+				popped_balloon = b
+				break
 
 	if popped_balloon:
 		active_balloons.erase(popped_balloon)
-		# Balloon will remove itself after animation completes
+		# Return balloon to pool after animation (delayed)
+		_await_and_return_balloon(popped_balloon)
 
 	# Play pop sound
 	AudioManager.play_sfx(POP_SOUND_PATH)
@@ -216,3 +267,9 @@ func _color_name_to_indonesian(color_name: String) -> String:
 			return "hijau"
 		_:
 			return color_name
+
+# Wait for pop animation then return balloon to pool
+func _await_and_return_balloon(balloon: Node) -> void:
+	if is_instance_valid(balloon):
+		await get_tree().create_timer(0.3).timeout  # Wait for pop animation
+		_return_balloon_to_pool(balloon)

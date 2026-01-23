@@ -18,6 +18,7 @@ var child_age: int = 3  # Default age for age-gating content
 
 ## Built-in Functions ##
 func _ready() -> void:
+	Engine.max_fps = 30  # Cap FPS for consistent performance and battery saving
 	_load_child_profile()
 	print("PlayTap - Game Edukasi Balita Indonesia")
 	print("GameManager initialized")
