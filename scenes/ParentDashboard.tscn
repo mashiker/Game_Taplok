@@ -1,0 +1,646 @@
+[gd_scene load_steps=6 format=3 uid="uid://parentdashboard"]
+
+[ext_resource type="Script" path="res://scripts/ParentDashboard.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.95, 0.98, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.2, 0.3, 0.5, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3"]
+bg_color = Color(0.8, 0.85, 0.95, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4"]
+bg_color = Color(0.9, 0.3, 0.3, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="ParentDashboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="PINLoginPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -200.0
+offset_right = 150.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PINVBox" type="VBoxContainer" parent="PINLoginPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="PINTitleLabel" type="Label" parent="PINLoginPanel/PINVBox"]
+layout_mode = 2
+text = "PARENT PIN"
+horizontal_alignment = 1
+
+[node name="PINHintLabel" type="Label" parent="PINLoginPanel/PINVBox"]
+layout_mode = 2
+text = "Default: 1234"
+horizontal_alignment = 1
+
+[node name="PINContainer" type="HBoxContainer" parent="PINLoginPanel/PINVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="PIN1" type="LineEdit" parent="PINLoginPanel/PINVBox/PINContainer"]
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 2
+placeholder_text = "*"
+max_length = 1
+text = ""
+secret = true
+secret_character = "*"
+middle_mouse_filter = 2
+
+[node name="PIN2" type="LineEdit" parent="PINLoginPanel/PINVBox/PINContainer"]
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 2
+placeholder_text = "*"
+max_length = 1
+text = ""
+secret = true
+secret_character = "*"
+middle_mouse_filter = 2
+
+[node name="PIN3" type="LineEdit" parent="PINLoginPanel/PINVBox/PINContainer"]
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 2
+placeholder_text = "*"
+max_length = 1
+text = ""
+secret = true
+secret_character = "*"
+middle_mouse_filter = 2
+
+[node name="PIN4" type="LineEdit" parent="PINLoginPanel/PINVBox/PINContainer"]
+custom_minimum_size = Vector2(50, 60)
+layout_mode = 2
+placeholder_text = "*"
+max_length = 1
+text = ""
+secret = true
+secret_character = "*"
+middle_mouse_filter = 2
+
+[node name="PINErrorLabel" type="Label" parent="PINLoginPanel/PINVBox"]
+layout_mode = 2
+text = "Incorrect PIN"
+horizontal_alignment = 1
+modulate = Color(1, 0.3, 0.3, 1)
+
+[node name="PINCancelButton" type="Button" parent="PINLoginPanel/PINVBox"]
+layout_mode = 2
+text = "Cancel"
+
+[node name="DashboardContent" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="HeaderBar" type="Panel" parent="DashboardContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HeaderHBox" type="HBoxContainer" parent="DashboardContent/HeaderBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 15.0
+offset_right = -20.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="DashboardContent/HeaderBar/HeaderHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Parent Dashboard"
+theme_override_font_sizes/font_size = 24
+
+[node name="BackButton" type="Button" parent="DashboardContent/HeaderBar/HeaderHBox"]
+layout_mode = 2
+text = "Back to Menu"
+
+[node name="TabContainer" type="TabContainer" parent="DashboardContent"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ChildProfile" type="Control" parent="DashboardContent/TabContainer"]
+layout_mode = 2
+
+[node name="ChildProfileScroll" type="ScrollContainer" parent="DashboardContent/TabContainer/ChildProfile"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChildProfileVBox" type="VBoxContainer" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="SectionTitle" type="Label" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+text = "Child Profile"
+theme_override_font_sizes/font_size = 20
+
+[node name="NameLabel" type="Label" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+text = "Child Name (optional):"
+
+[node name="NameInput" type="LineEdit" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+placeholder_text = "Enter child's name"
+
+[node name="AgeLabel" type="Label" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+text = "Child Age: 3 years"
+
+[node name="AgeSlider" type="HSlider" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+min_value = 2.0
+max_value = 5.0
+step = 1.0
+value = 3.0
+
+[node name="AgeValueLabel" type="Label" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+text = "3"
+horizontal_alignment = 1
+
+[node name="PrefsLabel" type="Label" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+text = "Content Preferences:"
+
+[node name="PrefsGrid" type="GridContainer" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+columns = 2
+
+[node name="PrefTapPop" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Tap Pop"
+button_pressed = true
+
+[node name="PrefDragMatch" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Drag Match"
+button_pressed = true
+
+[node name="PrefMemoryFlip" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Memory Flip"
+button_pressed = true
+
+[node name="PrefPiano" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Piano Hewan"
+button_pressed = true
+
+[node name="PrefFingerPaint" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Finger Paint"
+button_pressed = true
+
+[node name="PrefShape" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Shape Silhouette"
+button_pressed = true
+
+[node name="PrefColoring" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Coloring Book"
+button_pressed = true
+
+[node name="PrefRhythm" type="CheckBox" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/PrefsGrid"]
+layout_mode = 2
+text = "Music Rhythm"
+button_pressed = true
+
+[node name="ChildProfileSaveButton" type="Button" parent="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox"]
+layout_mode = 2
+text = "Save Profile"
+
+[node name="Statistics" type="Control" parent="DashboardContent/TabContainer"]
+layout_mode = 2
+
+[node name="StatisticsScroll" type="ScrollContainer" parent="DashboardContent/TabContainer/Statistics"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatisticsVBox" type="VBoxContainer" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="SectionTitle2" type="Label" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox"]
+layout_mode = 2
+text = "Play Statistics"
+theme_override_font_sizes/font_size = 20
+
+[node name="TodayLabel" type="Label" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox"]
+layout_mode = 2
+text = "Today: 0 hours (0 plays)"
+
+[node name="ChartLabel" type="Label" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox"]
+layout_mode = 2
+text = "Last 7 Days"
+
+[node name="ChartPanel" type="Panel" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 200)
+
+[node name="ChartDraw" type="Control" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox/ChartPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="GamesListLabel" type="Label" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox"]
+layout_mode = 2
+text = "Games Played"
+
+[node name="GamesList" type="ItemList" parent="DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Gallery" type="Control" parent="DashboardContent/TabContainer"]
+layout_mode = 2
+
+[node name="GalleryScroll" type="ScrollContainer" parent="DashboardContent/TabContainer/Gallery"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GalleryVBox" type="VBoxContainer" parent="DashboardContent/TabContainer/Gallery/GalleryScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="SectionTitle3" type="Label" parent="DashboardContent/TabContainer/Gallery/GalleryScroll/GalleryVBox"]
+layout_mode = 2
+text = "Art Gallery"
+theme_override_font_sizes/font_size = 20
+
+[node name="GalleryGrid" type="GridContainer" parent="DashboardContent/TabContainer/Gallery/GalleryScroll/GalleryVBox"]
+layout_mode = 2
+columns = 3
+
+[node name="NoPaintingsLabel" type="Label" parent="DashboardContent/TabContainer/Gallery/GalleryScroll/GalleryVBox/GalleryGrid"]
+layout_mode = 2
+text = "No artwork yet"
+
+[node name="Settings" type="Control" parent="DashboardContent/TabContainer"]
+layout_mode = 2
+
+[node name="SettingsScroll" type="ScrollContainer" parent="DashboardContent/TabContainer/Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SettingsVBox" type="VBoxContainer" parent="DashboardContent/TabContainer/Settings/SettingsScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="SectionTitle4" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+text = "Settings"
+theme_override_font_sizes/font_size = 20
+
+[node name="LanguageLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+text = "Language:"
+
+[node name="LanguageOption" type="OptionButton" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "Bahasa Indonesia"
+popup/item_0/id = 0
+popup/item_1/text = "English"
+popup/item_1/id = 1
+
+[node name="AudioSection" type="VBoxContainer" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AudioLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "Audio Volume"
+
+[node name="BgVolLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "Background: -8 dB"
+
+[node name="BgVolSlider" type="HSlider" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+min_value = -20.0
+max_value = 0.0
+step = 1.0
+value = -8.0
+
+[node name="SfxVolLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "SFX: -3 dB"
+
+[node name="SfxVolSlider" type="HSlider" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+min_value = -20.0
+max_value = 0.0
+step = 1.0
+value = -3.0
+
+[node name="VoiceVolLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+text = "Voice: -4 dB"
+
+[node name="VoiceVolSlider" type="HSlider" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection"]
+layout_mode = 2
+min_value = -20.0
+max_value = 0.0
+step = 1.0
+value = -4.0
+
+[node name="TimeoutLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+text = "Screen Timeout:"
+
+[node name="TimeoutOption" type="OptionButton" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+item_count = 4
+popup/item_0/text = "5 minutes"
+popup/item_0/id = 0
+popup/item_1/text = "10 minutes"
+popup/item_1/id = 1
+popup/item_2/text = "15 minutes"
+popup/item_2/id = 2
+popup/item_3/text = "Never"
+popup/item_3/id = 3
+
+[node name="AppSizeLabel" type="Label" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+text = "App Size:"
+
+[node name="AppSizeOption" type="OptionButton" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+item_count = 2
+popup/item_0/text = "Lite (30MB)"
+popup/item_0/id = 0
+popup/item_1/text = "Full (60MB)"
+popup/item_1/id = 1
+
+[node name="SettingsSaveButton" type="Button" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+text = "Save Settings"
+
+[node name="PINSection" type="VBoxContainer" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PINChangeButton" type="Button" parent="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/PINSection"]
+layout_mode = 2
+text = "Change PIN"
+
+[node name="Legal" type="Control" parent="DashboardContent/TabContainer"]
+layout_mode = 2
+
+[node name="LegalScroll" type="ScrollContainer" parent="DashboardContent/TabContainer/Legal"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LegalVBox" type="VBoxContainer" parent="DashboardContent/TabContainer/Legal/LegalScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="SectionTitle5" type="Label" parent="DashboardContent/TabContainer/Legal/LegalScroll/LegalVBox"]
+layout_mode = 2
+text = "Legal"
+theme_override_font_sizes/font_size = 20
+
+[node name="PrivacyButton" type="Button" parent="DashboardContent/TabContainer/Legal/LegalScroll/LegalVBox"]
+layout_mode = 2
+text = "Privacy Policy"
+
+[node name="TermsButton" type="Button" parent="DashboardContent/TabContainer/Legal/LegalScroll/LegalVBox"]
+layout_mode = 2
+text = "Terms of Service"
+
+[node name="CloudSyncBox" type="CheckBox" parent="DashboardContent/TabContainer/Legal/LegalScroll/LegalVBox"]
+layout_mode = 2
+text = "Cloud Sync (coming soon)"
+disabled = true
+
+[node name="LegalDialog" type="ConfirmationDialog" parent="."]
+title = "Legal Document"
+initial_position = 2
+size = Vector2i(500, 400)
+
+[node name="LegalDialogScroll" type="ScrollContainer" parent="LegalDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LegalDialogText" type="Label" parent="LegalDialog/LegalDialogScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Legal content here..."
+
+[node name="ImagePopup" type="PopupPanel" parent="."]
+initial_position = 2
+size = Vector2i(400, 400)
+
+[node name="ImageTexture" type="TextureRect" parent="ImagePopup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ImagePopupClose" type="Button" parent="ImagePopup"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -50.0
+offset_top = -50.0
+offset_right = 50.0
+offset_bottom = -10.0
+grow_horizontal = 2
+text = "Close"
+
+[node name="PINChangeDialog" type="ConfirmationDialog" parent="."]
+title = "Change PIN"
+initial_position = 2
+size = Vector2i(300, 300)
+
+[node name="PINChangeVBox" type="VBoxContainer" parent="PINChangeDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="OldPINLabel" type="Label" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+text = "Current PIN:"
+
+[node name="OldPINInput" type="LineEdit" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+secret = true
+secret_character = "*"
+max_length = 4
+
+[node name="NewPINLabel" type="Label" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+text = "New PIN:"
+
+[node name="NewPINInput" type="LineEdit" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+secret = true
+secret_character = "*"
+max_length = 4
+
+[node name="ConfirmPINLabel" type="Label" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+text = "Confirm PIN:"
+
+[node name="ConfirmPINInput" type="LineEdit" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+secret = true
+secret_character = "*"
+max_length = 4
+
+[node name="PINErrorLabel2" type="Label" parent="PINChangeDialog/PINChangeVBox"]
+layout_mode = 2
+text = "PIN mismatch"
+modulate = Color(1, 0.3, 0.3, 1)
+[connection signal="confirmed" from="PINChangeDialog" to="." method="_on_pin_change_confirmed"]
+[connection signal="confirmed" from="LegalDialog" to="." method="_on_legal_dialog_close"]
+[connection signal="close_requested" from="ImagePopup" to="." method="_on_image_popup_close"]
+[connection signal="pressed" from="DashboardContent/HeaderBar/HeaderHBox/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="DashboardContent/TabContainer/ChildProfile/ChildProfileScroll/ChildProfileVBox/ChildProfileSaveButton" to="." method="_on_child_profile_save"]
+[connection signal="drag_started" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection/BgVolSlider" to="." method="_on_volume_drag_started"]
+[connection signal="value_changed" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection/BgVolSlider" to="." method="_on_bg_volume_changed"]
+[connection signal="drag_started" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection/SfxVolSlider" to="." method="_on_volume_drag_started"]
+[connection signal="value_changed" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection/SfxVolSlider" to="." method="_on_sfx_volume_changed"]
+[connection signal="drag_started" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection/VoiceVolSlider" to="." method="_on_volume_drag_started"]
+[connection signal="value_changed" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/AudioSection/VoiceVolSlider" to="." method="_on_voice_volume_changed"]
+[connection signal="pressed" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/SettingsSaveButton" to="." method="_on_settings_save"]
+[connection signal="pressed" from="DashboardContent/TabContainer/Settings/SettingsScroll/SettingsVBox/PINSection/PINChangeButton" to="." method="_on_pin_change_button_pressed"]
+[connection signal="pressed" from="DashboardContent/TabContainer/Legal/LegalScroll/LegalVBox/PrivacyButton" to="." method="_on_privacy_button_pressed"]
+[connection signal="pressed" from="DashboardContent/TabContainer/Legal/LegalScroll/LegalVBox/TermsButton" to="." method="_on_terms_button_pressed"]
+[connection signal="text_submitted" from="PINLoginPanel/PINVBox/PINContainer/PIN1" to="." method="_on_pin_entered"]
+[connection signal="text_submitted" from="PINLoginPanel/PINVBox/PINContainer/PIN2" to="." method="_on_pin_entered"]
+[connection signal="text_submitted" from="PINLoginPanel/PINVBox/PINContainer/PIN3" to="." method="_on_pin_entered"]
+[connection signal="text_submitted" from="PINLoginPanel/PINVBox/PINContainer/PIN4" to="." method="_on_pin_entered"]
+[connection signal="pressed" from="PINLoginPanel/PINVBox/PINCancelButton" to="." method="_on_pin_cancel_pressed"]

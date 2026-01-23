@@ -366,3 +366,47 @@
 - Balloon colors stored as constants dictionary for easy reference
 - TranslationManager.get_text() returns localized string for color names
 ---
+
+## [2026-01-23] - US-031, US-032
+- Created RhythmGame.tscn scene extending GameSceneBase
+- Created RhythmGame.gd script with beat tracking and tap detection
+- 4 beat circles (ColorRect) arranged horizontally at center, 50x50px each, 20px spacing
+- Circle colors: red, blue, yellow, green (distinct colors for visual appeal)
+- Beat indicator: circle brightness pulse on beat using lightened() color in _update_beat_visuals()
+- AudioStreamPlayer for backing track on Background bus
+- Songs: "Twinkle Twinkle ID", "Cicak-cicak di Dinding", "Lihat Lihat Penyu" (placeholder paths)
+- Beat tracker: array of timestamps at 1-second intervals (0.5s, 1.5s, 2.5s, ...)
+- Tap detection: gui_input signal on each circle, handles both mouse and touch
+- Timing window: ±0.3s from beat = correct tap
+- Correct tap animation: circle brightens + shrinks (parallel tween with 0.3s duration)
+- Particle effect: 8 particles emitted outward from circle center on correct tap
+- Ding SFX: AudioManager.play_sfx("sfx/ding.ogg") on correct tap
+- Missed beat: silently ignored, no error sound, no penalty
+- Score tracking: correct_beats and total_beats counters (hidden from child)
+- End of song: "Kamu dapat X/Y beat!" message with celebration SFX
+- Auto-transition to MainMenu after 3 seconds post-song
+- Wayang mascot celebration animation on correct tap
+- Session tracking: "musical" category, record_tap() on each correct beat
+- Duplicate tap prevention: tapped_beats array tracks already-tapped beats
+
+**Files changed:**
+- scenes/RhythmGame.tscn (new)
+- scripts/RhythmGame.gd (new)
+- assets/sounds/music/README.md (new)
+- assets/sounds/music/.gdignore (new)
+- prd.json (updated US-031, US-032 to passes: true)
+
+**Learnings for future iterations:**
+- For beat timing: use Time.get_unix_time_from_system() - song_start_time to track elapsed time
+- Beat pulse detection: find beat where time_since_beat is within pulse window (0 to 0.2s)
+- Closest beat finding: iterate all beats, find minimum absolute distance
+- Circle brightness: use color.lightened(amount) where 0.0-1.0 is the lighten amount
+- gui_input signal receives event and index when using .bind(index) in connect()
+- InputEventMouseButton and InputEventScreenTouch for cross-platform tap detection
+- Particle effects: create ColorRect nodes, animate outward with trigonometry (cos/sin for angle)
+- Parallel tweens: use tween.set_parallel(true) for simultaneous animations
+- Song finished handling: connect AudioStreamPlayer.finished signal to _on_song_finished
+- Fallback for missing audio: use Timer to simulate song duration if stream fails to load
+- Session category "musical" for rhythm games (consistent with Piano Hewan)
+- Prevent duplicate beats: track tapped beats in array and check before counting
+- .gdignore in assets/sounds/music/ prevents import errors for placeholder files

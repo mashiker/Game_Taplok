@@ -1,0 +1,71 @@
+[gd_scene load_steps=2 format=3 uid="uid://coloringgame"]
+
+[ext_resource type="Script" path="res://scripts/ColoringGame.gd" id="1"]
+
+[node name="ColoringGame" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.98, 0.95, 0.9, 1)
+
+[node name="GameContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TopBar" type="HBoxContainer" parent="GameContainer"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="GameContainer/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(50, 50)
+text = "<"
+
+[node name="Spacer" type="Control" parent="GameContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="WayangMascot" type="AnimatedSprite2D" parent="GameContainer/TopBar"]
+layout_mode = 2
+custom_minimum_size = Vector2(60, 60)
+
+[node name="GameContent" type="Control" parent="GameContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TemplateSelector" type="HBoxContainer" parent="GameContainer/GameContent"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="TemplateScroll" type="ScrollContainer" parent="GameContainer/GameContent/TemplateSelector"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TemplateList" type="HBoxContainer" parent="GameContainer/GameContent/TemplateSelector/TemplateScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="UndoButton" type="Button" parent="GameContainer/GameContent/TemplateSelector"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 50)
+text = "Undo"
+
+[node name="SaveButton" type="Button" parent="GameContainer/GameContent/TemplateSelector"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 50)
+text = "Simpan"

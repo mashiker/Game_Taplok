@@ -149,8 +149,8 @@
         "TapCountLabel showing today's play count",
         "All buttons have min_size 120x120px for toddler touch targets"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-004"
       ],
@@ -707,8 +707,8 @@
         "Song player: AudioStreamPlayer for backing track",
         "Songs: Twinkle Twinkle ID, Cicak-cicak di Dinding, Lihat Lihat Penyu"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-007"
       ],
@@ -731,8 +731,8 @@
         "Score counter: tracks correct/total beats (hidden from child)",
         "End of song: display 'Kamu dapat X/Y beat!' message with celebration"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-031"
       ],
