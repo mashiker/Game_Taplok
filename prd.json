@@ -755,8 +755,8 @@
         "Change PIN option in dashboard settings",
         "Back button from games goes to menu, NOT dashboard"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-005"
       ],
@@ -779,8 +779,8 @@
         "Age value used by all games for content gating",
         "Settings loaded on app startup via GameManager"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-033"
       ],
@@ -803,8 +803,8 @@
         "Today's total: Label showing hours played today",
         "Data refreshes when dashboard opens"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-033"
       ],
@@ -827,8 +827,8 @@
         "Delete button: removes file and database entry with confirmation",
         "Date label under each thumbnail (format: DD/MM/YYYY)"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-033"
       ],
@@ -851,8 +851,8 @@
         "App size: OptionButton (Lite 30MB, Full 60MB)",
         "All settings saved to user://app_settings.json"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-033"
       ],
@@ -874,8 +874,8 @@
         "Legal documents in Bahasa Indonesia",
         "Cloud sync toggle: CheckBox with '(coming soon)' label disabled"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-033"
       ],

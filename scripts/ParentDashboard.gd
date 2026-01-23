@@ -549,4 +549,54 @@ func _on_chart_draw() -> void:
 	if not control or not control.is_visible_in_tree():
 		return
 
-	control.queue_redraw()
+	var size = control.size
+	var chart_width = size.x - 60  # margins for labels
+	var chart_height = size.y - 40
+	var origin = Vector2(40, 20)  # Chart origin with margins
+
+	# Draw axes
+	control.draw_line(origin, origin + Vector2(chart_width, 0), Color(0.3, 0.3, 0.3, 1), 2)
+	control.draw_line(origin, origin + Vector2(0, chart_height), Color(0.3, 0.3, 0.3, 1), 2)
+
+	# Draw Y-axis labels (0-4 hours)
+	for i in range(5):
+		var y_pos = origin.y + chart_height - (i * chart_height / 4.0)
+		control.draw_string(ThemeDB.fallback_font, Vector2(5, y_pos + 5), str(i), HORIZONTAL_ALIGNMENT_LEFT, -1, 10, Color(0, 0, 0, 1))
+
+	# Get last 7 days data
+	var by_date = session_stats.get("by_date", {})
+	var days_labels = []
+	var days_values = []
+
+	for i in range(6, -1, -1):
+		var date_dict = OS.get_date() if i == 0 else OS.get_date_from_unix_time(Time.get_unix_time_from_system() - i * 86400)
+		var date_str = "%04d-%02d-%02d" % [date_dict.year, date_dict.month, date_dict.day]
+		days_labels.append(date_str)
+		var seconds = by_date.get(date_str, 0)
+		days_values.append(seconds / 3600.0)  # Convert to hours
+
+	# Find max value for scaling
+	var max_hours = 4.0
+	for value in days_values:
+		if value > max_hours:
+			max_hours = value
+
+	if max_hours == 0:
+		max_hours = 1
+
+	# Draw bars
+	var bar_width = chart_width / 7.0
+	var current_locale = TranslationManager.get_locale()
+	var day_names = current_locale == "id" ? ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"] : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+	for i in range(7):
+		var x_pos = origin.x + i * bar_width + bar_width * 0.1
+		var bar_height = (days_values[i] / max_hours) * chart_height
+		var y_pos = origin.y + chart_height - bar_height
+
+		# Draw bar
+		control.draw_rect(Rect2(x_pos, y_pos, bar_width * 0.8, bar_height), Color(0.2, 0.5, 0.8, 0.8))
+
+		# Draw day label
+		var day_of_week = (OS.get_date()["weekday"] + (7 - 6 + i)) % 7
+		control.draw_string(ThemeDB.fallback_font, Vector2(x_pos + bar_width * 0.4 - 10, origin.y + chart_height + 15), day_names[day_of_week], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0, 0, 0, 1))
