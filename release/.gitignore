@@ -1,6 +1,7 @@
 # Ignore keystore files (should never be committed)
 *.keystore
 *.jks
+KEYSTORE_CREDENTIALS.txt
 
 # Ignore release builds (optional - comment out if you want to track builds)
 *.apk
