@@ -3,7 +3,9 @@
 - Export presets configured in export_presets.cfg (separate from project.godot)
 - Audio bus layout stored in default_bus_layout.tres with dB volume levels
 - Project uses config_version=5 for Godot 4.2+
-- Use autoload (singletons) in project.godot for global managers like GameManager
+- Use autoload (singletons) in project.godot for global managers like GameManager, TranslationManager
+- Localization files use JSON format in /assets/locales/{locale}.json
+- Translation keys use snake_case format for consistency
 
 ## [2025-01-23] - US-001
 - Created Godot 4.2 project with project.godot configured (config_version=5)
@@ -33,5 +35,41 @@
 - Viewport size is set in project.godot under [display] section with window/size/viewport_width and viewport_height
 - Autoload scripts are registered in [autoload] section with "*res://" prefix
 - Use .gitignore to exclude .godot/, import/, and build directories
+
+## [2025-01-23] - US-002
+- Audio bus architecture was completed as part of US-001
+- default_bus_layout.tres includes all required buses: Master (0dB), Background (-8dB), SFX (-3dB), Voice (-4dB)
+- No additional implementation needed
+
+**Files changed:**
+- None (completed in US-001)
+
+**Learnings for future iterations:**
+- Audio bus layout can be created during initial project setup
+- Bus layout is referenced in export_presets.cfg under audio/buses/default_bus_layout
+
+---
+
+## [2025-01-23] - US-003
+- Created TranslationManager.gd autoload singleton with get_text(key) function
+- Created /assets/locales/id.json with Indonesian translations
+- Created /assets/locales/en.json with English translations
+- All localization keys use snake_case format (e.g., game_tap_pop_name, color_red)
+- Added TranslationManager to autoloads in project.godot
+- Project locale set to 'id' as default in [locale] section
+- TranslationManager supports language switching with set_locale() and emits language_changed signal
+
+**Files changed:**
+- scripts/TranslationManager.gd (new)
+- assets/locales/id.json (new)
+- assets/locales/en.json (new)
+- project.godot (updated with TranslationManager autoload)
+
+**Learnings for future iterations:**
+- Localization files are JSON format with key-value pairs
+- TranslationManager uses FileAccess to load locale files at runtime
+- Fallback to key name if translation not found (prevents crashes)
+- Use TranslationManager.get_text("key") from anywhere in code to get translated strings
+- Add new translations to both locale files to maintain parity
 ---
 

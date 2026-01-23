@@ -58,8 +58,8 @@
         "Localization keys use snake_case format (e.g., game_tap_pop_name)",
         "Project locale set to 'id' as default in project settings"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-001"],
       "dependencies": ["US-001"]
     },
