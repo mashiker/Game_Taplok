@@ -486,3 +486,52 @@
 - Python PIL (Pillow) can be used to generate placeholder template images programmatically
 - Template thumbnails in selector use 100x100 resized versions for performance
 ---
+
+## [2026-01-23] - US-033, US-034, US-035, US-036, US-037, US-038
+- Implemented complete Parent Dashboard with PIN-protected access (US-033)
+- PIN Login Panel: 4 LineEdit nodes with auto-focus movement, shake animation on incorrect PIN
+- Default PIN: 1234 stored in user://settings.json, changeable via settings
+- Child Profile Settings (US-034): Age slider (2-5), name input, 8 game preference checkboxes
+- Settings saved to user://child_profile.json, loaded by GameManager on startup
+- Playtime Statistics (US-035): 7-day bar chart using custom _draw() on Control node
+- Chart shows Y-axis (0-4 hours), X-axis (days of week in Indonesian/English)
+- Today's total label shows hours and play count, game list shows "Game: X plays" format
+- Gallery & Export (US-036): GridContainer of painting thumbnails from Database.get_paintings()
+- Thumbnail tap shows full-size image in PopupPanel, download saves to user://downloads/
+- Delete button removes file and database entry with Database.delete_painting()
+- Settings & Audio Controls (US-037): Language OptionButton (id/en), volume sliders for Background/SFX/Voice
+- Volume sliders: HSlider -20 to 0 dB range, real-time updates via AudioManager.set_volume()
+- Screen timeout: OptionButton (5/10/15 min, Never), App size: Lite/Full (informational)
+- Settings saved to user://app_settings.json
+- Privacy & Legal Links (US-038): Privacy Policy and Terms buttons open scrollable dialogs
+- Legal documents: assets/legal/privacy_policy_id.txt and terms_id.txt (Indonesian)
+- Privacy policy states: zero PII, local storage only, 90-day retention, parental consent
+- Cloud sync toggle disabled with "(coming soon)" label
+
+**Files changed:**
+- scenes/ParentDashboard.tscn (new)
+- scripts/ParentDashboard.gd (new)
+- assets/locales/id.json (updated with parent dashboard translations)
+- assets/locales/en.json (updated with parent dashboard translations)
+- assets/legal/privacy_policy_id.txt (new)
+- assets/legal/terms_id.txt (new)
+- scripts/GameManager.gd (updated with _load_child_profile() on startup)
+- scripts/MainMenu.gd (updated tap count label to use TranslationManager)
+- prd.json (updated US-033-US-038 to passes: true)
+
+**Learnings for future iterations:**
+- PIN input pattern: Use text_submitted signal on LineEdit for auto-focus to next field
+- Shake animation: Create tween with parallel position changes (left-right-left-right-original)
+- Custom chart drawing: Use Control node with _draw() callback, draw_line() for axes, draw_rect() for bars
+- Chart data: Database.get_session_stats(7) returns {by_date: {}, game_counts: {}, total_duration: int}
+- Gallery thumbnails: ImageTexture.create_from_image(Image.load(filepath)) for TextureRect
+- PopupPanel: Use popup_centered() to show, hide() to close, set size for proper layout
+- Settings persistence: user:// directory works across platforms (Android, iOS, Desktop)
+- AudioManager volume: set_volume("BusName", db_value) where db_value ranges -60 to 0
+- Translation string formatting: Use %d in translation string, then var % value in code
+- Day of week localization: Indonesian (Min, Sen, Sel, Rab, Kam, Jum, Sab), English (Sun-Sat)
+- OS.get_date_from_unix_time() for date arithmetic with Time.get_unix_time_from_system() - days * 86400
+- Parent dashboard access: From MainMenu parent button, back button returns to menu
+- Child profile loading: GameManager._load_child_profile() reads age on startup for age-gating
+---
+
