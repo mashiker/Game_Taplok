@@ -1,0 +1,90 @@
+SYARAT DAN KETENTUAN
+PlayTap - Game Edukasi Balita Indonesia
+
+Terakhir diperbarui: Januari 2026
+
+1. PENERIMAAN SYARAT
+Dengan mengunduh, menginstal, atau menggunakan aplikasi PlayTap, Anda setuju untuk terikat oleh syarat dan ketentuan ini. Jika Anda tidak setuju, harap jangan gunakan aplikasi ini.
+
+2. DESKRIPSI LAYANAN
+PlayTap adalah aplikasi game edukasi untuk anak balita usia 2-5 tahun dengan konten 100% Bahasa Indonesia dan budaya lokal.
+
+3. PERSYARATAN PENGGUNAAN
+3.1. Usia
+Aplikasi ini ditujukan untuk anak-anak usia 2-5 tahun. Anak-anak harus menggunakan aplikasi ini di bawah pengawasan orang tua.
+
+3.2. Perangkat
+- Android 8.0 (API 26) atau lebih tinggi
+- Ruang penyimpanan minimal 50MB (versi Lite) atau 80MB (versi Full)
+- Layar sentuh kapasitif
+
+3.3. Izin Perangkat
+Aplikasi memerlukan izin berikut:
+- WRITE_EXTERNAL_STORAGE: Untuk menyimpan gambar yang dibuat anak di galeri perangkat
+
+4. HAK DAN KEWAJIBAN PENGGUNA
+4.1. Hak Pengguna
+- Menggunakan aplikasi untuk tujuan edukasi pribadi
+- Mengakses dan mengubah pengaturan aplikasi
+- Menghapus data yang disimpan secara lokal
+
+4.2. Kewajiban Pengguna
+- Menyediakan pengawasan orang tua saat anak menggunakan aplikasi
+- Menjaga kerahasiaan PIN Dashboard Orang Tua
+- Menggunakan aplikasi sesuai dengan tujuan edukasi
+
+5. HAK CIPTA DAN KONTEN
+5.1. Kepemilikan
+Semua konten dalam PlayTap (grafis, audio, teks, animasi) adalah hak cipta PlayTap dan dilindungi oleh hukum hak cipta Indonesia.
+
+5.2. Penggunaan yang Diperbolehkan
+Penggunaan pribadi dan non-komersial diizinkan.
+
+5.3. Larangan
+Dilarang:
+- Menyalin, mendistribusikan, atau memodifikasi aplikasi
+- Menggunakan konten untuk tujuan komersial
+- Membongkar reverse engineering aplikasi
+
+6. PEMBARUAN APLIKASI
+PlayTap dapat diperbarui secara berkala untuk:
+- Perbaikan bug dan peningkatan performa
+- Penambahan konten edukasi baru
+- Peningkatan keamanan
+
+Pengguna disarankan untuk mengizinkan pembaruan otomatis.
+
+7. BATASAN TANGGUNG JAWAB
+7.1. "SEBAGAIMANA ADANYA"
+Aplikasi disediakan "sebagaimana adanya" tanpa jaminan tersurat maupun tersirat.
+
+7.2. Kerusakan Perangkat
+PlayTap tidak bertanggung jawab atas kerusakan perangkat yang disebabkan oleh penggunaan aplikasi.
+
+7.3. Hasil Edukasi
+Hasil edukasi bervariasi untuk setiap anak. PlayTap tidak menjamin hasil belajar tertentu.
+
+8. LAYANAN PIHAK KETIGA
+Aplikasi ini tidak menggunakan layanan pihak ketiga:
+- Tidak ada analytics
+- Tidak ada iklan
+- Tidak ada pembelian dalam aplikasi
+- Tidak ada koneksi ke server eksternal
+
+9. PENGHENTIAN LAYANAN
+PlayTap berhak untuk menghentikan atau mengubah layanan kapan saja dengan pemberitahuan sebelumnya.
+
+10. HUKUM YANG BERLAKU
+Syarat dan ketentuan ini tunduk pada hukum Republik Indonesia. Perselisihan akan diselesaikan melalui peradilan di Jakarta, Indonesia.
+
+11. KEBIJAKAN PRIVASI
+Penggunaan aplikasi tunduk pada Kebijakan Privasi PlayTap yang tersedia terpisah.
+
+12. KONTAK
+Untuk pertanyaan atau komentar:
+Email: support@playtap.game
+Website: https://playtap.game
+
+---
+Versi: 1.0
+Tanggal Efektif: 1 Januari 2026

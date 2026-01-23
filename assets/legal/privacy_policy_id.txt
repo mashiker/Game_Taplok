@@ -1,0 +1,84 @@
+KEBIJAKAN PRIVASI
+PlayTap - Game Edukasi Balita Indonesia
+
+Terakhir diperbarui: Januari 2026
+
+1. PENGANTAR
+Terima kasih telah menggunakan PlayTap. Kami sangat peduli dengan privasi Anda dan privasi anak-anak Anda. Dokumen ini menjelaskan bagaimana kami menangani data dalam aplikasi PlayTap.
+
+2. DATA YANG KAMI KUMPULKAN
+2.1. TIDAK Ada Informasi Identitas Pribadi (PII)
+PlayTap TIDAK mengumpulkan informasi identitas pribadi apa pun, termasuk:
+- Tidak ada nama anak
+- Tidak ada tanggal lahir
+- Tidak ada alamat email
+- Tidak ada nomor telepon
+- Tidak ada lokasi GPS
+- Tidak ada identifier perangkat unik
+
+2.2. Data Sesi Lokal
+Satu-satunya data yang kami simpan adalah data sesi permainan yang disimpan LOKAL di perangkat Anda:
+- Jenis permainan yang dimainkan
+- Durasi sesi bermain
+- Metrik permainan dasar (jumlah ketukan, skor)
+- Gambar yang dibuat anak (disimpan di perangkat)
+
+Semua data ini disimpan di memori lokal perangkat (user:// directory) dan TIDAK pernah dikirim ke server eksternal.
+
+3. PENYIMPANAN DATA LOKAL
+3.1. Lokasi Penyimpanan
+Semua data disimpan di direktori lokal aplikasi:
+- Database sesi: user://playtap.db
+- Gambar: user://paintings/
+- Pengaturan: user://settings.json, user://child_profile.json, user://app_settings.json
+
+3.2. Retensi Data
+Data sesi permainan secara otomatis dihapus setelah 90 hari.
+Gambar yang dibuat anak akan tetap ada sampai orang tua menghapusnya secara manual.
+
+4. TIDAK ADA KONEKTIVITAS INTERNET
+PlayTap dirancang untuk berfungsi sepenuhnya tanpa internet:
+- Tidak ada koneksi ke server cloud
+- Tidak ada analytics pihak ketiga
+- Tidak ada iklan
+- Tidak ada pembelian dalam aplikasi
+
+5. HAK ANDA SEBAGAI ORANG TUA
+5.1. Akses Data
+Orang tua memiliki akses penuh ke semua data melalui Dashboard Orang Tua (dilindungi PIN).
+
+5.2. Penghapusan Data
+Anda dapat menghapus semua data kapan saja dengan:
+- Menghapus data aplikasi melalui pengaturan perangkat
+- Menggunakan opsi "Hapus Karya" di galeri
+- Data sesi otomatis dihapus setelah 90 hari
+
+5.3. Persetujuan Orang Tua
+Dengan mengizinkan anak Anda menggunakan aplikasi ini, Anda:
+- Menyetujui pengumpulan data sesi lokal yang dijelaskan di atas
+- Memahami bahwa tidak ada PII yang dikumpulkan
+- Menyetujui penyimpanan data lokal selama 90 hari
+
+6. KEAMANAN DATA
+6.1. PIN Perlindungan
+Dashboard Orang Tua dilindungi dengan PIN (default: 1234, dapat diubah).
+
+6.2. Enkripsi
+Data disimpan secara lokal dan dilindungi oleh sistem keamanan perangkat Android/iOS.
+
+7. PERUBAHAN KEBIJAKAN
+Kami akan memberi tahu pengguna tentang perubahan signifikan pada kebijakan privasi melalui pembaruan aplikasi.
+
+8. HUKUM YANG BERLAKU
+Kebijakan privasi ini tunduk pada hukum perlindungan data Indonesia, termasuk:
+- UU Perlindungan Data Pribadi (PDP Law) Indonesia
+- Ketentuan perlindungan data anak
+
+9. HUBUNGI KAMI
+Untuk pertanyaan tentang privasi, silakan hubungi:
+Email: privasi@playtap.game
+Website: https://playtap.game
+
+---
+Versi: 1.0
+Tanggal Efektif: 1 Januari 2026

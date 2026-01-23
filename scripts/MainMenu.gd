@@ -13,7 +13,15 @@ func _ready() -> void:
 
 # Set up UI elements with translations
 func _setup_ui() -> void:
-	$VBoxContainer/BottomBar/TapCountLabel.text = TranslationManager.get_text("app_name")
+	# Set game button labels using TranslationManager
+	$VBoxContainer/GameGrid/TapPopButton.text = TranslationManager.get_text("game_tap_pop_name")
+	$VBoxContainer/GameGrid/DragMatchButton.text = TranslationManager.get_text("game_drag_match_name")
+	$VBoxContainer/GameGrid/MemoryFlipButton.text = TranslationManager.get_text("game_memory_flip_name")
+	$VBoxContainer/GameGrid/PianoHewanButton.text = TranslationManager.get_text("game_piano_hewan_name")
+	$VBoxContainer/GameGrid/FingerPaintButton.text = TranslationManager.get_text("game_finger_paint_name")
+	$VBoxContainer/GameGrid/ShapeSilhouetteButton.text = TranslationManager.get_text("game_shape_silhouette_name")
+	$VBoxContainer/GameGrid/ColoringBookButton.text = TranslationManager.get_text("game_coloring_book_name")
+	$VBoxContainer/GameGrid/MusicRhythmButton.text = TranslationManager.get_text("game_music_rhythm_name")
 
 # Connect button signals
 func _connect_signals() -> void:
@@ -38,8 +46,8 @@ func _connect_signals() -> void:
 
 # Update tap count label
 func _update_tap_count() -> void:
-	# TODO: Get actual tap count from database/session
-	$VBoxContainer/BottomBar/TapCountLabel.text = "Main 0x hari ini"
+	var play_count = Database.get_todays_play_count()
+	$VBoxContainer/BottomBar/TapCountLabel.text = "Main %dx hari ini" % play_count
 
 ## Signal Callbacks ##
 

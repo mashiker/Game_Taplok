@@ -96,4 +96,4 @@ text = "Main 0x hari ini"
 [node name="ParentButton" type="Button" parent="VBoxContainer/BottomBar"]
 layout_mode = 2
 custom_minimum_size = Vector2(50, 50)
-text = ""
+text = "⚙"
