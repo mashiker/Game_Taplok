@@ -979,8 +979,8 @@
         "APK tested on physical device before upload",
         "Version code: 1, Version name: 1.0.0"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-040",
         "US-041"
@@ -991,7 +991,7 @@
       ]
     }
   ],
-  "completionPercentage": 0,
+  "completionPercentage": 100,
   "estimatedHours": 320,
   "teamSize": 1,
   "timeline": "8 weeks (MVP Phase 1)"
