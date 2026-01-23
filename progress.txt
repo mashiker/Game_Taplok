@@ -19,6 +19,13 @@
 - Session categories: "cognitive" (puzzles), "creative" (painting), "musical" (piano) for analytics
 - Game scenes extend Control with GameSceneBase pattern: _on_game_start(), _on_game_end(), _get_game_metrics() hooks
 - Input handling: connect gui_input signals in _ready(), use is_transitioning flag to block during animations
+- Image manipulation: use Image.get_pixel() and set_pixel() for per-pixel operations (flood fill, drawing)
+- Flood fill algorithm: stack-based approach with visited tracking to avoid infinite loops
+- Template images stored in /assets/textures/coloring_templates/ as PNG files with black outlines on white background
+- Undo stack: store Image.duplicate() snapshots, max 20 states, pop_front() when limit exceeded
+- Age-based content filtering: use GameManager.get_child_age() to determine template complexity
+- Export resolution: display at 800x600, export at 1200x900 using Image.resize() with INTERPOLATE_NEAREST
+- TextureRect for canvas display with ImageTexture updated via set_image() after pixel changes
 
 ## [2025-01-23] - US-001
 - Created Godot 4.2 project with project.godot configured (config_version=5)
@@ -435,4 +442,47 @@
 - Gear icon Unicode character ⚙ works in Godot Button text property
 - MainMenu already had proper structure from US-004, just needed label population
 - Game button labels should be set in _ready() via _setup_ui() to ensure translations load first
+---
+
+## [2026-01-23] - US-028, US-029, US-030
+- Created ColoringGame.tscn extending GameSceneBase with template selector and canvas
+- Created ColoringGame.gd with flood-fill algorithm implementation
+- Created 5 template images using Python (PIL): batik.png, komodo.png, anggrek.png, joglo.png, melati.png
+- Templates stored in /assets/textures/coloring_templates/ with black outlines on white background
+- Flood fill uses stack-based algorithm with 4-way connectivity and color matching
+- 8 color palette (same as FingerPaint) with circular buttons and gold glow on active color
+- Undo system with max 20 state stack storing Image.duplicate() snapshots
+- Template selector with scrollable thumbnails at top of screen
+- Age-based template complexity: 2-3yo (batik), 3-4yo (komodo, anggrek), 4-5yo (joglo, melati)
+- Save button exports at 1200x900 resolution to user://paintings/coloring_{timestamp}.png
+- Database.save_painting("Coloring", filepath, template_id) saves metadata
+- Session tracking: "creative" category for painting/coloring games
+- Haptic feedback on each fill (30ms vibration)
+- pop_soft.ogg SFX on region fill
+
+**Files changed:**
+- scenes/ColoringGame.tscn (new)
+- scripts/ColoringGame.gd (new)
+- assets/textures/coloring_templates/batik.png (new)
+- assets/textures/coloring_templates/komodo.png (new)
+- assets/textures/coloring_templates/anggrek.png (new)
+- assets/textures/coloring_templates/joglo.png (new)
+- assets/textures/coloring_templates/melati.png (new)
+- tools/create_templates.py (new)
+- prd.json (updated US-028, US-029, US-030 to passes: true)
+- progress.txt (updated)
+
+**Learnings for future iterations:**
+- Flood fill algorithm must use color matching with tolerance due to anti-aliasing artifacts
+- Stack-based flood fill with visited Dictionary prevents infinite loops and is more efficient than recursion
+- Image.resize() with INTERPOLATE_NEAREST maintains clean lines when scaling templates
+- Template images should have black outlines on white background for best flood fill results
+- TextureRect.expand_mode = EXPAND_FIT_WIDTH_PROPORTIONAL helps canvas scale nicely
+- Age-based template selection uses GameManager.get_child_age() with age group buckets (2-3, 3-4, 4-5)
+- Undo stack stores Image.duplicate() not texture, to ensure clean state restoration
+- Color matching tolerance: use abs(c1.r - c2.r) < 0.02 for RGB components
+- Session category "creative" used for all painting/coloring games
+- Export resolution 1200x900 provides print quality output from 800x600 display canvas
+- Python PIL (Pillow) can be used to generate placeholder template images programmatically
+- Template thumbnails in selector use 100x100 resized versions for performance
 ---

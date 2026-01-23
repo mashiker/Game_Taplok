@@ -18,6 +18,7 @@ var child_age: int = 3  # Default age for age-gating content
 
 ## Built-in Functions ##
 func _ready() -> void:
+	_load_child_profile()
 	print("PlayTap - Game Edukasi Balita Indonesia")
 	print("GameManager initialized")
 
@@ -92,3 +93,14 @@ func set_child_age(age: int) -> void:
 		print("Child age set to: ", age)
 	else:
 		push_warning("Invalid child age: ", age, ". Should be 2-5.")
+
+# Load child profile from settings file
+func _load_child_profile() -> void:
+	const CHILD_PROFILE_PATH = "user://child_profile.json"
+	if FileAccess.file_exists(CHILD_PROFILE_PATH):
+		var file = FileAccess.open(CHILD_PROFILE_PATH, FileAccess.READ)
+		if file:
+			var data = JSON.parse_string(file.get_as_text())
+			if data and data.has("age"):
+				child_age = data.age
+			file.close()

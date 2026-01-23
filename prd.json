@@ -637,8 +637,8 @@
         "Flood-fill algorithm implemented on region tap",
         "Pre-computed fill map generated on template load for performance"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-007"
       ],
@@ -661,8 +661,8 @@
         "Auto-save after every color change to temporary file",
         "Age-based complexity: 2-3yo (2-3 regions), 3-4yo (5-8 regions), 4-5yo (10-15 regions)"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-028"
       ],
@@ -684,8 +684,8 @@
         "Parent dashboard gallery displays colorings with thumbnails",
         "Download button in gallery saves to device storage"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-029"
       ],

@@ -47,7 +47,7 @@ func _connect_signals() -> void:
 # Update tap count label
 func _update_tap_count() -> void:
 	var play_count = Database.get_todays_play_count()
-	$VBoxContainer/BottomBar/TapCountLabel.text = "Main %dx hari ini" % play_count
+	$VBoxContainer/BottomBar/TapCountLabel.text = TranslationManager.get_text("tap_count_label") % play_count
 
 ## Signal Callbacks ##
 
