@@ -156,8 +156,8 @@
         "Voice player has priority over SFX (ducking when voice plays)",
         "All audio paths relative to /assets/sounds/"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-002"],
       "dependencies": ["US-002"]
     },

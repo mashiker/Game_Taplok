@@ -3,12 +3,14 @@
 - Export presets configured in export_presets.cfg (separate from project.godot)
 - Audio bus layout stored in default_bus_layout.tres with dB volume levels
 - Project uses config_version=5 for Godot 4.2+
-- Use autoload (singletons) in project.godot for global managers (GameManager, TranslationManager, Database, SessionManager)
+- Use autoload (singletons) in project.godot for global managers (GameManager, TranslationManager, Database, SessionManager, AudioManager)
 - Localization files use JSON format in /assets/locales/{locale}.json
 - Translation keys use snake_case format for consistency
 - Persistent data stored in user:// directory (cross-platform)
 - SQLite operations require gdsqlite plugin (not built into Godot 4.2)
 - Session tracking via SessionManager: start_session() -> record_tap() -> end_session()
+- Audio playback via AudioManager: play_sfx(), play_voice(), play_music()
+- Audio bus ducking: voice automatically reduces SFX volume by 12dB during playback
 
 ## [2025-01-23] - US-001
 - Created Godot 4.2 project with project.godot configured (config_version=5)
@@ -147,5 +149,32 @@
 - Games can set custom auto-end limits (e.g., puzzles may end after completion, not taps)
 - SessionManager.check_auto_end_conditions() should be called in game _process() or timer
 - Use content_category for analytics: "cognitive" (puzzles), "creative" (painting), "musical" (piano)
----
 
+## [2025-01-23] - US-008
+- Created AudioManager.gd autoload singleton for all audio playback
+- Functions: play_sfx(path, bus='SFX'), play_voice(path), play_music(path, loop=true)
+- set_volume(bus_name, volume_db) and get_volume(bus_name) for volume control
+- SFX player pool supports up to 4 simultaneous sounds via _get_available_sfx_player()
+- Voice player has priority over SFX (ducking -12dB when voice plays)
+- All audio paths relative to /assets/sounds/ (or use res://user:// for absolute paths)
+- Audio buses: Master (0dB), Background (-8dB), SFX (-3dB), Voice (-4dB)
+- Supports OGG (via AudioStreamOggVorbis), MP3, WAV formats
+- Music fade in/out with fade_duration parameter (uses tween)
+- Added is_voice_playing() and is_music_playing() helper functions
+- stop_music(fade_duration) for smooth fade-out
+- Added AudioManager to autoloads in project.godot
+
+**Files changed:**
+- scripts/AudioManager.gd (new)
+- project.godot (updated with AudioManager autoload)
+
+**Learnings for future iterations:**
+- AudioStreamPlayer needs to be added as child to play audio
+- Use Object pooling for frequently created/destroyed nodes (like SFX players)
+- Audio bus ducking: reduce volume when priority audio plays, restore when finished
+- OGG loading in Godot requires reading file buffer and assigning to AudioStreamOggVorbis.data
+- MP3/WAV can be loaded directly with load() function
+- AudioServer.get_bus_index() returns -1 if bus doesn't exist (check before setting volume)
+- Voice ducking uses previous volume storage to restore after playback
+- Fade in/out uses create_tween().tween_property() for smooth transitions
+---
