@@ -1,0 +1,882 @@
+{
+  "projectName": "PlayTap - Game Edukasi Balita Indonesia",
+  "version": "1.0",
+  "branchName": "playtap-mvp-v1",
+  "description": "Aplikasi game edukasi untuk anak balita usia 2-5 tahun dengan konten 100% Bahasa Indonesia dan budaya lokal. Dibangun dengan Godot 4.2 untuk Android 8.0+.",
+
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Godot Project Setup & Base Structure",
+      "description": "As a developer, I need to initialize the Godot 4.2 project with proper folder structure so that all team members can work consistently.",
+      "priority": 1,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "Godot 4.2 LTS project created with project.godot configured",
+        "Folder structure: /assets/sounds, /assets/textures, /assets/locales, /scenes, /scripts",
+        "Main.tscn scene created with Node2D root",
+        "project.godot has Android 8.0+ (API 26) export preset configured",
+        "Application/config/name set to 'PlayTap'",
+        "Display/window/size/viewport_width set to 540, viewport_height to 960 (portrait)"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": [],
+      "dependencies": []
+    },
+
+    {
+      "id": "US-002",
+      "title": "Audio Bus Architecture Configuration",
+      "description": "As a developer, I need to configure audio buses so that different audio types can be controlled independently.",
+      "priority": 2,
+      "storyPoints": 2,
+      "acceptanceCriteria": [
+        "Audio bus layout created in project settings",
+        "Master bus at 0dB",
+        "Background bus child of Master at -8dB",
+        "SFX bus child of Master at -3dB",
+        "Voice bus child of Master at -4dB",
+        "Bus layout saved to default_bus_layout.tres"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-001"],
+      "dependencies": ["US-001"]
+    },
+
+    {
+      "id": "US-003",
+      "title": "Localization System Setup",
+      "description": "As a developer, I need to set up the localization system so that all text can be displayed in multiple languages.",
+      "priority": 3,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "TranslationManager.gd script created with get_text(key) function",
+        "/assets/locales/id.json created with Indonesian translations",
+        "/assets/locales/en.json created with English translations",
+        "Localization keys use snake_case format (e.g., game_tap_pop_name)",
+        "Project locale set to 'id' as default in project settings"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-001"],
+      "dependencies": ["US-001"]
+    },
+
+    {
+      "id": "US-004",
+      "title": "Scene Structure & Signal System",
+      "description": "As a developer, I need to create the base scene hierarchy and signal system for game transitions.",
+      "priority": 4,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "MainMenu.tscn scene created with Control root",
+        "GameSceneBase.tscn template created for mini-games",
+        "Global autoload (GameManager.gd) created for signal emission",
+        "Signals defined: game_started(game_name), game_ended(game_name, metrics), reward_trigger(type)",
+        "Scene change transition: fade_to_scene(scene_path) function with 1s tween"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-001"],
+      "dependencies": ["US-001"]
+    },
+
+    {
+      "id": "US-005",
+      "title": "SQLite Database Schema Setup",
+      "description": "As a developer, I need to create the SQLite database schema so that session data can be persisted.",
+      "priority": 5,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "Database.gd script created with connection logic",
+        "sessions table created: id INTEGER PRIMARY KEY, game_type TEXT, start_time TIMESTAMP, duration_seconds INTEGER, metrics TEXT",
+        "paintings table created: id INTEGER PRIMARY KEY, source TEXT, filepath TEXT, created_at TIMESTAMP",
+        "Database initialized in user://playtap.db path",
+        "Helper functions: log_session(), get_paintings(), delete_old_sessions()"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-001"],
+      "dependencies": ["US-001"]
+    },
+
+    {
+      "id": "US-006",
+      "title": "Session Manager Singleton",
+      "description": "As a developer, I need to create SessionManager.gd to track gameplay metrics across all games.",
+      "priority": 6,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "SessionManager.gd autoload created",
+        "Variables: current_game, start_time, tap_count, content_category",
+        "Functions: start_session(game_name), end_session(), record_tap(), get_session_duration()",
+        "Auto-saves session to database on end_session() call",
+        "Session data written to user:// directory only (no cloud)"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-005"],
+      "dependencies": ["US-005"]
+    },
+
+    {
+      "id": "US-007",
+      "title": "Main Menu Scene Layout",
+      "description": "As a child, I need a colorful menu to choose games so that I can play independently.",
+      "priority": 7,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "PlayTap logo TextureRect (120x60px) at top of menu",
+        "Wayang mascot AnimatedSprite (120x120px) with idle animation",
+        "GridContainer with 2 columns, 5 rows for game buttons",
+        "Each game button: TextureRect icon + Label for name below",
+        "Parent button (gear icon) at bottom-right corner",
+        "TapCountLabel showing today's play count",
+        "All buttons have min_size 120x120px for toddler touch targets"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-004"],
+      "dependencies": ["US-004"]
+    },
+
+    {
+      "id": "US-008",
+      "title": "Audio Manager Singleton",
+      "description": "As a developer, I need AudioManager.gd to handle all audio playback with proper bus routing.",
+      "priority": 8,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "AudioManager.gd autoload created",
+        "Functions: play_sfx(path, bus='SFX'), play_voice(path), play_music(path, loop=true)",
+        "set_volume(bus_name, volume_db) function for volume control",
+        "SFX player pool supports up to 4 simultaneous sounds",
+        "Voice player has priority over SFX (ducking when voice plays)",
+        "All audio paths relative to /assets/sounds/"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-002"],
+      "dependencies": ["US-002"]
+    },
+
+    {
+      "id": "US-009",
+      "title": "Tap Pop - Scene & Balloon Spawn System",
+      "description": "As a developer, I need to create the TapPop scene with balloon spawning logic.",
+      "priority": 9,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "TapPopGame.tscn created with Node2D root",
+        "Balloon.tscn scene with Area2D + Sprite + CircleShape2D (40px radius)",
+        "Spawn logic: random position within 200px margins from screen edges",
+        "Maximum 3 balloons visible at once",
+        "Balloon colors: red (#E84A3D), blue (#38BDF8), yellow (#FBBF24), green (#34D399)",
+        "Balloons respawn 1 second after being popped"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-010",
+      "title": "Tap Pop - Touch Detection & Pop Animation",
+      "description": "As a developer, I need to implement balloon tap detection and pop effects.",
+      "priority": 10,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "_input_event function detects taps on balloon Area2D",
+        "On tap: scale tween from 1.0 to 0 over 200ms with EASE_OUT",
+        "Particle burst: 8 small circles emitted from balloon center",
+        "Haptic feedback: OS.vibrate_msec(50) on successful tap",
+        "Balloon removed from scene after pop animation completes",
+        "New balloon spawns 1 second after pop"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-009"],
+      "dependencies": ["US-009"]
+    },
+
+    {
+      "id": "US-011",
+      "title": "Tap Pop - Audio Feedback & Session Tracking",
+      "description": "As a developer, I need to add audio feedback and session logging to Tap Pop game.",
+      "priority": 11,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "On balloon tap: play pop_success.ogg via AudioManager",
+        "Play word callout based on balloon color (e.g., 'merah!' for red)",
+        "Audio files in /assets/sounds/words/id/warna_{color}.ogg format",
+        "Each tap recorded via SessionManager.record_tap()",
+        "Session auto-ends after 60 taps OR 10 minutes via SessionManager.end_session()",
+        "No timer, no score, no failure state displayed to child"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-010", "US-008"],
+      "dependencies": ["US-010", "US-008"]
+    },
+
+    {
+      "id": "US-012",
+      "title": "Tap Pop - Age Gating Implementation",
+      "description": "As a developer, I need to adjust balloon count based on child's age from parent settings.",
+      "priority": 12,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "Read child_age from parent settings (default: 3)",
+        "Ages 2-3: spawn only 2 balloons, colors limited to red/blue/yellow",
+        "Ages 4-5: spawn 3 balloons, all colors available",
+        "Age checked on game start via GameManager.get_child_age()",
+        "Balloon count adjusted immediately if age setting changes between sessions"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-011"],
+      "dependencies": ["US-011"]
+    },
+
+    {
+      "id": "US-013",
+      "title": "Drag Match - Scene & Shape Setup",
+      "description": "As a developer, I need to create the DragMatch scene with draggable shape objects.",
+      "priority": 13,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "DragMatchGame.tscn created with Control root",
+        "Shape.tscn scene with Control node + ColorRect (50x50px)",
+        "Shapes: Circle, Square, Triangle, Star, Heart (using TextureRect or Polygon2D)",
+        "Slot.tscn scene with ColorRect placeholder (60x60px)",
+        "2-4 shape pairs spawned based on session number",
+        "Shapes arranged at bottom, slots arranged in grid at center"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-014",
+      "title": "Drag Match - Drag & Drop Logic",
+      "description": "As a developer, I need to implement drag detection and drop validation for shapes.",
+      "priority": 14,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "_gui_input function detects MOUSE_BUTTON press + motion for drag start",
+        "10px deadzone before drag activates (prevents accidental drags)",
+        "During drag: shape opacity 0.7, scale 1.1, follows cursor",
+        "On button release: check if shape overlaps with slot Area2D",
+        "Drop detection: get_overlapping_areas() on shape",
+        "Shape snaps back to original position if dropped outside slot"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-013"],
+      "dependencies": ["US-013"]
+    },
+
+    {
+      "id": "US-015",
+      "title": "Drag Match - Match Validation & Feedback",
+      "description": "As a developer, I need to validate correct matches and provide audiovisual feedback.",
+      "priority": 15,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "On drop: compare shape.shape_type with slot.slot_type",
+        "Correct match: play success SFX, play word callout (e.g., 'lingkaran!'), slot highlights",
+        "Correct match: shape tweens to slot center (0.2s easing)",
+        "Wayang mascot plays dance animation on correct match",
+        "Incorrect match: gentle SFX, shape bounces back (0.3s tween)",
+        "Matched pair removed after 1 second delay",
+        "Session ends after 8 successful matches OR 10 minutes"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-014"],
+      "dependencies": ["US-014"]
+    },
+
+    {
+      "id": "US-016",
+      "title": "Drag Match - Progression System",
+      "description": "As a developer, I need to implement session-based difficulty progression.",
+      "priority": 16,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "Track times_played per shape type in game_progress table",
+        "Sessions 1-3: 2 shapes only (100% match rate expected)",
+        "Sessions 4-7: 3 shapes",
+        "Sessions 8+: 4 shapes",
+        "Progression transparent to user (no 'level up' messages)",
+        "Shape count checked on game start from database"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-015"],
+      "dependencies": ["US-015"]
+    },
+
+    {
+      "id": "US-017",
+      "title": "Memory Flip - Scene & Card Setup",
+      "description": "As a developer, I need to create the MemoryFlip scene with card grid layout.",
+      "priority": 17,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "MemoryFlipGame.tscn created with Control root",
+        "Card.tscn scene with Control + ColorRect for front/back",
+        "Card front: blue gradient with ? icon",
+        "Card back: TextureRect for content image",
+        "2x2 grid (4 cards) for ages 2-3, 2x3 grid (6 cards) for ages 4+",
+        "Card size: 60x60px, 10px spacing between cards",
+        "Grid centered on screen with 40px margins"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-018",
+      "title": "Memory Flip - Card Flip Animation & State",
+      "description": "As a developer, I need to implement card flip mechanics with animation.",
+      "priority": 18,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "Card.gd script with flipped, matched, content_id variables",
+        "On click: rotate Y axis from 0 to 180 degrees over 0.3s (tween with EASE_IN_OUT)",
+        "Flip soft SFX plays on flip (/sounds/flip_soft.ogg)",
+        "Max 2 cards can be flipped simultaneously (state: flipping, waiting, reset)",
+        "Flipped cards stored in array for match comparison",
+        "Match check triggered after 0.5s delay when 2 cards flipped"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-017"],
+      "dependencies": ["US-017"]
+    },
+
+    {
+      "id": "US-019",
+      "title": "Memory Flip - Match Logic & Win Condition",
+      "description": "As a developer, I need to implement match detection and win state handling.",
+      "priority": 19,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "Compare content_id of 2 flipped cards",
+        "Match: play match_success SFX, word callout, glow effect on cards",
+        "Matched cards set to 0.5 opacity and disable further clicks",
+        "No match: play gentle SFX, flip both cards back after 0.5s",
+        "Win condition: all pairs matched → celebration SFX + 'Wah hebat!' label",
+        "Auto-transition to menu after 3 seconds on win"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-018"],
+      "dependencies": ["US-018"]
+    },
+
+    {
+      "id": "US-020",
+      "title": "Piano Hewan - Scene & Key Layout",
+      "description": "As a developer, I need to create the PianoHewan scene with interactive piano keys.",
+      "priority": 20,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "PianoGame.tscn created with Control root",
+        "PianoKey.tscn scene with Control + ColorRect (50x150px)",
+        "5 keys arranged horizontally at screen center",
+        "Each key has TextureRect for animal icon above it",
+        "Key colors: distinct colors (red, blue, yellow, green, orange)",
+        "2px spacing between keys"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-021",
+      "title": "Piano Hewan - Sound Playback & Polyphony",
+      "description": "As a developer, I need to implement animal sound playback with multi-touch support.",
+      "priority": 21,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "Key mapping stored: C4=Komodo, D4=Orangutan, E4=Burung, F4=Paus, G4=Belalang",
+        "On tap: play animal sound once via AudioManager",
+        "On hold (press): loop sound for max 3 seconds, then fade out",
+        "Multi-touch enabled: up to 3 simultaneous sounds (polyphonic)",
+        "Key highlight: brightness +30% on press, fade out on release",
+        "Haptic: 30ms vibrate on press, 50ms on release"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-020"],
+      "dependencies": ["US-020"]
+    },
+
+    {
+      "id": "US-022",
+      "title": "Piano Hewan - Character Animation & Auto-Exit",
+      "description": "As a developer, I need to add mascot reaction and inactivity timeout.",
+      "priority": 22,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "Wayang mascot dances while any sound plays (animation syncs to rhythm)",
+        "Inactivity timer starts at 15 minutes on game start",
+        "Timer resets on any key press",
+        "After 15 min inactivity: fade to menu with 'Sampai jumpa!' message",
+        "No time limit displayed to child during play"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-021"],
+      "dependencies": ["US-021"]
+    },
+
+    {
+      "id": "US-023",
+      "title": "Finger Paint - Canvas & Drawing System",
+      "description": "As a developer, I need to create the FingerPaint scene with drawing canvas.",
+      "priority": 23,
+      "storyPoints": 6,
+      "acceptanceCriteria": [
+        "FingerPaintGame.tscn created with Control root",
+        "Canvas: ColorRect 800x600px at screen center, white background",
+        "Brush system: line drawing on InputEvent.MOUSE_MOTION while pressed",
+        "Brush size: 20px diameter default, stored in current_brush_size variable",
+        "Anti-aliasing enabled on line drawing",
+        "Line smoothing: every 2 points averaged to reduce jitter",
+        "Strokes stored in Array[Dictionary] with points, color, size",
+        "Max 500 strokes (new strokes replace oldest if limit reached)"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-024",
+      "title": "Finger Paint - Color Palette & Tools",
+      "description": "As a developer, I need to add color selection and drawing tools.",
+      "priority": 24,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "8 color buttons at bottom: red, blue, yellow, green, pink, orange, purple, black",
+        "Each button: 40x40px circular ColorRect",
+        "Active color highlighted with glow effect",
+        "Brush size buttons: small (10px), medium (20px default), large (30px)",
+        "Clear All button: shows confirmation dialog 'Hapus gambar?'",
+        "Dialog has OK/Batal buttons, centered on screen"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-023"],
+      "dependencies": ["US-023"]
+    },
+
+    {
+      "id": "US-025",
+      "title": "Finger Paint - Save & Haptic Feedback",
+      "description": "As a developer, I need to implement save functionality and touch feedback.",
+      "priority": 25,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "Save button: camera icon at bottom-right",
+        "On save: export canvas texture to PNG",
+        "File path: user://paintings/painting_{timestamp}.png",
+        "Save painting metadata to database (source='FingerPaint', filepath, created_at)",
+        "'Gambar Tersimpan!' label shows for 2 seconds after save",
+        "Haptic feedback during draw: continuous ~20Hz vibration",
+        "Canvas renders at 30FPS (Engine.max_fps set in _ready())"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-024"],
+      "dependencies": ["US-024"]
+    },
+
+    {
+      "id": "US-026",
+      "title": "Shape Silhouette - Scene & Drag System",
+      "description": "As a developer, I need to create the ShapeMatch scene with silhouette matching.",
+      "priority": 26,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "ShapeMatchGame.tscn created with Control root",
+        "Silhouette placeholder: ColorRect 100x100px at center, dark blue outline",
+        "Draggable options: 3-4 shapes (60x60px) at bottom",
+        "Content sets: Rumah Adat (sessions 1-2), Hewan (sessions 3-4), Mix (sessions 5+)",
+        "Drag detection: same as DragMatch (10px deadzone, opacity 0.7, scale 1.1)",
+        "Drop detection: check if shape position overlaps silhouette placeholder"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-027",
+      "title": "Shape Silhouette - Match Validation & Progression",
+      "description": "As a developer, I need to implement silhouette matching with visual feedback.",
+      "priority": 27,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "On correct drop: shape animates into silhouette (0.5s slide + scale tween)",
+        "Color fills silhouette with 0.3s fade animation",
+        "Success SFX + Wayang celebration animation",
+        "Auto-transition to next puzzle after 1.5 seconds",
+        "Incorrect drop: shape bounces back, gentle SFX only",
+        "5-7 puzzles per session, session ends after completion OR 10 minutes"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-026"],
+      "dependencies": ["US-026"]
+    },
+
+    {
+      "id": "US-028",
+      "title": "Coloring Book - Template Loading System",
+      "description": "As a developer, I need to create template loading with flood-fill capability.",
+      "priority": 28,
+      "storyPoints": 6,
+      "acceptanceCriteria": [
+        "ColoringGame.tscn created with Control root",
+        "Template loading: supports PNG/SVG with segmented regions",
+        "Templates: 5 at launch (batik, komodo, anggrek, rumah joglo, melati)",
+        "Template resolution: 800x600 for display, 1200x900 for export",
+        "Flood-fill algorithm implemented on region tap",
+        "Pre-computed fill map generated on template load for performance"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-029",
+      "title": "Coloring Book - Coloring & Undo System",
+      "description": "As a developer, I need to implement region coloring with undo functionality.",
+      "priority": 29,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "On region tap: fill with current color using flood fill",
+        "8 color palette (same as Finger Paint)",
+        "Tap + hold on colored region: opens palette for recoloring",
+        "Undo button: reverts last color action",
+        "Max 20 undo stack (Array[Dictionary] of previous states)",
+        "Auto-save after every color change to temporary file",
+        "Age-based complexity: 2-3yo (2-3 regions), 3-4yo (5-8 regions), 4-5yo (10-15 regions)"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-028"],
+      "dependencies": ["US-028"]
+    },
+
+    {
+      "id": "US-030",
+      "title": "Coloring Book - Export & Gallery Integration",
+      "description": "As a developer, I need to export completed colorings to the gallery.",
+      "priority": 30,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "Save button exports completed coloring to PNG",
+        "Export resolution: 1200x900 for print quality",
+        "File saved to user://paintings/coloring_{timestamp}.png",
+        "Metadata saved to database (source='Coloring', filepath, template_id)",
+        "Parent dashboard gallery displays colorings with thumbnails",
+        "Download button in gallery saves to device storage"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-029"],
+      "dependencies": ["US-029"]
+    },
+
+    {
+      "id": "US-031",
+      "title": "Music Rhythm - Scene & Beat Visuals",
+      "description": "As a developer, I need to create the RhythmGame scene with beat circle visuals.",
+      "priority": 31,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "RhythmGame.tscn created with Control root",
+        "4 beat circles (ColorRect) arranged horizontally at center",
+        "Each circle: 50x50px, spacing 20px",
+        "Beat indicator: circle brightness pulse on beat",
+        "Song player: AudioStreamPlayer for backing track",
+        "Songs: Twinkle Twinkle ID, Cicak-cicak di Dinding, Lihat Lihat Penyu"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-007"],
+      "dependencies": ["US-007"]
+    },
+
+    {
+      "id": "US-032",
+      "title": "Music Rhythm - Tap Detection & Scoring",
+      "description": "As a developer, I need to implement beat timing detection and tap scoring.",
+      "priority": 32,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "Beat tracker: array of beat timestamps (1 second intervals)",
+        "Tap detection: gui_input on circles",
+        "Timing window: ±0.3s from beat = correct",
+        "Correct tap: circle brightens + shrinks (tween), particle effect, ding SFX",
+        "Missed beat: circle fades (no error sound), no penalty",
+        "Score counter: tracks correct/total beats (hidden from child)",
+        "End of song: display 'Kamu dapat X/Y beat!' message with celebration"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-031"],
+      "dependencies": ["US-031"]
+    },
+
+    {
+      "id": "US-033",
+      "title": "Parent Dashboard - PIN Login",
+      "description": "As a parent, I need a PIN-protected dashboard so that only I can access settings.",
+      "priority": 33,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "ParentDashboard.tscn scene created",
+        "PIN input: 4 LineEdit nodes, focus moves automatically",
+        "Default PIN: 1234, stored in user://settings.json",
+        "On correct PIN: transition to dashboard content",
+        "On incorrect PIN: shake animation, clear input",
+        "Change PIN option in dashboard settings",
+        "Back button from games goes to menu, NOT dashboard"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-005"],
+      "dependencies": ["US-005"]
+    },
+
+    {
+      "id": "US-034",
+      "title": "Parent Dashboard - Child Profile Settings",
+      "description": "As a parent, I need to set my child's age and preferences so content is age-appropriate.",
+      "priority": 34,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "Child Profile section in dashboard",
+        "Age slider: HSlider with range 2-5, current value displayed",
+        "Name input: LineEdit for child's name (optional)",
+        "Content preferences: CheckBox list for each game type",
+        "Save button: writes settings to user://child_profile.json",
+        "Age value used by all games for content gating",
+        "Settings loaded on app startup via GameManager"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-033"],
+      "dependencies": ["US-033"]
+    },
+
+    {
+      "id": "US-035",
+      "title": "Parent Dashboard - Playtime Statistics",
+      "description": "As a parent, I need to see my child's playtime statistics so I can monitor usage.",
+      "priority": 35,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "7-day playtime chart: bar graph using TextureRect or custom draw",
+        "Query sessions table for last 7 days data",
+        "Y-axis: hours played (0-4 range), X-axis: days of week",
+        "Game list: ItemList with 'Game Name: X plays' format",
+        "Play count per game aggregated from sessions table",
+        'Today\'s total: Label showing hours played today',
+        "Data refreshes when dashboard opens"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-033"],
+      "dependencies": ["US-033"]
+    },
+
+    {
+      "id": "US-036",
+      "title": "Parent Dashboard - Gallery & Export",
+      "description": "As a parent, I need a gallery to view and download my child's artwork.",
+      "priority": 36,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "Gallery section: GridContainer of painting thumbnails",
+        "Query paintings table for all saved artworks",
+        "Thumbnail: TextureRect loaded from filepath",
+        "On thumbnail tap: show full-size image in popup",
+        "Download button: saves PNG to device Downloads folder",
+        "Delete button: removes file and database entry with confirmation",
+        "Date label under each thumbnail (format: DD/MM/YYYY)"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-033"],
+      "dependencies": ["US-033"]
+    },
+
+    {
+      "id": "US-037",
+      "title": "Parent Dashboard - Settings & Audio Controls",
+      "description": "As a parent, I need to configure app settings like language and audio volume.",
+      "priority": 37,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "Settings tab: TabContainer with sub-sections",
+        "Language: OptionButton (Bahasa Indonesia, English)",
+        "Audio volume: HSlider for Background, SFX, Voice buses (-20 to 0 dB)",
+        "Subtitles: CheckBox toggle (for future text display)",
+        "Screen timeout: OptionButton (5 min, 10 min, 15 min, Never)",
+        "App size: OptionButton (Lite 30MB, Full 60MB)",
+        "All settings saved to user://app_settings.json"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-033"],
+      "dependencies": ["US-033"]
+    },
+
+    {
+      "id": "US-038",
+      "title": "Parent Dashboard - Privacy & Legal Links",
+      "description": "As a parent, I need access to privacy policy and legal information.",
+      "priority": 38,
+      "storyPoints": 2,
+      "acceptanceCriteria": [
+        "Privacy Policy button: opens /assets/legal/privacy_policy_id.txt",
+        "Terms of Service button: opens /assets/legal/terms_id.txt",
+        "Content displayed in scrollable popup dialog",
+        "Close button on dialog",
+        "Legal documents in Bahasa Indonesia",
+        "Cloud sync toggle: CheckBox with '(coming soon)' label disabled"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-033"],
+      "dependencies": ["US-033"]
+    },
+
+    {
+      "id": "US-039",
+      "title": "Android Build Configuration",
+      "description": "As a developer, I need to configure the Android export for optimal performance.",
+      "priority": 39,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "Android export preset: Minimum SDK 26 (Android 8.0)",
+        "Package name: com.playtap.game (or custom)",
+        "Texture compression: VRAM Compression enabled",
+        "Audio format: OGG Vorbis for all sounds",
+        "Architecture: arm64-v8a (primary), armeabi-v7a (fallback)",
+        "Permissions: only WRITE_EXTERNAL_STORAGE for gallery",
+        "Export options: Strip binaries enabled for smaller APK"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": [],
+      "dependencies": []
+    },
+
+    {
+      "id": "US-040",
+      "title": "Performance Optimization",
+      "description": "As a developer, I need to optimize the app for low-end Android devices.",
+      "priority": 40,
+      "storyPoints": 5,
+      "acceptanceCriteria": [
+        "FPS capped at 30 via Engine.max_fps = 30 in Main._ready()",
+        "Object pooling: balloon/card instances reused (not destroyed)",
+        "VisibleOnScreenNotifier2D on particle emitters",
+        "Audio preloaded in _ready() for all SFX",
+        "Texture import: VRAM compression, max size 1024x1024",
+        "Memory usage: <150MB verified via profiler",
+        "Tap latency: <100ms perceived responsiveness"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-039"],
+      "dependencies": ["US-039"]
+    },
+
+    {
+      "id": "US-041",
+      "title": "Privacy Policy & GDPR Compliance Documents",
+      "description": "As a parent, I need clear privacy documentation so I can trust the app with my child.",
+      "priority": 41,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "privacy_policy_id.txt created in /assets/legal/",
+        "States: zero child PII collected, no location/device IDs",
+        "States: session data stored locally only, 90-day retention",
+        "States: right to data deletion mechanism (clear app data)",
+        "GDPR clause: parental consent for any future data features",
+        "Indonesian privacy law (PDP Law) compliance statement"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": [],
+      "dependencies": []
+    },
+
+    {
+      "id": "US-042",
+      "title": "Google Play Store Assets Preparation",
+      "description": "As a product owner, I need to prepare all assets for Play Store submission.",
+      "priority": 42,
+      "storyPoints": 4,
+      "acceptanceCriteria": [
+        "App icon: 512x512 PNG, high contrast, PlayTap branding",
+        "5 screenshots: 1024x500 (tablet) or 480x360 (phone)",
+        "Screenshots show: menu, 3 gameplay examples, parent dashboard",
+        "Store description: 80 characters short, 4000 character full in Indonesian",
+        "ASO keywords: game balita, edukasi anak, game anak Indonesia, belajar anak",
+        "Privacy policy URL: valid link or in-app document"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": [],
+      "dependencies": []
+    },
+
+    {
+      "id": "US-043",
+      "title": "App Signing & Release Build",
+      "description": "As a developer, I need to create a signed release build for Play Store.",
+      "priority": 43,
+      "storyPoints": 3,
+      "acceptanceCriteria": [
+        "Release keystore created with strong password",
+        "Android export preset configured with keystore path",
+        "Release build (AAB or APK) generated successfully",
+        "App size verified: <50MB for lite version",
+        "APK tested on physical device before upload",
+        "Version code: 1, Version name: 1.0.0"
+      ],
+      "passes": false,
+      "status": "todo",
+      "blockedBy": ["US-040", "US-041"],
+      "dependencies": ["US-040", "US-041"]
+    }
+  ],
+
+  "completionPercentage": 0,
+  "estimatedHours": 320,
+  "teamSize": 1,
+  "timeline": "8 weeks (MVP Phase 1)"
+}

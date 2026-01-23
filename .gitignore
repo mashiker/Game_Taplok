@@ -1,0 +1,34 @@
+# Godot 4+ specific ignores
+.godot/
+import/
+
+# Import/export
+.release/
+export/
+
+# Mono/CLR generated files
+.mono/
+data_*/
+
+# Android builds
+*.apk
+*.aab
+*.ap_
+
+# User-specific files
+*.import
+*.import.*
+*.translation
+
+# Build files
+build/
+
+# IDE
+.vscode/
+.idea/
+*.sln
+*.csproj
+
+# OS
+.DS_Store
+Thumbs.db
