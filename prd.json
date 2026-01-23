@@ -19,8 +19,8 @@
         "Application/config/name set to 'PlayTap'",
         "Display/window/size/viewport_width set to 540, viewport_height to 960 (portrait)"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [],
       "dependencies": []
     },

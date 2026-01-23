@@ -1,2 +1,37 @@
 ## Codebase Patterns
+- Godot scene files (.tscn) use GDScript format=3 with uid references
+- Export presets configured in export_presets.cfg (separate from project.godot)
+- Audio bus layout stored in default_bus_layout.tres with dB volume levels
+- Project uses config_version=5 for Godot 4.2+
+- Use autoload (singletons) in project.godot for global managers like GameManager
+
+## [2025-01-23] - US-001
+- Created Godot 4.2 project with project.godot configured (config_version=5)
+- Set up folder structure: /assets/sounds, /assets/textures, /assets/locales, /scenes, /scripts
+- Created Main.tscn scene with Node2D root
+- Configured Android 8.0+ (API 26) export preset in export_presets.cfg
+- Set Application/config/name to 'PlayTap'
+- Set viewport to 540x960 (portrait mode)
+- Added GameManager.gd autoload singleton with signals (game_started, game_ended, reward_trigger)
+- Created default_bus_layout.tres with Master (0dB), Background (-8dB), SFX (-3dB), Voice (-4dB) buses
+- Added project icon.svg and .gitignore for Godot projects
+
+**Files changed:**
+- project.godot (new)
+- export_presets.cfg (new)
+- default_bus_layout.tres (new)
+- icon.svg (new)
+- scenes/Main.tscn (new)
+- scripts/GameManager.gd (new)
+- .gitignore (new)
+
+**Learnings for future iterations:**
+- Godot scene files use `[gd_scene load_steps=X format=3 uid="uid://..."]` header format
+- Export presets are separate from project.godot, stored in export_presets.cfg
+- Audio buses use dB values: 0dB is full volume, negative values reduce volume
+- Android minimum platform version is set via binary_format/minimum_platform_version=26 in export_presets.cfg
+- Viewport size is set in project.godot under [display] section with window/size/viewport_width and viewport_height
+- Autoload scripts are registered in [autoload] section with "*res://" prefix
+- Use .gitignore to exclude .godot/, import/, and build directories
+---
 
