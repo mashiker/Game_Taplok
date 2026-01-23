@@ -13,7 +13,7 @@ config_version=5
 config/name="PlayTap"
 config/description="Game Edukasi Balita Indonesia - Aplikasi game edukasi untuk anak balita usia 2-5 tahun"
 config/version="1.0.0"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="res://scenes/MainMenu.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
