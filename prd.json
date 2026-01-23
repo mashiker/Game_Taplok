@@ -288,8 +288,8 @@
         "2-4 shape pairs spawned based on session number",
         "Shapes arranged at bottom, slots arranged in grid at center"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-007"
       ],
@@ -311,8 +311,8 @@
         "Drop detection: get_overlapping_areas() on shape",
         "Shape snaps back to original position if dropped outside slot"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-013"
       ],
@@ -335,8 +335,8 @@
         "Matched pair removed after 1 second delay",
         "Session ends after 8 successful matches OR 10 minutes"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-014"
       ],
@@ -358,8 +358,8 @@
         "Progression transparent to user (no 'level up' messages)",
         "Shape count checked on game start from database"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [
         "US-015"
       ],
