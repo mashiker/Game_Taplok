@@ -39,8 +39,8 @@
         "Voice bus child of Master at -4dB",
         "Bus layout saved to default_bus_layout.tres"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-001"],
       "dependencies": ["US-001"]
     },
