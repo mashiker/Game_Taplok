@@ -701,7 +701,7 @@
         "Y-axis: hours played (0-4 range), X-axis: days of week",
         "Game list: ItemList with 'Game Name: X plays' format",
         "Play count per game aggregated from sessions table",
-        'Today\'s total: Label showing hours played today',
+        "Today's total: Label showing hours played today",
         "Data refreshes when dashboard opens"
       ],
       "passes": false,
