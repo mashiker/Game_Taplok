@@ -71,5 +71,29 @@
 - Fallback to key name if translation not found (prevents crashes)
 - Use TranslationManager.get_text("key") from anywhere in code to get translated strings
 - Add new translations to both locale files to maintain parity
+
+## [2025-01-23] - US-004
+- Created MainMenu.tscn scene with Control root and game button grid
+- Created GameSceneBase.tscn template for mini-games with common UI
+- GameManager.gd already exists with required signals (game_started, game_ended, reward_trigger)
+- fade_to_scene(scene_path) function already implemented with 1s tween in GameManager
+- Created MainMenu.gd with game button handlers using GameManager.fade_to_scene()
+- Created GameSceneBase.gd as base class with virtual functions for game lifecycle
+- Updated project.godot to use MainMenu.tscn as main scene
+- GameSceneBase provides _on_game_start(), _on_game_end(), _get_game_metrics() hooks
+
+**Files changed:**
+- scenes/MainMenu.tscn (new)
+- scenes/GameSceneBase.tscn (new)
+- scripts/MainMenu.gd (new)
+- scripts/GameSceneBase.gd (new)
+- project.godot (updated main_scene path)
+
+**Learnings for future iterations:**
+- Game scenes should extend GameSceneBase for consistent UI and lifecycle
+- Use GameManager.fade_to_scene() for all scene transitions
+- GameSceneBase.virtual functions: override _on_game_start() for init, _on_game_end() for cleanup
+- Back button in games should return to MainMenu.tscn
+- All game scenes should set game_name variable for proper session tracking
 ---
 

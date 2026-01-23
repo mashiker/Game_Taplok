@@ -77,8 +77,8 @@
         "Signals defined: game_started(game_name), game_ended(game_name, metrics), reward_trigger(type)",
         "Scene change transition: fade_to_scene(scene_path) function with 1s tween"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-001"],
       "dependencies": ["US-001"]
     },
