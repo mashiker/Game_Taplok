@@ -3,11 +3,12 @@
 - Export presets configured in export_presets.cfg (separate from project.godot)
 - Audio bus layout stored in default_bus_layout.tres with dB volume levels
 - Project uses config_version=5 for Godot 4.2+
-- Use autoload (singletons) in project.godot for global managers (GameManager, TranslationManager, Database)
+- Use autoload (singletons) in project.godot for global managers (GameManager, TranslationManager, Database, SessionManager)
 - Localization files use JSON format in /assets/locales/{locale}.json
 - Translation keys use snake_case format for consistency
 - Persistent data stored in user:// directory (cross-platform)
 - SQLite operations require gdsqlite plugin (not built into Godot 4.2)
+- Session tracking via SessionManager: start_session() -> record_tap() -> end_session()
 
 ## [2025-01-23] - US-001
 - Created Godot 4.2 project with project.godot configured (config_version=5)
@@ -122,5 +123,29 @@
 - Metrics stored as JSON string in database - use JSON.stringify() and JSON.parse()
 - ClassDB.class_exists("SQLite") checks if gdsqlite is available
 - Always handle database connection failures gracefully with error messages
+
+## [2025-01-23] - US-006
+- Created SessionManager.gd autoload singleton for tracking gameplay metrics
+- Variables: current_game, start_time, tap_count, content_category
+- Functions: start_session(game_name), end_session(), record_tap(), get_session_duration()
+- Auto-saves session to database on end_session() call via Database.log_session()
+- Session data written to user:// directory only (no cloud sync)
+- Added signals: session_started(game_name, category), session_ended(game_name, duration, metrics), tap_recorded(count)
+- Added metric system: set_metric(key, value), get_metric(key, default), get_all_metrics()
+- Auto-end conditions: 10 minutes (600s) or 60 taps - configurable via set_auto_end_conditions()
+- Added SessionManager to autoloads in project.godot
+
+**Files changed:**
+- scripts/SessionManager.gd (new)
+- project.godot (updated with SessionManager autoload)
+
+**Learnings for future iterations:**
+- SessionManager uses Time.get_unix_time_from_system() for timestamps
+- start_session() ends any existing session first (prevents double-session bugs)
+- Metrics are Dictionary with tap_count and content_category automatically added
+- Call SessionManager.record_tap() for each user interaction
+- Games can set custom auto-end limits (e.g., puzzles may end after completion, not taps)
+- SessionManager.check_auto_end_conditions() should be called in game _process() or timer
+- Use content_category for analytics: "cognitive" (puzzles), "creative" (painting), "musical" (piano)
 ---
 

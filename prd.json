@@ -115,8 +115,8 @@
         "Auto-saves session to database on end_session() call",
         "Session data written to user:// directory only (no cloud)"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": ["US-005"],
       "dependencies": ["US-005"]
     },
