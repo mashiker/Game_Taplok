@@ -898,8 +898,8 @@
         "Permissions: only WRITE_EXTERNAL_STORAGE for gallery",
         "Export options: Strip binaries enabled for smaller APK"
       ],
-      "passes": false,
-      "status": "todo",
+      "passes": true,
+      "status": "done",
       "blockedBy": [],
       "dependencies": []
     },
