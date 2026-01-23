@@ -1,0 +1,71 @@
+# PlayTap - ASO (App Store Optimization) Keywords
+
+## Primary Keywords (High Priority)
+game balita
+edukasi anak
+game anak Indonesia
+belajar anak
+
+## Secondary Keywords (Medium Priority)
+game edukasi
+game anak 2 tahun
+game anak 3 tahun
+game anak 4 tahun
+game anak 5 tahun
+belajar warna
+belajar bentuk
+belajar angka
+game offline
+game tanpa iklan
+game balita Indonesia
+permainan anak
+mainan edukatif
+
+## Long-tail Keywords (Lower Competition, Higher Intent)
+game edukasi anak Indonesia
+permainan balita offline
+belajar membaca anak
+game mengenal warna
+game mengenal bentuk
+piano hewan Indonesia
+game mewarnai anak
+game memori anak
+tap pop balita
+drag match balita
+memory flip anak
+
+## Indonesian Keywords Only
+balita
+anak usia dini
+PAUD (Pendidikan Anak Usia Dini)
+TK (Taman Kanak-kanak)
+bermain sambil belajar
+game lokal Indonesia
+budaya Indonesia
+hewan Indonesia
+lagu anak Indonesia
+
+## Competitor Keywords (For Comparison)
+(not to use, but for market research):
+- babybus
+- kiddoc
+- educative
+- lego duplo
+
+## English Keywords (for Indonesian users searching in English)
+toddler games
+kids learning
+children education
+baby games
+preschool games
+kindergarten games
+
+## Comma-Separated List (For Play Store Console)
+game balita, edukasi anak, game anak Indonesia, belajar anak, game edukasi, game anak 2 tahun, game anak 3 tahun, game anak 4 tahun, game anak 5 tahun, belajar warna, belajar bentuk, belajar angka, game offline, game tanpa iklan, permainan anak, mainan edukatif, PAUD, TK, bermain sambil belajar, game lokal Indonesia, budaya Indonesia, hewan Indonesia, lagu anak Indonesia
+
+## Short Description Keywords (80 char max)
+Game edukasi balita Indonesia usia 2-5 tahun. Belajar sambil bermain dengan 8 game seru!
+
+## Character Count (for reference)
+Short Description: 83 characters
+Full Description: ~3800 characters

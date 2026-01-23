@@ -1,0 +1,163 @@
+# PlayTap - Game Edukasi Balita Indonesia
+## Play Store Listing
+
+### SHORT DESCRIPTION (80 characters max)
+Game edukasi balita Indonesia usia 2-5 tahun. Belajar sambil bermain dengan 8 game seru!
+
+### FULL DESCRIPTION (4000 characters max)
+
+PlayTap adalah aplikasi game edukasi bahasa Indonesia untuk anak balita usia 2-5 tahun. Dikembangkan dengan konten budaya lokal dan 100% bahasa Indonesia.
+
+## 8 GAME EDUKASI YANG SERU:
+
+1. TAP POP - Ketuk balon untuk meletuskan! Belajar warna dan koordinasi mata-tangan.
+
+2. DRAG MATCH - Tarik bentuk ke slot yang sesuai. Kenali bentuk dasar: lingkaran, persegi, segitiga.
+
+3. MEMORY FLIP - Temukan kartu yang cocok! Latih memori anak dengan kartu warna-warni.
+
+4. PIANO HEWAN - Mainkan piano dengan suara hewan Indonesia: komodo, orangutan, burung, paus, belalang!
+
+5. FINGER PAINT - Gambar dan mewarnai dengan jari. Kembangkan kreativitas seni sejak dini.
+
+6. SHAPE SILHOUETTE - Cocokkan bentuk dengan bayangannya. Pengenalan bentuk tingkat lanjut.
+
+7. COLORING BOOK - Pewarnaan gambar dengan 8 warna. Undo jika salah, simpan karya ke galeri!
+
+8. MUSIC RHYTHM - Ketuk mengikuti irama lagu anak Indonesia: "Lihat Lihat Penyu", "Cicak-cicak di Dinding", "Twinkle Twinkle".
+
+## FITUR UNTUK ORANG TUA:
+
+- DASHBOARD ORANG TUA (dilindungi PIN)
+  - Atur profil anak (nama, usia)
+  - Lihat statistik bermain 7 hari terakhir
+  - Galeri karya seni anak
+  - Pengaturan bahasa (Indonesia/Inggris)
+  - Kontrol volume musik, SFX, dan suara
+  - Pengaturan timeout layar (5/10/15 menit)
+
+- PRIVASI TERJAMIN
+  - TANPA IKLAN
+  - TANPA pembelian dalam aplikasi
+  - Data disimpan LOKAL di perangkat
+  - TANPA analitik pihak ketiga
+  - Dashboard dilindungi PIN
+
+- KONTEN BERBASIS USIA
+  - Anak usia 2-3 tahun: konten lebih sederhana
+  - Anak usia 4-5 tahun: tantangan lebih bervariasi
+
+## MENGAPA PLAYTAP?
+
+100% BAHASA INDONESIA
+Semua konten dalam bahasa Indonesia: audio, teks, lagu, dan hewan lokal.
+
+BUDAYA LOKAL
+Hewan Indonesia: komodo, orangutan, paus, burung, belalang. Lagu anak Indonesia.
+
+AMAN UNTUK ANAK
+Tanpa iklan, tanpa pembelian, tanpa koneksi internet. Offline-first!
+
+DEVELOP DENGAN CINTA
+Dibuat untuk anak-anak Indonesia dengan cinta oleh orang tua Indonesia.
+
+## DETAIL TEKNIS:
+
+- Usia: 2-5 tahun
+- Bahasa: Indonesia (tersedia opsi Inggris)
+- Ukuran: ~50MB (versi Lite)
+- Android: 8.0 (API 26) atau lebih tinggi
+- Izin: Penyimpanan (untuk menyimpan gambar)
+
+## HUBUNGI KAMI:
+
+Email: support@playtap.id
+Website: https://playtap.id (coming soon)
+Instagram: @playtap.indonesia
+
+## KATA KUNCI PENCARIAN (ASO):
+
+game balita, edukasi anak, game anak Indonesia, belajar anak, game edukasi, game anak 2 tahun, game anak 3 tahun, game anak 4 tahun, belajar warna, belajar bentuk, belajar angka, game offline, game tanpa iklan
+
+---
+
+Versi: 1.0.0
+Terakhir diperbarui: Januari 2026
+
+---
+
+## DESKRIPSI PANJANG (Full Description for Play Store)
+
+PlayTap - Game Edukasi Balita Indonesia
+
+PlayTap adalah aplikasi game edukasi bahasa Indonesia untuk anak balita usia 2-5 tahun. Dengan 8 mini-game yang menyenangkan, anak-anak dapat belajar sambil bermain dengan konten 100% bahasa Indonesia dan budaya lokal.
+
+DELAPAN GAME EDUKATIF:
+
+1. Tap Pop - Ketuk balon berwarna untuk meletuskannya! Anak akan belajar mengenali warna (merah, biru, kuning, hijau) sambil melatih koordinasi mata-tangan dan refleks motorik.
+
+2. Drag Match - Tarik bentuk geometri ke slot yang sesuai. Anak belajar mengenali bentuk dasar: lingkaran, persegi, segitiga, bintang, dan hati.
+
+3. Memory Flip - Temukan pasangan kartu yang cocok! Game kartu memori yang melatih daya ingat anak dengan kartu berwarna-warni.
+
+4. Piano Hewan - Mainkan piano dengan suara hewan khas Indonesia! Setiap kunci piano memainkan suara hewan: komodo, orangutan, burung, paus, dan belalang.
+
+5. Finger Paint - Gambar dan mewarnai dengan jari di kanvas digital. Kembangkan kreativitas seni sejak dini dengan 8 warna penuh.
+
+6. Shape Silhouette - Cocokkan bentuk dengan bayangannya. Pengenalan bentuk tingkat lanjut untuk mengasah observasi visual.
+
+7. Coloring Book - Pewarnaan gambar dengan 8 warna dan fitur undo. Simpan karya seni anak ke galeri dalam aplikasi!
+
+8. Music Rhythm - Ketuk mengikuti irama lagu anak Indonesia populer: "Lihat Lihat Penyu", "Cicak-cicak di Dinding", dan "Twinkle Twinkle Little Star".
+
+FITUR UNTUK ORANG TUA:
+
+Dashboard Orang Tua yang dilindungi PIN memungkinkan Anda untuk:
+- Mengatur profil anak (nama dan usia)
+- Melihat statistik bermain 7 hari terakhir
+- Mengakses galeri karya seni anak
+- Mengunduh gambar ke perangkat
+- Mengubah bahasa (Indonesia/Inggris)
+- Mengontrol volume musik, efek suara, dan suara
+- Mengatur timeout layar (5/10/15 menit atau tidak pernah)
+
+PRIVASI DAN KEAMANAN:
+
+Kami sangat peduli dengan privasi anak-anak:
+- TANPA IKLAN - Anak bermain tanpa gangguan
+- TANPA pembelian dalam aplikasi - Tidak ada kejutan di tagihan
+- Data disimpan LOKAL di perangkat - Tidak dikirim ke server
+- TANPA analitik pihak ketiga - Privasi terjaga
+- Dashboard dilindungi PIN - Anak tidak dapat mengubah pengaturan
+
+KONTEN BERBASIS USIA:
+
+Untuk pengalaman terbaik, konten game disesuaikan dengan usia anak:
+- Anak usia 2-3 tahun: Game lebih sederhana dengan lebih sedikit opsi
+- Anak usia 4-5 tahun: Tantangan lebih bervariasi untuk menstimulasi perkembangan
+
+MENGAPA MEMILIH PLAYTAP?
+
+100% BAHASA INDONESIA - Semua konten dalam bahasa Indonesia: audio, teks, dan lagu.
+
+BUDAYA LOKAL - Hewan khas Indonesia: komodo, orangutan, paus, burung, dan belalang. Lagu-lagu anak Indonesia yang populer.
+
+AMAN UNTUK ANAK - Tanpa iklan, tanpa pembelian, tanpa koneksi internet. Aplikasi offline-first!
+
+DEVELOP DENGAN CINTA - Dibuat khusus untuk anak-anak Indonesia dengan cinta oleh orang tua Indonesia.
+
+SPESIFIKASI:
+
+Usia: 2-5 tahun
+Bahasa: Indonesia (tersedia opsi Inggris di pengaturan)
+Ukuran: ~50MB (versi Lite)
+Android: 8.0 (API 26) atau lebih tinggi
+Izin: Penyimpanan eksternal (untuk menyimpan gambar ke galeri perangkat)
+
+HUBUNGI KAMI:
+
+Email: support@playtap.id
+Website: https://playtap.id (coming soon)
+Instagram: @playtap.indonesia
+
+PlayTap - Belajar Sambil Bermain, dengan Cinta Bahasa Indonesia!
