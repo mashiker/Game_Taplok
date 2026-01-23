@@ -3,7 +3,6 @@
   "version": "1.0",
   "branchName": "playtap-mvp-v1",
   "description": "Aplikasi game edukasi untuk anak balita usia 2-5 tahun dengan konten 100% Bahasa Indonesia dan budaya lokal. Dibangun dengan Godot 4.2 untuk Android 8.0+.",
-
   "userStories": [
     {
       "id": "US-001",
@@ -24,7 +23,6 @@
       "blockedBy": [],
       "dependencies": []
     },
-
     {
       "id": "US-002",
       "title": "Audio Bus Architecture Configuration",
@@ -41,10 +39,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-001"],
-      "dependencies": ["US-001"]
+      "blockedBy": [
+        "US-001"
+      ],
+      "dependencies": [
+        "US-001"
+      ]
     },
-
     {
       "id": "US-003",
       "title": "Localization System Setup",
@@ -60,10 +61,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-001"],
-      "dependencies": ["US-001"]
+      "blockedBy": [
+        "US-001"
+      ],
+      "dependencies": [
+        "US-001"
+      ]
     },
-
     {
       "id": "US-004",
       "title": "Scene Structure & Signal System",
@@ -79,10 +83,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-001"],
-      "dependencies": ["US-001"]
+      "blockedBy": [
+        "US-001"
+      ],
+      "dependencies": [
+        "US-001"
+      ]
     },
-
     {
       "id": "US-005",
       "title": "SQLite Database Schema Setup",
@@ -98,10 +105,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-001"],
-      "dependencies": ["US-001"]
+      "blockedBy": [
+        "US-001"
+      ],
+      "dependencies": [
+        "US-001"
+      ]
     },
-
     {
       "id": "US-006",
       "title": "Session Manager Singleton",
@@ -117,10 +127,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-005"],
-      "dependencies": ["US-005"]
+      "blockedBy": [
+        "US-005"
+      ],
+      "dependencies": [
+        "US-005"
+      ]
     },
-
     {
       "id": "US-007",
       "title": "Main Menu Scene Layout",
@@ -138,10 +151,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-004"],
-      "dependencies": ["US-004"]
+      "blockedBy": [
+        "US-004"
+      ],
+      "dependencies": [
+        "US-004"
+      ]
     },
-
     {
       "id": "US-008",
       "title": "Audio Manager Singleton",
@@ -158,10 +174,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-002"],
-      "dependencies": ["US-002"]
+      "blockedBy": [
+        "US-002"
+      ],
+      "dependencies": [
+        "US-002"
+      ]
     },
-
     {
       "id": "US-009",
       "title": "Tap Pop - Scene & Balloon Spawn System",
@@ -178,10 +197,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-010",
       "title": "Tap Pop - Touch Detection & Pop Animation",
@@ -198,10 +220,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-009"],
-      "dependencies": ["US-009"]
+      "blockedBy": [
+        "US-009"
+      ],
+      "dependencies": [
+        "US-009"
+      ]
     },
-
     {
       "id": "US-011",
       "title": "Tap Pop - Audio Feedback & Session Tracking",
@@ -218,10 +243,15 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-010", "US-008"],
-      "dependencies": ["US-010", "US-008"]
+      "blockedBy": [
+        "US-010",
+        "US-008"
+      ],
+      "dependencies": [
+        "US-010",
+        "US-008"
+      ]
     },
-
     {
       "id": "US-012",
       "title": "Tap Pop - Age Gating Implementation",
@@ -237,10 +267,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-011"],
-      "dependencies": ["US-011"]
+      "blockedBy": [
+        "US-011"
+      ],
+      "dependencies": [
+        "US-011"
+      ]
     },
-
     {
       "id": "US-013",
       "title": "Drag Match - Scene & Shape Setup",
@@ -257,10 +290,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-014",
       "title": "Drag Match - Drag & Drop Logic",
@@ -277,10 +313,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-013"],
-      "dependencies": ["US-013"]
+      "blockedBy": [
+        "US-013"
+      ],
+      "dependencies": [
+        "US-013"
+      ]
     },
-
     {
       "id": "US-015",
       "title": "Drag Match - Match Validation & Feedback",
@@ -298,10 +337,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-014"],
-      "dependencies": ["US-014"]
+      "blockedBy": [
+        "US-014"
+      ],
+      "dependencies": [
+        "US-014"
+      ]
     },
-
     {
       "id": "US-016",
       "title": "Drag Match - Progression System",
@@ -318,10 +360,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-015"],
-      "dependencies": ["US-015"]
+      "blockedBy": [
+        "US-015"
+      ],
+      "dependencies": [
+        "US-015"
+      ]
     },
-
     {
       "id": "US-017",
       "title": "Memory Flip - Scene & Card Setup",
@@ -339,10 +384,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-018",
       "title": "Memory Flip - Card Flip Animation & State",
@@ -359,10 +407,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-017"],
-      "dependencies": ["US-017"]
+      "blockedBy": [
+        "US-017"
+      ],
+      "dependencies": [
+        "US-017"
+      ]
     },
-
     {
       "id": "US-019",
       "title": "Memory Flip - Match Logic & Win Condition",
@@ -379,10 +430,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-018"],
-      "dependencies": ["US-018"]
+      "blockedBy": [
+        "US-018"
+      ],
+      "dependencies": [
+        "US-018"
+      ]
     },
-
     {
       "id": "US-020",
       "title": "Piano Hewan - Scene & Key Layout",
@@ -399,10 +453,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-021",
       "title": "Piano Hewan - Sound Playback & Polyphony",
@@ -419,10 +476,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-020"],
-      "dependencies": ["US-020"]
+      "blockedBy": [
+        "US-020"
+      ],
+      "dependencies": [
+        "US-020"
+      ]
     },
-
     {
       "id": "US-022",
       "title": "Piano Hewan - Character Animation & Auto-Exit",
@@ -438,10 +498,13 @@
       ],
       "passes": true,
       "status": "done",
-      "blockedBy": ["US-021"],
-      "dependencies": ["US-021"]
+      "blockedBy": [
+        "US-021"
+      ],
+      "dependencies": [
+        "US-021"
+      ]
     },
-
     {
       "id": "US-023",
       "title": "Finger Paint - Canvas & Drawing System",
@@ -458,12 +521,15 @@
         "Strokes stored in Array[Dictionary] with points, color, size",
         "Max 500 strokes (new strokes replace oldest if limit reached)"
       ],
-      "passes": false,
-      "status": "todo",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "passes": true,
+      "status": "done",
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-024",
       "title": "Finger Paint - Color Palette & Tools",
@@ -478,12 +544,15 @@
         "Clear All button: shows confirmation dialog 'Hapus gambar?'",
         "Dialog has OK/Batal buttons, centered on screen"
       ],
-      "passes": false,
-      "status": "todo",
-      "blockedBy": ["US-023"],
-      "dependencies": ["US-023"]
+      "passes": true,
+      "status": "done",
+      "blockedBy": [
+        "US-023"
+      ],
+      "dependencies": [
+        "US-023"
+      ]
     },
-
     {
       "id": "US-025",
       "title": "Finger Paint - Save & Haptic Feedback",
@@ -499,12 +568,15 @@
         "Haptic feedback during draw: continuous ~20Hz vibration",
         "Canvas renders at 30FPS (Engine.max_fps set in _ready())"
       ],
-      "passes": false,
-      "status": "todo",
-      "blockedBy": ["US-024"],
-      "dependencies": ["US-024"]
+      "passes": true,
+      "status": "done",
+      "blockedBy": [
+        "US-024"
+      ],
+      "dependencies": [
+        "US-024"
+      ]
     },
-
     {
       "id": "US-026",
       "title": "Shape Silhouette - Scene & Drag System",
@@ -519,12 +591,15 @@
         "Drag detection: same as DragMatch (10px deadzone, opacity 0.7, scale 1.1)",
         "Drop detection: check if shape position overlaps silhouette placeholder"
       ],
-      "passes": false,
-      "status": "todo",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "passes": true,
+      "status": "done",
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-027",
       "title": "Shape Silhouette - Match Validation & Progression",
@@ -539,12 +614,15 @@
         "Incorrect drop: shape bounces back, gentle SFX only",
         "5-7 puzzles per session, session ends after completion OR 10 minutes"
       ],
-      "passes": false,
-      "status": "todo",
-      "blockedBy": ["US-026"],
-      "dependencies": ["US-026"]
+      "passes": true,
+      "status": "done",
+      "blockedBy": [
+        "US-026"
+      ],
+      "dependencies": [
+        "US-026"
+      ]
     },
-
     {
       "id": "US-028",
       "title": "Coloring Book - Template Loading System",
@@ -561,10 +639,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-029",
       "title": "Coloring Book - Coloring & Undo System",
@@ -582,10 +663,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-028"],
-      "dependencies": ["US-028"]
+      "blockedBy": [
+        "US-028"
+      ],
+      "dependencies": [
+        "US-028"
+      ]
     },
-
     {
       "id": "US-030",
       "title": "Coloring Book - Export & Gallery Integration",
@@ -602,10 +686,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-029"],
-      "dependencies": ["US-029"]
+      "blockedBy": [
+        "US-029"
+      ],
+      "dependencies": [
+        "US-029"
+      ]
     },
-
     {
       "id": "US-031",
       "title": "Music Rhythm - Scene & Beat Visuals",
@@ -622,10 +709,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-007"],
-      "dependencies": ["US-007"]
+      "blockedBy": [
+        "US-007"
+      ],
+      "dependencies": [
+        "US-007"
+      ]
     },
-
     {
       "id": "US-032",
       "title": "Music Rhythm - Tap Detection & Scoring",
@@ -643,10 +733,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-031"],
-      "dependencies": ["US-031"]
+      "blockedBy": [
+        "US-031"
+      ],
+      "dependencies": [
+        "US-031"
+      ]
     },
-
     {
       "id": "US-033",
       "title": "Parent Dashboard - PIN Login",
@@ -664,10 +757,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-005"],
-      "dependencies": ["US-005"]
+      "blockedBy": [
+        "US-005"
+      ],
+      "dependencies": [
+        "US-005"
+      ]
     },
-
     {
       "id": "US-034",
       "title": "Parent Dashboard - Child Profile Settings",
@@ -685,10 +781,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-033"],
-      "dependencies": ["US-033"]
+      "blockedBy": [
+        "US-033"
+      ],
+      "dependencies": [
+        "US-033"
+      ]
     },
-
     {
       "id": "US-035",
       "title": "Parent Dashboard - Playtime Statistics",
@@ -706,10 +805,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-033"],
-      "dependencies": ["US-033"]
+      "blockedBy": [
+        "US-033"
+      ],
+      "dependencies": [
+        "US-033"
+      ]
     },
-
     {
       "id": "US-036",
       "title": "Parent Dashboard - Gallery & Export",
@@ -727,10 +829,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-033"],
-      "dependencies": ["US-033"]
+      "blockedBy": [
+        "US-033"
+      ],
+      "dependencies": [
+        "US-033"
+      ]
     },
-
     {
       "id": "US-037",
       "title": "Parent Dashboard - Settings & Audio Controls",
@@ -748,10 +853,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-033"],
-      "dependencies": ["US-033"]
+      "blockedBy": [
+        "US-033"
+      ],
+      "dependencies": [
+        "US-033"
+      ]
     },
-
     {
       "id": "US-038",
       "title": "Parent Dashboard - Privacy & Legal Links",
@@ -768,10 +876,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-033"],
-      "dependencies": ["US-033"]
+      "blockedBy": [
+        "US-033"
+      ],
+      "dependencies": [
+        "US-033"
+      ]
     },
-
     {
       "id": "US-039",
       "title": "Android Build Configuration",
@@ -792,7 +903,6 @@
       "blockedBy": [],
       "dependencies": []
     },
-
     {
       "id": "US-040",
       "title": "Performance Optimization",
@@ -810,10 +920,13 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-039"],
-      "dependencies": ["US-039"]
+      "blockedBy": [
+        "US-039"
+      ],
+      "dependencies": [
+        "US-039"
+      ]
     },
-
     {
       "id": "US-041",
       "title": "Privacy Policy & GDPR Compliance Documents",
@@ -833,7 +946,6 @@
       "blockedBy": [],
       "dependencies": []
     },
-
     {
       "id": "US-042",
       "title": "Google Play Store Assets Preparation",
@@ -853,7 +965,6 @@
       "blockedBy": [],
       "dependencies": []
     },
-
     {
       "id": "US-043",
       "title": "App Signing & Release Build",
@@ -870,11 +981,16 @@
       ],
       "passes": false,
       "status": "todo",
-      "blockedBy": ["US-040", "US-041"],
-      "dependencies": ["US-040", "US-041"]
+      "blockedBy": [
+        "US-040",
+        "US-041"
+      ],
+      "dependencies": [
+        "US-040",
+        "US-041"
+      ]
     }
   ],
-
   "completionPercentage": 0,
   "estimatedHours": 320,
   "teamSize": 1,

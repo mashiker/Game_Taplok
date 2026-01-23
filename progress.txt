@@ -179,7 +179,51 @@
 - Fade in/out uses create_tween().tween_property() for smooth transitions
 ---
 
-## [2025-01-23] - US-017, US-018, US-019
+## [2026-01-23] - US-020, US-021, US-022
+- Created PianoKey.tscn scene with Control node (50x150px)
+- ColorRect for key with distinct colors (red, blue, yellow, green, orange)
+- TextureRect placeholder for animal icon above each key
+- Created PianoKey.gd with touch/multi-touch support via InputEventScreenTouch
+- Key highlight: brightness +30% on press (BRIGHTEN_AMOUNT = 0.3), fade on release
+- Haptic feedback: 30ms on press (HAPTIC_PRESS_MS), 50ms on release (HAPTIC_RELEASE_MS)
+- On tap: play animal sound once; on hold: loop for max 3s (LOOP_MAX_DURATION), then fade out
+- FADE_DURATION = 0.5s for smooth fade out
+- Created PianoGame.tscn extending GameSceneBase
+- HBoxContainer with 5 keys arranged horizontally at screen center, 2px spacing
+- Created PianoGame.gd with KEY_DATA dictionary mapping keys to animals/sounds/colors
+- Key mapping: C4=Komodo (red), D4=Orangutan (blue), E4=Burung (yellow), F4=Paus (green), G4=Belalang (orange)
+- Multi-touch: up to 3 simultaneous sounds (MAX_POLYPHONY)
+- Active sound counter (active_sounds) tracks playing sounds for polyphony limit
+- Wayang mascot dances while any sound plays (wayang_dancing flag, _update_wayang_dance())
+- Inactivity timer: 15 minutes (INACTIVITY_TIMEOUT = 900s), resets on key press
+- Auto-fade to menu on inactivity timeout
+- Session tracking: records taps, sets content_category to "musical"
+- Animal sounds stored in /assets/sounds/animals/ as OGG files
+- Each PianoKey has its own AudioStreamPlayer for independent playback
+- AudioStreamOggVorbis used with loop enabled for sustained sounds
+
+**Files changed:**
+- scenes/PianoKey.tscn (new)
+- scripts/PianoKey.gd (new)
+- scenes/PianoGame.tscn (new)
+- scripts/PianoGame.gd (new)
+- assets/sounds/animals/README.md (new)
+
+**Learnings for future iterations:**
+- Multi-touch in Godot: use InputEventScreenTouch in _input() function, check get_rect().has_point() for local position
+- For multi-touch support, set mouse_filter = MOUSE_FILTER_PASS on Control nodes
+- Each key needs its own AudioStreamPlayer for independent sound playback (polyphony)
+- Use Color.v (value) for brightness adjustment in HSV color space
+- Haptic feedback: OS.vibrate_msec(duration_ms) works on Android/iOS
+- OGG audio with loop: set stream.loop = true on AudioStreamOggVorbis
+- Fade out audio: tween volume_db to -60 over duration, then stop player
+- Inactivity timer pattern: accumulate delta in _process(), reset on user action
+- Wayang dance sync: check active_sounds counter, start dance on press, stop when no sounds playing
+- Animal sound files: komodo.ogg, orangutan.ogg, burung.ogg, paus.ogg, belalang.ogg in /assets/sounds/animals/
+- Session content_category for musical games: "musical" (for analytics)
+- Inactivity timeout of 15 minutes is appropriate for toddler creative play
+- GameSceneBase extension: set game_name before super._ready() for proper session tracking
+---
 - Created Card.tscn scene with Control node (60x60px)
 - Card has CardPivot child with pivot_offset at center for rotation
 - Front: ColorRect (blue) with Label "?" icon
