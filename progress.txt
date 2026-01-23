@@ -316,4 +316,53 @@
 - Use await tween.finished for sequential animations (slide then color fill)
 - Use is_transitioning flag to prevent input during animations
 - SessionManager.start_session(game_name, "cognitive") for proper category tracking
+
+## [2026-01-23] - US-009, US-010, US-011, US-012
+- Created Balloon.tscn scene with Area2D root and CollisionLayer 2 (Interactive)
+- Sprite2D for balloon visual using ColorRect placeholder (80x80px)
+- CollisionShape2D with CircleShape2D (40px radius)
+- Balloon.gd script with _input_event for tap detection via InputEventMouseButton
+- Pop animation: scale tween from 1.0 to 0 over 200ms (POP_DURATION) with EASE_OUT and TRANS_BACK easing
+- Haptic feedback: OS.vibrate_msec(50) on successful tap
+- Created TapPopGame.tscn extending GameSceneBase with light blue background (Color(0.85, 0.93, 1, 1))
+- BalloonContainer for balloon spawning with 200px margins (SCREEN_MARGIN) from edges
+- Wayang mascot placeholder in top bar for celebrations
+- Balloon colors: red (#E84A3D), blue (#38BDF8), yellow (#FBBF24), green (#34D399)
+- Spawn up to 3 balloons at random positions within screen bounds
+- Balloons respawn 1s after pop (RESPAWN_DELAY) using Timer
+- Age gating: ages 2-3 get 2 balloons (red/blue/yellow only), ages 4-5 get 3 balloons (all colors)
+- Audio feedback: pop_success.ogg SFX and color word callout (warna_{color}.ogg)
+- Session tracking: SessionManager.record_tap() on each pop, auto-end after 60 taps or 10 minutes
+- Color translation keys: color_red, color_blue, color_yellow, color_green
+- Audio paths: sounds/sfx/pop_success.ogg, sounds/words/id/warna_merah.ogg, etc.
+- GameManager.get_child_age() method added for age-gating (defaults to 3)
+- GameManager.set_child_age(age) method for parent dashboard to update age
+- Added .gdignore in assets/sounds/ to prevent import errors for missing audio files
+- Session category: "cognitive" for Tap Pop game
+- Balloon removal: queue_free() called after pop animation completes via _on_pop_complete callback
+
+**Files changed:**
+- scenes/Balloon.tscn (new)
+- scripts/Balloon.gd (new)
+- scenes/TapPopGame.tscn (new)
+- scripts/TapPopGame.gd (new)
+- scripts/GameManager.gd (updated with get_child_age() and set_child_age() methods)
+- assets/sounds/.gdignore (new)
+- prd.json (updated US-009, US-010, US-011, US-012 to passes: true)
+
+**Learnings for future iterations:**
+- Area2D.input_event signal provides viewport, event, and shape_idx parameters
+- For tap detection: check if event is InputEventMouseButton and event.pressed is true
+- Pop animation pattern: tween scale to Vector2.ZERO, then use callback to queue_free()
+- Balloon positioning: use container.get_size() to calculate spawn bounds, apply margins
+- Age gating: read from GameManager.get_child_age(), default to age 3 if not set
+- For toddler games: limit options for younger ages (2-3yo get 2 balloons, 4-5yo get 3)
+- Color name translation: use dictionary to map English color names to Indonesian for audio paths
+- Audio file naming: warna_merah.ogg (merah=red), warna_biru.ogg (biru=blue), etc.
+- SessionManager.check_auto_end_conditions() should be called after each tap
+- Use is_popping flag to prevent multiple pop animations on same balloon
+- Balloon spawn timer: create Timer node in _ready(), connect timeout signal
+- Session auto-end: check if SessionManager.is_session_active() after each action
+- Balloon colors stored as constants dictionary for easy reference
+- TranslationManager.get_text() returns localized string for color names
 ---
