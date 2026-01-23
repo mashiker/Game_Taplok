@@ -277,8 +277,8 @@ func _init_database() -> void:
 		database_initialized.emit(false)
 		return
 
-	# Create database instance
-	db = SQLite.new()
+	# Create database instance using ClassDB to avoid static type errors
+	db = ClassDB.instantiate("SQLite")
 
 	# Open or create database
 	var full_path = ProjectSettings.globalize_path(DB_PATH)
