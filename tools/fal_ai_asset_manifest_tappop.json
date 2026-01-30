@@ -1,0 +1,54 @@
+{
+  "style": {
+    "model": "fal-ai/flux-pro/v1.1-ultra",
+    "look": "kartun flat pastel",
+    "notes": [
+      "transparent background for sprites",
+      "thick friendly outline",
+      "simple shapes, kid friendly",
+      "no text, no watermark"
+    ]
+  },
+  "outputs": {
+    "balloons": {"size": [256, 256], "format": "png"},
+    "background": {"size": [1080, 1920], "format": "png"},
+    "ui": {"size": [512, 256], "format": "png"}
+  },
+  "assets": [
+    {
+      "id": "bg_tappop",
+      "type": "background",
+      "out": "assets/textures/games/tappop/bg_tappop_1080x1920.png",
+      "prompt": "Flat pastel cartoon vertical background for a toddler balloon popping game. Soft sky gradient, rounded clouds, subtle floating bubbles, cheerful confetti dots, lots of empty space center, no text.",
+      "negative": "text, watermark, logo, realistic, dark, scary, clutter"
+    },
+    {
+      "id": "balloon_red",
+      "type": "balloon",
+      "out": "assets/textures/games/tappop/balloon_red_256.png",
+      "prompt": "Cute flat pastel cartoon balloon character, red, smiling, with small glossy highlight, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo, complex background"
+    },
+    {
+      "id": "balloon_blue",
+      "type": "balloon",
+      "out": "assets/textures/games/tappop/balloon_blue_256.png",
+      "prompt": "Cute flat pastel cartoon balloon character, blue, smiling, with small glossy highlight, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo, complex background"
+    },
+    {
+      "id": "balloon_yellow",
+      "type": "balloon",
+      "out": "assets/textures/games/tappop/balloon_yellow_256.png",
+      "prompt": "Cute flat pastel cartoon balloon character, yellow, smiling, with small glossy highlight, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo, complex background"
+    },
+    {
+      "id": "balloon_green",
+      "type": "balloon",
+      "out": "assets/textures/games/tappop/balloon_green_256.png",
+      "prompt": "Cute flat pastel cartoon balloon character, green, smiling, with small glossy highlight, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo, complex background"
+    }
+  ]
+}

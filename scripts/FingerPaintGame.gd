@@ -44,6 +44,10 @@ var haptic_timer: float = 0.0
 var color_buttons: Array[Button] = []
 var brush_size_buttons: Array[Button] = []
 
+var _strokes_done: int = 0
+var _target_strokes: int = 5
+var _goal_rewarded: bool = false
+
 ## UI References ##
 @onready var color_palette_container: HBoxContainer
 @onready var brush_size_container: HBoxContainer
@@ -56,6 +60,7 @@ func _ready() -> void:
 	super._ready()
 	game_name = "FingerPaint"
 	Engine.max_fps = 30  # Cap FPS for drawing performance
+	_update_hud()
 	_setup_canvas()
 	_setup_ui_elements()
 	_create_paintings_directory()
@@ -120,6 +125,9 @@ func save_painting() -> void:
 
 	# Save to database
 	Database.save_painting("FingerPaint", filepath)
+
+	# Reward feedback
+	RewardSystem.reward_success(get_viewport().get_visible_rect().size * 0.5, 1.6)
 
 	# Show save confirmation
 	_show_save_confirmation()
@@ -318,6 +326,9 @@ func _handle_mouse_button(event: InputEventMouseButton) -> void:
 		if is_drawing and current_stroke.size() > 0:
 			# Save the stroke
 			_stroke_to_array()
+			_strokes_done += 1
+			RewardSystem.reward_success(canvas.global_position + local_pos, 0.7)
+			_update_hud()
 		is_drawing = false
 		last_point = Vector2.ZERO
 		current_stroke = []
@@ -389,10 +400,22 @@ func _redraw_all_strokes() -> void:
 
 	canvas_texture.set_image(canvas_image)
 
+func _update_hud() -> void:
+	var obj := $GameContainer/TopBar/ObjectiveLabel
+	var prog := $GameContainer/TopBar/ProgressLabel
+	if obj:
+		obj.text = "Buat coretan"
+	if prog:
+		prog.text = str(min(_strokes_done, _target_strokes)) + "/" + str(_target_strokes)
+
+	if not _goal_rewarded and _strokes_done >= _target_strokes:
+		_goal_rewarded = true
+		RewardSystem.reward_success(get_viewport().get_visible_rect().size * 0.5, 1.5)
+
 # Trigger haptic feedback
 func _trigger_haptic() -> void:
 	if OS.has_feature("android") or OS.has_feature("ios"):
-		OS.vibrate_msec(20)
+		Input.vibrate_handheld(20)
 
 # Update color button highlighting
 func _update_color_buttons() -> void:

@@ -30,7 +30,7 @@ const CIRCLE_COLORS: Array[Color] = [
 ]
 
 ## Variables ##
-var beat_circles: Array[ColorRect] = []
+var beat_circles: Array[TextureRect] = []
 var beat_timestamps: Array[float] = []
 var current_song_index: int = 0
 var song_start_time: float = 0.0
@@ -56,6 +56,8 @@ func _ready() -> void:
 
 	# Get node references
 	_setup_node_references()
+
+	_update_hud()
 
 	# Set up the rhythm game
 	_setup_rhythm_game()
@@ -140,15 +142,19 @@ func _setup_rhythm_game() -> void:
 
 # Create a single beat circle
 func _create_beat_circle(index: int) -> void:
-	var circle = ColorRect.new()
+	var circle := TextureRect.new()
 	circle.name = "BeatCircle" + str(index)
 	circle.custom_minimum_size = Vector2(CIRCLE_SIZE, CIRCLE_SIZE)
-	circle.color = CIRCLE_COLORS[index]
 	circle.mouse_filter = Control.MOUSE_FILTER_PASS
+	circle.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	circle.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 
-	# Make it circular (corner radius)
-	# Note: In Godot 4.2, we use theme overrides for corner radius
-	# For now, we'll use a simple colored rect - visual polish can be added later
+	# Flat pastel sprite
+	var tex_path := "res://assets/textures/games/rhythm/circle_%d_256.png" % (index + 1)
+	if ResourceLoader.exists(tex_path):
+		circle.texture = load(tex_path)
+	else:
+		circle.modulate = CIRCLE_COLORS[index]
 
 	# Connect gui_input for tap detection
 	circle.gui_input.connect(_on_circle_input.bind(index))
@@ -162,6 +168,7 @@ func _start_song() -> void:
 	var current_song = SONGS[current_song_index]
 	total_beats = current_song.beats
 	correct_beats = 0
+	_update_hud()
 	tapped_beats.clear()
 	active_particles.clear()
 
@@ -218,14 +225,14 @@ func _update_beat_visuals() -> void:
 
 	# Pulse the appropriate circle
 	for i in range(beat_circles.size()):
-		var circle = beat_circles[i]
+		var circle := beat_circles[i]
 		if circle:
 			if i == current_beat_index:
-				# Brighten the circle (pulse effect)
-				circle.color = CIRCLE_COLORS[i].lightened(0.3)
+				circle.scale = Vector2.ONE * 1.08
+				circle.modulate = Color(1, 1, 1, 1)
 			else:
-				# Return to normal color
-				circle.color = CIRCLE_COLORS[i]
+				circle.scale = Vector2.ONE
+				circle.modulate = Color(1, 1, 1, 1)
 
 # Handle tap on beat circle
 func _on_circle_input(event: InputEvent, circle_index: int) -> void:
@@ -263,8 +270,10 @@ func _handle_tap(circle_index: int) -> void:
 		# Correct tap!
 		_on_correct_tap(circle_index, closest_beat_index)
 	else:
-		# Missed beat - no penalty, just ignore
-		pass
+		# Missed beat - soft feedback
+		var circle := beat_circles[circle_index]
+		if circle:
+			RewardSystem.reward_error(circle.global_position + (circle.size * 0.5))
 
 # Handle a correct tap
 func _on_correct_tap(circle_index: int, beat_index: int) -> void:
@@ -287,41 +296,43 @@ func _on_correct_tap(circle_index: int, beat_index: int) -> void:
 	_animate_correct_tap(circle)
 
 	# Create particle effect
-	_create_particle_effect(circle)
+	_create_particle_effect(circle, circle_index)
+
+	# Reward feedback
+	RewardSystem.reward_success(circle.global_position + (circle.size * 0.5), 0.9)
 
 	# Trigger wayang celebration
 	_trigger_wayang_celebration()
+	_update_hud()
 
 	print("RhythmGame: Correct tap! Beat ", beat_index, ", total correct: ", correct_beats)
 
-# Animate correct tap (brighten + shrink)
-func _animate_correct_tap(circle: ColorRect) -> void:
-	var tween = create_tween()
+# Animate correct tap (bounce)
+func _animate_correct_tap(circle: TextureRect) -> void:
+	var tween := create_tween()
 	tween.set_parallel(true)
 
-	# Brighten color
-	var original_color = circle.color
-	circle.color = original_color.lightened(0.5)
-	tween.tween_property(circle, "color", original_color, CORRECT_ANIMATION_DURATION)
-
-	# Shrink scale
-	var original_scale = circle.scale
+	var original_scale := circle.scale
 	circle.scale = original_scale * 1.2
 	tween.tween_property(circle, "scale", original_scale, CORRECT_ANIMATION_DURATION)
+
+	var original_mod := circle.modulate
+	circle.modulate = original_mod.lightened(0.15)
+	tween.tween_property(circle, "modulate", original_mod, CORRECT_ANIMATION_DURATION)
 
 	# Use ease out back for bouncy effect
 	tween.set_ease(Tween.EASE_OUT)
 	tween.set_trans(Tween.TRANS_BACK)
 
 # Create particle effect at circle position
-func _create_particle_effect(circle: ColorRect) -> void:
+func _create_particle_effect(circle: TextureRect, circle_index: int) -> void:
 	var circle_global_pos = circle.global_position
 	var circle_size = circle.size
 	var center = circle_global_pos + circle_size / 2
 
 	for i in range(PARTICLE_COUNT):
 		var particle = ColorRect.new()
-		particle.color = circle.color.lightened(0.2)
+		particle.color = CIRCLE_COLORS[circle_index].lightened(0.2)
 		particle.size = Vector2(8, 8)
 		particle.position = center
 		particle.z_index = 100
@@ -385,6 +396,12 @@ func _on_song_finished() -> void:
 	# Show results
 	_show_results()
 
+	# Reward summary
+	if total_beats > 0 and float(correct_beats) / float(total_beats) >= 0.6:
+		RewardSystem.reward_success(get_viewport().get_visible_rect().size * 0.5, 1.6)
+	else:
+		RewardSystem.reward_error(get_viewport().get_visible_rect().size * 0.5)
+
 	# Auto-transition to menu after 3 seconds
 	var timer = Timer.new()
 	timer.wait_time = 3.0
@@ -415,6 +432,14 @@ func _show_results() -> void:
 
 		# Play celebration sound
 		AudioManager.play_sfx("sfx/celebration.ogg")
+
+func _update_hud() -> void:
+	var obj := $GameContainer/TopBar/ObjectiveLabel
+	var prog := $GameContainer/TopBar/ProgressLabel
+	if obj:
+		obj.text = "Ikuti irama"
+	if prog:
+		prog.text = str(correct_beats) + "/" + str(total_beats)
 
 # Stop music
 func _stop_music() -> void:

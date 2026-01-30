@@ -1,0 +1,88 @@
+{
+  "style": {
+    "model": "fal-ai/flux-pro/v1.1-ultra",
+    "look": "kartun flat pastel",
+    "notes": [
+      "clean vector-like shapes, soft gradients minimal",
+      "thick friendly outline, high contrast text areas",
+      "kid-friendly, Indonesian vibe subtle (optional)"
+    ]
+  },
+  "outputs": {
+    "icons": {"size": [512, 512], "format": "png"},
+    "backgrounds": {"size": [1080, 1920], "format": "png"},
+    "mascot": {"size": [1024, 1024], "format": "png"}
+  },
+  "assets": [
+    {
+      "id": "bg_main_menu",
+      "type": "background",
+      "out": "assets/textures/ui/backgrounds/bg_main_menu_1080x1920.png",
+      "prompt": "A cute flat pastel cartoon vertical mobile game background for toddlers (ages 2-5). Soft sky gradient, rounded clouds, subtle floating bubbles and confetti shapes, lots of empty space in the center for UI, no text, clean and cheerful, Indonesian kids vibe but subtle.",
+      "negative": "text, watermark, logo, realistic, dark, scary, clutter, low contrast"
+    },
+    {
+      "id": "icon_tap_pop",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_tap_pop_512.png",
+      "prompt": "Flat pastel cartoon icon (512x512) for a toddler mini-game: popping balloons. A big smiling balloon with sparkle pop effect, thick friendly outline, simple shapes, centered, no text.",
+      "negative": "text, watermark, photo, complex background"
+    },
+    {
+      "id": "icon_drag_match",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_drag_match_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: drag and match shapes. Two cute shapes (circle and square) with a dotted drag path and a small hand cursor, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "icon_memory_flip",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_memory_flip_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: memory card flip. Two rounded cards, one face down with a star, one face up with a cute animal silhouette, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "icon_piano_hewan",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_piano_hewan_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: animal piano. Small colorful piano keys with a cute animal face (e.g., cat) above it, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "icon_finger_paint",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_finger_paint_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: finger painting. A cute paint palette with a big colorful finger swipe stroke, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "icon_shape_silhouette",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_shape_silhouette_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: shape silhouette matching. A cute silhouette slot with a matching shape hovering near it, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "icon_coloring_book",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_coloring_book_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: coloring book. A simple line-art page with a big crayon coloring part of it, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "icon_music_rhythm",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_music_rhythm_512.png",
+      "prompt": "Flat pastel cartoon icon for toddler mini-game: music rhythm. Musical notes and a bouncing beat bar with sparkles, thick friendly outline, centered, no text.",
+      "negative": "text, watermark, photo, clutter"
+    },
+    {
+      "id": "mascot_wayang_base",
+      "type": "mascot",
+      "out": "assets/textures/ui/mascot/mascot_wayang_base_1024.png",
+      "prompt": "A cute flat pastel cartoon mascot inspired by Indonesian wayang, simplified for toddlers: big friendly eyes, smiling, rounded shapes, thick outline, front-facing, full body, on transparent background, no text.",
+      "negative": "text, watermark, scary, sharp edges, realistic"
+    }
+  ]
+}

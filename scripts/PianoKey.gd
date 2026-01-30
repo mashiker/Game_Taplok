@@ -30,14 +30,20 @@ var loop_timer: Timer = null
 var fade_tween: Tween = null
 
 ## Node References ##
-@onready var color_rect: ColorRect = $ColorRect
+@onready var key_tex: TextureRect = $KeyTexture
 @onready var icon_rect: TextureRect = $IconTexture
 
 ## Built-in Functions ##
 func _ready() -> void:
-	# Set initial color
-	if color_rect:
-		color_rect.color = base_color
+	# Set initial tint
+	if key_tex:
+		key_tex.modulate = base_color
+
+	# Set icon texture (flat pastel)
+	if icon_rect:
+		var icon_path := _get_icon_path(animal_name)
+		if not icon_path.is_empty() and ResourceLoader.exists(icon_path):
+			icon_rect.texture = load(icon_path)
 
 	# Create timer for loop duration
 	loop_timer = Timer.new()
@@ -118,15 +124,15 @@ func _release_key() -> void:
 
 # Highlight the key (increase brightness)
 func _highlight_key() -> void:
-	if color_rect:
+	if key_tex:
 		var highlighted_color = base_color
 		highlighted_color.v = min(1.0, base_color.v + BRIGHTEN_AMOUNT)
-		color_rect.color = highlighted_color
+		key_tex.modulate = highlighted_color
 
 # Remove highlight from the key
 func _unhighlight_key() -> void:
-	if color_rect:
-		color_rect.color = base_color
+	if key_tex:
+		key_tex.modulate = base_color
 
 # Play the animal sound
 func _play_sound() -> void:
@@ -152,6 +158,21 @@ func _play_sound() -> void:
 		current_player.stream = stream
 		current_player.play()
 
+func _get_icon_path(animal: String) -> String:
+	var a := animal.to_lower()
+	# Map game animal names to asset ids
+	if a.find("komodo") != -1:
+		return "res://assets/textures/games/piano/icon_komodo_256.png"
+	if a.find("orangutan") != -1:
+		return "res://assets/textures/games/piano/icon_orangutan_256.png"
+	if a.find("burung") != -1:
+		return "res://assets/textures/games/piano/icon_burung_256.png"
+	if a.find("paus") != -1:
+		return "res://assets/textures/games/piano/icon_paus_256.png"
+	if a.find("belalang") != -1:
+		return "res://assets/textures/games/piano/icon_belalang_256.png"
+	return ""
+
 # Load audio stream from file
 func _load_audio_stream(path: String) -> AudioStream:
 	var ext = path.get_extension().to_lower()
@@ -174,7 +195,7 @@ func _load_audio_stream(path: String) -> AudioStream:
 # Trigger haptic feedback
 func _trigger_haptic(duration_ms: int) -> void:
 	if OS.has_feature("android") or OS.has_feature("ios"):
-		OS.vibrate_msec(duration_ms)
+		Input.vibrate_handheld(duration_ms)
 
 # Fade out the sound
 func _fade_out_sound() -> void:

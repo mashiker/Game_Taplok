@@ -1,0 +1,12 @@
+{
+  "id": "animals_id",
+  "name": "Hewan Indonesia",
+  "background": "res://assets/textures/games/find_tap/bg_findtap_animals_1920x1080.png",
+  "items": [
+    {"id": "komodo", "label_id": "Komodo", "icon": "res://assets/textures/games/find_tap/animals/komodo_512.png"},
+    {"id": "orangutan", "label_id": "Orangutan", "icon": "res://assets/textures/games/find_tap/animals/orangutan_512.png"},
+    {"id": "burung", "label_id": "Burung", "icon": "res://assets/textures/games/find_tap/animals/burung_512.png"},
+    {"id": "paus", "label_id": "Paus", "icon": "res://assets/textures/games/find_tap/animals/paus_512.png"},
+    {"id": "belalang", "label_id": "Belalang", "icon": "res://assets/textures/games/find_tap/animals/belalang_512.png"}
+  ]
+}

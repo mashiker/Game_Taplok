@@ -7,8 +7,8 @@ extends Area2D
 signal balloon_popped(color_name: String)
 
 ## Constants ##
-const POP_DURATION: float = 0.2
-const BALLOON_RADIUS: int = 40
+const POP_DURATION: float = 0.18
+const BALLOON_RADIUS: int = 44
 
 ## Variables ##
 var balloon_color: Color = Color(0.91, 0.29, 0.24, 1)  # Default red
@@ -17,28 +17,38 @@ var is_popping: bool = false
 
 ## Built-in Functions ##
 func _ready() -> void:
-	# Update the sprite color
-	var sprite = $Sprite
-	if sprite:
-		sprite.color = balloon_color
-
 	# Connect input event for tap detection
 	input_event.connect(_on_input_event)
 
 	# Pick random color
 	_set_random_color()
 
+	# Spawn animation
+	scale = Vector2.ZERO
+	var tw := create_tween()
+	tw.tween_property(self, "scale", Vector2.ONE, 0.18).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
 ## Public Functions ##
 
-# Set the balloon color
-# @param color: The color to set
-# @param name: The color name (e.g., "red", "blue")
+# Set the balloon color (kept for backwards-compat), also selects sprite texture
 func set_balloon_color(color: Color, name: String) -> void:
 	balloon_color = color
 	color_name = name
+	_update_visuals()
+
+func _update_visuals() -> void:
 	var sprite = $Sprite
-	if sprite:
-		sprite.color = balloon_color
+	if not sprite:
+		return
+
+	# Prefer textures for TapPop
+	var tex_path := "res://assets/textures/games/tappop/balloon_%s_256.png" % color_name
+	if ResourceLoader.exists(tex_path):
+		sprite.texture = load(tex_path)
+		sprite.modulate = Color.WHITE
+	else:
+		# Fallback to tint if texture missing
+		sprite.modulate = balloon_color
 
 # Get the current color name
 # @return: The color name
@@ -54,13 +64,12 @@ func pop() -> void:
 
 	# Pop animation: scale down to 0
 	var tween = create_tween()
-	tween.set_parallel(false)
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_BACK)
-
-	# Scale from 1.0 to 0 over POP_DURATION
-	tween.tween_property(self, "scale", Vector2.ZERO, POP_DURATION)
-	tween.tween_callback(_on_pop_complete)
+	tween.set_parallel(true)
+	# Pop: slightly up then vanish
+	tween.tween_property(self, "scale", Vector2.ONE * 1.15, POP_DURATION * 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "scale", Vector2.ZERO, POP_DURATION * 0.65).set_delay(POP_DURATION * 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	tween.tween_property(self, "modulate:a", 0.0, POP_DURATION).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_callback(_on_pop_complete).set_delay(POP_DURATION)
 
 ## Private Functions ##
 
@@ -91,4 +100,4 @@ func _on_pop_complete() -> void:
 	balloon_popped.emit(color_name)
 
 	# Provide haptic feedback
-	OS.vibrate_msec(50)
+	Input.vibrate_handheld(50)

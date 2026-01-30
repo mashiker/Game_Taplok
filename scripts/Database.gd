@@ -8,7 +8,36 @@ extends Node
 const DB_PATH: String = "user://playtap.db"
 
 ## Variables ##
-var db: Object = null  # Will be SQLite object from gdsqlite plugin
+var db: Object = null  # SQLite instance from godot-sqlite (GDExtension)
+
+# Adapter helpers (godot-sqlite API)
+func _db_open() -> bool:
+	# godot-sqlite expects setting `path` then calling open_db()
+	db.path = DB_PATH
+	# Keep console noise low (avoid reflection; just don't set verbosity here)
+	return db.open_db()
+
+func _db_execute(sql: String, bindings: Array = []) -> bool:
+	if bindings.size() > 0:
+		return db.query_with_bindings(sql, bindings)
+	return db.query(sql)
+
+func _db_query(sql: String, bindings: Array = []) -> Array:
+	var ok: bool
+	if bindings.size() > 0:
+		ok = db.query_with_bindings(sql, bindings)
+	else:
+		ok = db.query(sql)
+	if not ok:
+		return []
+	return db.query_result
+
+func _row_get(row, key: String, fallback_idx: int = 0):
+	if row is Dictionary:
+		return row.get(key)
+	if row is Array:
+		return row[fallback_idx]
+	return null
 
 ## Signals ##
 signal database_initialized(success: bool)
@@ -35,7 +64,7 @@ func log_session(game_type: String, start_time: String, duration_seconds: int, m
 	var query = "INSERT INTO sessions (game_type, start_time, duration_seconds, metrics) VALUES (?, ?, ?, ?)"
 
 	# Using placeholder for SQLite binding (plugin-specific syntax may vary)
-	var result = db.execute(query, [game_type, start_time, duration_seconds, metrics_json])
+	var result = _db_execute(query, [game_type, start_time, duration_seconds, metrics_json])
 
 	if result:
 		print("Session logged: ", game_type, ", duration: ", duration_seconds, "s")
@@ -52,7 +81,7 @@ func get_paintings() -> Array:
 
 	var paintings = []
 	var query = "SELECT id, source, filepath, created_at FROM paintings ORDER BY created_at DESC"
-	var result = db.query(query)
+	var result = _db_query(query)
 
 	if result and result is Array:
 		for row in result:
@@ -73,7 +102,7 @@ func delete_old_sessions(days: int = 90) -> void:
 		return
 
 	var query = "DELETE FROM sessions WHERE date(start_time) < date('now', '-' || ? || ' days')"
-	var result = db.execute(query, [days])
+	var result = _db_execute(query, [days])
 
 	if result:
 		print("Deleted sessions older than ", days, " days")
@@ -89,7 +118,7 @@ func save_painting(source: String, filepath: String) -> void:
 		return
 
 	var query = "INSERT INTO paintings (source, filepath, created_at) VALUES (?, ?, datetime('now'))"
-	var result = db.execute(query, [source, filepath])
+	var result = _db_execute(query, [source, filepath])
 
 	if result:
 		print("Painting saved: ", source, " -> ", filepath)
@@ -106,7 +135,7 @@ func delete_painting(painting_id: int) -> bool:
 
 	# First get the filepath to delete the file
 	var query = "SELECT filepath FROM paintings WHERE id = ?"
-	var result = db.query(query, [painting_id])
+	var result = _db_query(query, [painting_id])
 
 	if result and result is Array and result.size() > 0:
 		var filepath = result[0][0]
@@ -121,7 +150,7 @@ func delete_painting(painting_id: int) -> bool:
 
 	# Delete the database record
 	query = "DELETE FROM paintings WHERE id = ?"
-	result = db.execute(query, [painting_id])
+	result = _db_execute(query, [painting_id])
 
 	if result:
 		print("Painting deleted: ", painting_id)
@@ -156,7 +185,7 @@ func get_session_stats(days: int = 7) -> Dictionary:
 		GROUP BY game_type, date(start_time)
 		ORDER BY date DESC
 	"""
-	var result = db.query(query, [days])
+	var result = _db_query(query, [days])
 
 	if result and result is Array:
 		for row in result:
@@ -185,11 +214,11 @@ func get_todays_play_count() -> int:
 		push_error("Database not initialized")
 		return 0
 
-	var query = "SELECT COUNT(*) FROM sessions WHERE date(start_time) = date('now')"
-	var result = db.query(query)
+	var query = "SELECT COUNT(*) AS c FROM sessions WHERE date(start_time) = date('now')"
+	var result = _db_query(query)
 
 	if result and result is Array and result.size() > 0:
-		return result[0][0]
+		return int(_row_get(result[0], "c", 0))
 
 	return 0
 
@@ -201,11 +230,11 @@ func get_game_play_count(game_type: String) -> int:
 		push_error("Database not initialized")
 		return 0
 
-	var query = "SELECT COUNT(*) FROM sessions WHERE game_type = ?"
-	var result = db.query(query, [game_type])
+	var query = "SELECT COUNT(*) AS c FROM sessions WHERE game_type = ?"
+	var result = _db_query(query, [game_type])
 
 	if result and result is Array and result.size() > 0:
-		return result[0][0]
+		return int(_row_get(result[0], "c", 0))
 
 	return 0
 
@@ -223,7 +252,7 @@ func increment_progress(game_type: String, item_id: String) -> void:
 		SET times_played = times_played + 1, last_played = datetime('now')
 		WHERE game_type = ? AND item_id = ?
 	"""
-	var result = db.execute(update_query, [game_type, item_id])
+	var result = _db_execute(update_query, [game_type, item_id])
 
 	# If no rows were updated, insert new record
 	if not result or not db.get_last_insert_row_id():
@@ -231,7 +260,7 @@ func increment_progress(game_type: String, item_id: String) -> void:
 			INSERT INTO game_progress (game_type, item_id, times_played, last_played)
 			VALUES (?, ?, 1, datetime('now'))
 		"""
-		db.execute(insert_query, [game_type, item_id])
+		_db_execute(insert_query, [game_type, item_id])
 
 # Get the progress for a specific item
 # @param game_type: Type of game
@@ -243,7 +272,7 @@ func get_item_progress(game_type: String, item_id: String) -> int:
 		return 0
 
 	var query = "SELECT times_played FROM game_progress WHERE game_type = ? AND item_id = ?"
-	var result = db.query(query, [game_type, item_id])
+	var result = _db_query(query, [game_type, item_id])
 
 	if result and result is Array and result.size() > 0:
 		return result[0][0]
@@ -259,7 +288,7 @@ func get_total_game_progress(game_type: String) -> int:
 		return 0
 
 	var query = "SELECT SUM(times_played) FROM game_progress WHERE game_type = ?"
-	var result = db.query(query, [game_type])
+	var result = _db_query(query, [game_type])
 
 	if result and result is Array and result.size() > 0 and result[0][0] != null:
 		return result[0][0]
@@ -281,9 +310,7 @@ func _init_database() -> void:
 	db = ClassDB.instantiate("SQLite")
 
 	# Open or create database
-	var full_path = ProjectSettings.globalize_path(DB_PATH)
-	var result = db.open(full_path)
-
+	var result = _db_open()
 	if not result:
 		push_error("Failed to open database at: ", DB_PATH)
 		database_initialized.emit(false)
@@ -310,7 +337,7 @@ func _create_tables() -> void:
 			metrics TEXT
 		)
 	"""
-	db.execute(sessions_table)
+	_db_execute(sessions_table)
 
 	# Create paintings table
 	var paintings_table = """
@@ -321,7 +348,7 @@ func _create_tables() -> void:
 			created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 		)
 	"""
-	db.execute(paintings_table)
+	_db_execute(paintings_table)
 
 	# Create game_progress table for tracking progression
 	var game_progress_table = """
@@ -334,11 +361,11 @@ func _create_tables() -> void:
 			UNIQUE(game_type, item_id)
 		)
 	"""
-	db.execute(game_progress_table)
+	_db_execute(game_progress_table)
 
 	# Create indexes for better query performance
-	db.execute("CREATE INDEX IF NOT EXISTS idx_sessions_start_time ON sessions(start_time)")
-	db.execute("CREATE INDEX IF NOT EXISTS idx_paintings_created_at ON paintings(created_at)")
-	db.execute("CREATE INDEX IF NOT EXISTS idx_game_progress_type ON game_progress(game_type)")
+	_db_execute("CREATE INDEX IF NOT EXISTS idx_sessions_start_time ON sessions(start_time)")
+	_db_execute("CREATE INDEX IF NOT EXISTS idx_paintings_created_at ON paintings(created_at)")
+	_db_execute("CREATE INDEX IF NOT EXISTS idx_game_progress_type ON game_progress(game_type)")
 
 	print("Database tables created/verified")

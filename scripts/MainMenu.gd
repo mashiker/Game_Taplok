@@ -8,20 +8,24 @@ func _ready() -> void:
 	_setup_ui()
 	_connect_signals()
 	_update_tap_count()
+	_apply_responsive_layout()
+	# Keep layout stable when window/orientation changes (desktop/testing)
+	get_viewport().size_changed.connect(_apply_responsive_layout)
 
 ## Private Functions ##
 
 # Set up UI elements with translations
 func _setup_ui() -> void:
-	# Set game button labels using TranslationManager
-	$VBoxContainer/GameGrid/TapPopButton.text = TranslationManager.get_text("game_tap_pop_name")
-	$VBoxContainer/GameGrid/DragMatchButton.text = TranslationManager.get_text("game_drag_match_name")
-	$VBoxContainer/GameGrid/MemoryFlipButton.text = TranslationManager.get_text("game_memory_flip_name")
-	$VBoxContainer/GameGrid/PianoHewanButton.text = TranslationManager.get_text("game_piano_hewan_name")
-	$VBoxContainer/GameGrid/FingerPaintButton.text = TranslationManager.get_text("game_finger_paint_name")
-	$VBoxContainer/GameGrid/ShapeSilhouetteButton.text = TranslationManager.get_text("game_shape_silhouette_name")
-	$VBoxContainer/GameGrid/ColoringBookButton.text = TranslationManager.get_text("game_coloring_book_name")
-	$VBoxContainer/GameGrid/MusicRhythmButton.text = TranslationManager.get_text("game_music_rhythm_name")
+	$VBoxContainer/GameGrid/TapPopButton.set_title(TranslationManager.get_text("game_tap_pop_name"))
+	$VBoxContainer/GameGrid/DragMatchButton.set_title(TranslationManager.get_text("game_drag_match_name"))
+	$VBoxContainer/GameGrid/MemoryFlipButton.set_title(TranslationManager.get_text("game_memory_flip_name"))
+	$VBoxContainer/GameGrid/PianoHewanButton.set_title(TranslationManager.get_text("game_piano_hewan_name"))
+	$VBoxContainer/GameGrid/FingerPaintButton.set_title(TranslationManager.get_text("game_finger_paint_name"))
+	$VBoxContainer/GameGrid/ShapeSilhouetteButton.set_title(TranslationManager.get_text("game_shape_silhouette_name"))
+	$VBoxContainer/GameGrid/ColoringBookButton.set_title(TranslationManager.get_text("game_coloring_book_name"))
+	$VBoxContainer/GameGrid/MusicRhythmButton.set_title(TranslationManager.get_text("game_music_rhythm_name"))
+	$VBoxContainer/GameGrid/FindTapButton.set_title(TranslationManager.get_text("game_find_tap_name"))
+	$VBoxContainer/GameGrid/SoundMatchButton.set_title(TranslationManager.get_text("game_sound_match_name"))
 
 # Connect button signals
 func _connect_signals() -> void:
@@ -33,7 +37,9 @@ func _connect_signals() -> void:
 		$VBoxContainer/GameGrid/FingerPaintButton,
 		$VBoxContainer/GameGrid/ShapeSilhouetteButton,
 		$VBoxContainer/GameGrid/ColoringBookButton,
-		$VBoxContainer/GameGrid/MusicRhythmButton
+		$VBoxContainer/GameGrid/MusicRhythmButton,
+		$VBoxContainer/GameGrid/FindTapButton,
+		$VBoxContainer/GameGrid/SoundMatchButton
 	]
 
 	for button in game_buttons:
@@ -48,6 +54,37 @@ func _connect_signals() -> void:
 func _update_tap_count() -> void:
 	var play_count = Database.get_todays_play_count()
 	$VBoxContainer/BottomBar/TapCountLabel.text = TranslationManager.get_text("tap_count_label") % play_count
+
+func _apply_responsive_layout() -> void:
+	# The menu was originally authored for portrait. This keeps it readable on 1280x720.
+	var vp := get_viewport_rect().size
+	var is_landscape := vp.x >= vp.y
+
+	var vbox: VBoxContainer = $VBoxContainer
+	var grid: GridContainer = $VBoxContainer/GameGrid
+
+	if is_landscape:
+		# Wider container so cards can breathe.
+		vbox.offset_left = -560.0
+		vbox.offset_right = 560.0
+		vbox.offset_top = -300.0
+		vbox.offset_bottom = 300.0
+		vbox.set("theme_override_constants/separation", 14)
+
+		grid.columns = 5
+		grid.set("theme_override_constants/h_separation", 16)
+		grid.set("theme_override_constants/v_separation", 16)
+	else:
+		# Original portrait-ish layout.
+		vbox.offset_left = -240.0
+		vbox.offset_right = 240.0
+		vbox.offset_top = -380.0
+		vbox.offset_bottom = 380.0
+		vbox.set("theme_override_constants/separation", 18)
+
+		grid.columns = 3
+		grid.set("theme_override_constants/h_separation", 14)
+		grid.set("theme_override_constants/v_separation", 14)
 
 ## Signal Callbacks ##
 
@@ -71,6 +108,10 @@ func _on_game_button_pressed(button_name: String) -> void:
 			scene_path = "res://scenes/ColoringGame.tscn"
 		"MusicRhythmButton":
 			scene_path = "res://scenes/RhythmGame.tscn"
+		"FindTapButton":
+			scene_path = "res://scenes/FindTapThemeSelect.tscn"
+		"SoundMatchButton":
+			scene_path = "res://scenes/SoundMatchGame.tscn"
 
 	if scene_path != "":
 		GameManager.fade_to_scene(scene_path)

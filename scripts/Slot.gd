@@ -8,12 +8,21 @@ class_name Slot
 ## Constants ##
 const SLOT_SIZE: Vector2 = Vector2(60, 60)
 
+const SLOT_TEXTURES := {
+	"circle": preload("res://assets/textures/games/drag_match/slots/circle.png"),
+	"square": preload("res://assets/textures/games/drag_match/slots/square.png"),
+	"triangle": preload("res://assets/textures/games/drag_match/slots/triangle.png"),
+	"star": preload("res://assets/textures/games/drag_match/slots/star.png"),
+	"heart": preload("res://assets/textures/games/drag_match/slots/heart.png"),
+}
+
 ## Variables ##
 @export var slot_type: String = ""  # "circle", "square", "triangle", "star", "heart"
 var is_filled: bool = false
 
 ## Node References ##
-@onready var color_rect: ColorRect = $ColorRect
+@onready var icon: TextureRect = $Icon
+@onready var highlight_rect: ColorRect = $Highlight
 @onready var area: Area2D = $Area2D
 @onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
 
@@ -43,19 +52,13 @@ func clear() -> void:
 
 # Highlight the slot (visual feedback)
 func highlight(enabled: bool) -> void:
-	if not color_rect:
+	if not highlight_rect:
 		return
 
-	if enabled:
-		color_rect.color = Color(0.8, 0.9, 1.0)  # Light blue highlight
-	else:
-		_reset_color()
+	highlight_rect.color.a = 0.35 if enabled else 0.0
 
 # Show success visual on match
 func show_success() -> void:
-	if not color_rect:
-		return
-
 	var tween = create_tween()
 	tween.set_parallel(true)
 
@@ -63,31 +66,28 @@ func show_success() -> void:
 	tween.tween_property(self, "scale", Vector2(1.2, 1.2), 0.1)
 	tween.tween_property(self, "scale", Vector2(1.0, 1.0), 0.2).set_delay(0.1)
 
-	# Flash color
-	var original_color = color_rect.color
-	color_rect.color = Color(0.2, 1.0, 0.5)  # Bright green
-	tween.tween_property(color_rect, "color", original_color, 0.3).set_delay(0.2)
+	# Flash highlight + brighten icon briefly
+	if highlight_rect:
+		highlight_rect.color = Color(0.2, 1.0, 0.5, 0.45)
+		tween.tween_property(highlight_rect, "color:a", 0.0, 0.35).set_delay(0.15)
+	if icon:
+		icon.modulate = Color(1.1, 1.1, 1.1, 1.0)
+		tween.tween_property(icon, "modulate", Color(1, 1, 1, 1), 0.35)
 
 ## Private Functions ##
 
 # Set up the slot visual
 func _setup_slot() -> void:
-	if not color_rect:
-		return
-
 	custom_minimum_size = SLOT_SIZE
 	_reset_color()
 
-	# Add border for visibility
-	color_rect.color = Color(0.15, 0.15, 0.2)  # Dark outline color
-
-# Reset color to default
+# Reset visuals to default
 func _reset_color() -> void:
-	if not color_rect:
-		return
-
-	# Dark outline color (placeholder for shape)
-	color_rect.color = Color(0.15, 0.15, 0.2)
+	if icon:
+		icon.modulate = Color(1, 1, 1, 1)
+		icon.texture = SLOT_TEXTURES.get(slot_type, null)
+	if highlight_rect:
+		highlight_rect.color = Color(0.65, 0.85, 1.0, 0.0)
 
 # Connect signals
 func _connect_signals() -> void:

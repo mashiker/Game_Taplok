@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://mainmenu"]
+[gd_scene load_steps=4 format=3 uid="uid://mainmenu"]
 
 [ext_resource type="Script" path="res://scripts/MainMenu.gd" id="1"]
+[ext_resource type="PackedScene" uid="uid://gamecardbutton" path="res://scenes/ui/GameCardButton.tscn" id="2_card"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/backgrounds/bg_main_menu_1080x1920.png" id="3_bg"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -9,12 +11,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource("1")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="BackgroundFallback" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 color = Color(0.95, 0.98, 1, 1)
+
+[node name="BackgroundImage" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("3_bg")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -23,13 +36,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -300.0
-offset_right = 200.0
-offset_bottom = 300.0
+offset_left = -240.0
+offset_top = -380.0
+offset_right = 240.0
+offset_bottom = 380.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 18
 
 [node name="LogoContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -38,51 +51,59 @@ theme_override_constants/separation = 20
 
 [node name="PlayTapLogo" type="TextureRect" parent="VBoxContainer/LogoContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(120, 60)
+custom_minimum_size = Vector2(160, 80)
 size_flags_vertical = 3
 
 [node name="WayangMascot" type="AnimatedSprite2D" parent="VBoxContainer/LogoContainer"]
 layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+custom_minimum_size = Vector2(140, 140)
 
 [node name="GameGrid" type="GridContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-columns = 2
-theme_override_constants/h_separation = 15
-theme_override_constants/v_separation = 15
+columns = 3
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 14
 
-[node name="TapPopButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="TapPopButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.91, 0.29, 0.24, 1)
+icon_path = "res://assets/textures/ui/icons/icon_tap_pop_512.png"
 
-[node name="DragMatchButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="DragMatchButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.22, 0.74, 0.97, 1)
+icon_path = "res://assets/textures/ui/icons/icon_drag_match_512.png"
 
-[node name="MemoryFlipButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="MemoryFlipButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.18, 0.8, 0.44, 1)
+icon_path = "res://assets/textures/ui/icons/icon_memory_flip_512.png"
 
-[node name="PianoHewanButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="PianoHewanButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.95, 0.61, 0.07, 1)
+icon_path = "res://assets/textures/ui/icons/icon_piano_hewan_512.png"
 
-[node name="FingerPaintButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="FingerPaintButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.61, 0.35, 0.71, 1)
+icon_path = "res://assets/textures/ui/icons/icon_finger_paint_512.png"
 
-[node name="ShapeSilhouetteButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="ShapeSilhouetteButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.1, 0.74, 0.61, 1)
+icon_path = "res://assets/textures/ui/icons/icon_shape_silhouette_512.png"
 
-[node name="ColoringBookButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="ColoringBookButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.98, 0.38, 0.5, 1)
+icon_path = "res://assets/textures/ui/icons/icon_coloring_book_512.png"
 
-[node name="MusicRhythmButton" type="Button" parent="VBoxContainer/GameGrid"]
-layout_mode = 2
-custom_minimum_size = Vector2(120, 120)
+[node name="MusicRhythmButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.2, 0.6, 0.6, 1)
+icon_path = "res://assets/textures/ui/icons/icon_music_rhythm_512.png"
+
+[node name="FindTapButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.35, 0.7, 0.9, 1)
+icon_path = "res://assets/textures/ui/icons/icon_find_tap_512.png"
+
+[node name="SoundMatchButton" parent="VBoxContainer/GameGrid" instance=ExtResource("2_card")]
+base_color = Color(0.35, 0.55, 0.95, 1)
+icon_path = "res://assets/textures/ui/icons/icon_music_rhythm_512.png"
 
 [node name="BottomBar" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -95,5 +116,5 @@ text = "Main 0x hari ini"
 
 [node name="ParentButton" type="Button" parent="VBoxContainer/BottomBar"]
 layout_mode = 2
-custom_minimum_size = Vector2(50, 50)
+custom_minimum_size = Vector2(56, 56)
 text = "⚙"

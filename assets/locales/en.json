@@ -2,7 +2,6 @@
   "app_name": "PlayTap",
   "app_tagline": "Indonesian Toddler Educational Games",
   "tap_count_label": "Played %dx today",
-
   "game_tap_pop_name": "Tap Pop",
   "game_tap_pop_description": "Tap balloons to pop them!",
   "game_drag_match_name": "Drag Match",
@@ -19,7 +18,6 @@
   "game_coloring_book_description": "Color beautiful pictures!",
   "game_music_rhythm_name": "Music Rhythm",
   "game_rhythm_description": "Tap along with the song rhythm!",
-
   "color_red": "red",
   "color_blue": "blue",
   "color_yellow": "yellow",
@@ -28,19 +26,16 @@
   "color_orange": "orange",
   "color_purple": "purple",
   "color_black": "black",
-
   "shape_circle": "circle",
   "shape_square": "square",
   "shape_triangle": "triangle",
   "shape_star": "star",
   "shape_heart": "heart",
-
   "animal_komodo": "komodo dragon",
   "animal_orangutan": "orangutan",
   "animal_burung": "bird",
   "animal_paus": "whale",
   "animal_belalang": "grasshopper",
-
   "parent_dashboard": "Parent Dashboard",
   "settings": "Settings",
   "child_profile": "Child Profile",
@@ -53,18 +48,15 @@
   "cancel": "Cancel",
   "delete": "Delete",
   "download": "Download",
-
   "message_wah_hebat": "Great job!",
   "message_sampai_jumpa": "See you later!",
   "message_gambar_tersimpan": "Picture Saved!",
   "message_hapus_gambar": "Delete picture?",
-
   "pin_title": "Enter PIN",
   "pin_incorrect": "Incorrect PIN",
   "change_pin": "Change PIN",
   "privacy_policy": "Privacy Policy",
   "terms_of_service": "Terms of Service",
-
   "pd_pin_title": "Enter Parent PIN",
   "pd_pin_default": "Default PIN: 1234",
   "pd_pin_change": "Change PIN",
@@ -73,7 +65,6 @@
   "pd_pin_confirm": "Confirm PIN",
   "pd_pin_mismatch": "PINs do not match",
   "pd_pin_changed": "PIN changed successfully",
-
   "pd_child_profile": "Child Profile",
   "pd_child_name": "Child Name",
   "pd_child_age": "Child Age",
@@ -87,18 +78,15 @@
   "pd_game_shape_silhouette": "Shape Silhouette",
   "pd_game_coloring_book": "Coloring Book",
   "pd_game_music_rhythm": "Music Rhythm",
-
   "pd_statistics": "Play Statistics",
   "pd_last_7_days": "Last 7 Days",
   "pd_today": "Today",
   "pd_hours": "hours",
   "pd_plays": "plays",
   "pd_no_data": "No data yet",
-
   "pd_gallery": "Art Gallery",
   "pd_no_paintings": "No artwork yet",
   "pd_delete_confirm": "Delete this artwork?",
-
   "pd_settings": "Settings",
   "pd_language": "Language",
   "pd_lang_indonesian": "Bahasa Indonesia",
@@ -116,9 +104,15 @@
   "pd_app_size_full": "Full (60MB)",
   "pd_cloud_sync": "Cloud Sync",
   "pd_cloud_sync_coming_soon": "(coming soon)",
-
   "pd_legal": "Legal",
   "pd_privacy_policy": "Privacy Policy",
   "pd_terms": "Terms of Service",
-  "pd_close": "Close"
+  "pd_close": "Close",
+  "game_find_tap_name": "Find & Tap",
+  "game_find_tap_description": "Tap the requested item",
+  "game_sound_match_name": "Sound Match",
+  "game_sound_match_description": "Listen to a sound and tap the matching picture",
+  "choose_theme": "Choose Theme",
+  "theme_animals": "Animals",
+  "theme_transport": "Transport"
 }

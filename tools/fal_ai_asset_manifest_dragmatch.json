@@ -1,0 +1,96 @@
+{
+  "style": {
+    "model": "fal-ai/flux-pro/v1.1-ultra",
+    "look": "kartun flat pastel",
+    "notes": [
+      "transparent background for sprites",
+      "thick friendly outline",
+      "simple shapes, kid friendly",
+      "no text, no watermark"
+    ]
+  },
+  "outputs": {
+    "background": {"size": [1080, 1920], "format": "png"},
+    "shape": {"size": [256, 256], "format": "png"},
+    "slot": {"size": [256, 256], "format": "png"}
+  },
+  "assets": [
+    {
+      "id": "bg_dragmatch",
+      "type": "background",
+      "out": "assets/textures/games/dragmatch/bg_dragmatch_1080x1920.png",
+      "prompt": "Flat pastel cartoon vertical background for a toddler drag-and-match shapes game. Soft gradient, playful shapes (circles, stars) floating subtly, lots of empty space center for UI, no text.",
+      "negative": "text, watermark, logo, realistic, dark, scary, clutter"
+    },
+    {
+      "id": "shape_circle",
+      "type": "shape",
+      "out": "assets/textures/games/dragmatch/shape_circle_256.png",
+      "prompt": "Cute flat pastel cartoon shape icon: circle, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "shape_square",
+      "type": "shape",
+      "out": "assets/textures/games/dragmatch/shape_square_256.png",
+      "prompt": "Cute flat pastel cartoon shape icon: square, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "shape_triangle",
+      "type": "shape",
+      "out": "assets/textures/games/dragmatch/shape_triangle_256.png",
+      "prompt": "Cute flat pastel cartoon shape icon: triangle, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "shape_star",
+      "type": "shape",
+      "out": "assets/textures/games/dragmatch/shape_star_256.png",
+      "prompt": "Cute flat pastel cartoon shape icon: star, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "shape_heart",
+      "type": "shape",
+      "out": "assets/textures/games/dragmatch/shape_heart_256.png",
+      "prompt": "Cute flat pastel cartoon shape icon: heart, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "slot_circle",
+      "type": "slot",
+      "out": "assets/textures/games/dragmatch/slot_circle_256.png",
+      "prompt": "Flat pastel cartoon slot silhouette for a circle shape. Rounded card with a cutout/silhouette circle in the center, thick outline, gentle shadow, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "slot_square",
+      "type": "slot",
+      "out": "assets/textures/games/dragmatch/slot_square_256.png",
+      "prompt": "Flat pastel cartoon slot silhouette for a square shape. Rounded card with a cutout/silhouette square in the center, thick outline, gentle shadow, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "slot_triangle",
+      "type": "slot",
+      "out": "assets/textures/games/dragmatch/slot_triangle_256.png",
+      "prompt": "Flat pastel cartoon slot silhouette for a triangle shape. Rounded card with a cutout/silhouette triangle in the center, thick outline, gentle shadow, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "slot_star",
+      "type": "slot",
+      "out": "assets/textures/games/dragmatch/slot_star_256.png",
+      "prompt": "Flat pastel cartoon slot silhouette for a star shape. Rounded card with a cutout/silhouette star in the center, thick outline, gentle shadow, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "slot_heart",
+      "type": "slot",
+      "out": "assets/textures/games/dragmatch/slot_heart_256.png",
+      "prompt": "Flat pastel cartoon slot silhouette for a heart shape. Rounded card with a cutout/silhouette heart in the center, thick outline, gentle shadow, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    }
+  ]
+}

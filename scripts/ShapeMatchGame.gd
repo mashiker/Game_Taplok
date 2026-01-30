@@ -1,4 +1,4 @@
-extends Control
+extends "res://scripts/GameSceneBase.gd"
 
 # ShapeMatchGame - Shape Silhouette matching game (US-026, US-027)
 # Children drag shapes to match silhouettes of Rumah Adat, Hewan, etc.
@@ -37,8 +37,7 @@ var content_hewan: Array = [
 var content_mix: Array = []
 
 ## Variables ##
-var game_name: String = "Shape Silhouette"
-var is_active: bool = false
+# game_name and is_active provided by GameSceneBase
 var session_number: int = 1
 var puzzles_completed: int = 0
 var puzzles_in_session: int = 0
@@ -60,19 +59,18 @@ var is_transitioning: bool = false
 
 ## Built-in Functions ##
 func _ready() -> void:
+	game_name = "Shape Silhouette"
 	_setup_content_mix()
-	_setup_ui()
-	_connect_signals()
+	super._ready()
 
 	# Connect input handlers for each option
 	var options_container = $GameContainer/GameContent/OptionsContainer
 	for i in range(4):
 		var option = options_container.get_child(i)
-		if option:
+		if option and not option.gui_input.is_connected(_on_option_gui_input):
 			option.gui_input.connect(_on_option_gui_input.bind(option))
 
-	# Start game
-	_on_game_start()
+	_update_hud()
 
 func _process(_delta: float) -> void:
 	if is_active:
@@ -88,8 +86,7 @@ func _input(event: InputEvent) -> void:
 
 ## Virtual Functions (override from GameSceneBase) ##
 func _on_game_start() -> void:
-	is_active = true
-	GameManager.start_game(game_name)
+	super._on_game_start()
 	SessionManager.start_session(game_name, "cognitive")
 
 	session_start_time = Time.get_unix_time_from_system()
@@ -110,15 +107,13 @@ func _on_game_start() -> void:
 
 	# Load first puzzle
 	_load_puzzle()
+	_update_hud()
 
 	print("Shape Silhouette started - Session ", session_number, " with ", puzzles_in_session, " puzzles")
 
 func _on_game_end() -> void:
-	is_active = false
-	var metrics = _get_game_metrics()
-	GameManager.end_game(metrics)
+	super._on_game_end()
 	SessionManager.end_session()
-	print("Shape Silhouette ended - metrics: ", metrics)
 
 func _get_game_metrics() -> Dictionary:
 	var duration = 0
@@ -141,6 +136,10 @@ func _setup_content_mix() -> void:
 
 # Set up UI elements with translations
 func _setup_ui() -> void:
+	var back_button = $GameContainer/TopBar/BackButton
+	if back_button:
+		back_button.text = TranslationManager.get_text("back")
+
 	# Set up option shapes
 	var options = $GameContainer/GameContent/OptionsContainer
 	if options:
@@ -185,11 +184,11 @@ func _load_puzzle() -> void:
 	current_puzzle = puzzle_item.duplicate()
 	correct_answer_id = puzzle_item.id
 
-	# Update silhouette color (dark blue placeholder)
+	# Update silhouette tint (dark placeholder)
 	var silhouette = $GameContainer/GameContent/SilhouetteContainer/SilhouettePlaceholder
 	if silhouette:
-		silhouette.color = Color(0.1, 0.1, 0.4, 1)
-		silhouette.modulate = Color(1, 1, 1, 1)
+		silhouette.modulate = Color(0.75, 0.8, 0.95, 1)
+		silhouette.set_meta("answer_id", correct_answer_id)
 
 	# Set up answer options
 	var options_container = $GameContainer/GameContent/OptionsContainer
@@ -217,13 +216,19 @@ func _load_puzzle() -> void:
 	for i in range(4):
 		var option_node = options_container.get_child(i)
 		if option_node:
-			var shape_rect = option_node.get_node("ShapeRect")
+			var tile := option_node.get_node("Tile") as TextureRect
+			var icon := option_node.get_node("Icon") as TextureRect
 			var shape_area = option_node.get_node("ShapeArea")
 
-			if shape_rect:
-				shape_rect.color = options[i].color
-				shape_rect.modulate = Color(1, 1, 1, 1)
-				shape_rect.z_index = 0
+			if tile:
+				tile.modulate = options[i].color
+				tile.z_index = 0
+
+			if icon:
+				var icon_path := "res://assets/textures/games/shape_match/icon_%s_256.png" % options[i].id
+				if ResourceLoader.exists(icon_path):
+					icon.texture = load(icon_path)
+					icon.modulate = Color(1, 1, 1, 1)
 
 			# Store answer ID in the area for validation
 			if shape_area:
@@ -338,10 +343,13 @@ func _on_correct_answer() -> void:
 	tween.tween_property(drag_target, "scale", Vector2(1, 1), CORRECT_ANIMATION_DURATION)
 	tween.tween_property(drag_target, "modulate:a", 1.0, CORRECT_ANIMATION_DURATION)
 
-	# Fill silhouette with color after animation
+	# Fill silhouette tint with the chosen color after animation
 	await tween.finished
 	tween = create_tween()
-	tween.tween_property(silhouette, "color", shape_color, COLOR_FILL_DURATION)
+	tween.tween_property(silhouette, "modulate", shape_color, COLOR_FILL_DURATION)
+
+	# Reward feedback
+	RewardSystem.reward_success(silhouette.global_position + (silhouette.size * 0.5), 1.1)
 
 	# Play success SFX
 	AudioManager.play_sfx("success.ogg")
@@ -356,6 +364,7 @@ func _on_correct_answer() -> void:
 	# Record tap
 	SessionManager.record_tap()
 	puzzles_completed += 1
+	_update_hud()
 
 	# Wait then transition
 	await get_tree().create_timer(AUTO_TRANSITION_DELAY).timeout
@@ -363,6 +372,10 @@ func _on_correct_answer() -> void:
 
 # Handle incorrect answer
 func _on_incorrect_answer() -> void:
+	# Soft error feedback
+	if drag_target:
+		RewardSystem.reward_error(drag_target.global_position + (drag_target.size * 0.5))
+
 	# Play gentle SFX
 	AudioManager.play_sfx("gentle.ogg")
 
@@ -434,6 +447,14 @@ func _end_session(reason: String) -> void:
 func _show_completion_message() -> void:
 	# Could add a celebration message here
 	print("Puzzles completed: ", puzzles_completed)
+
+func _update_hud() -> void:
+	var obj := $GameContainer/TopBar/ObjectiveLabel
+	var prog := $GameContainer/TopBar/ProgressLabel
+	if obj:
+		obj.text = "Cocokkan bayangan"
+	if prog:
+		prog.text = str(puzzles_completed) + "/" + str(puzzles_in_session)
 
 ## Signal Callbacks ##
 

@@ -1,0 +1,67 @@
+{
+  "style": {
+    "model": "fal-ai/flux-pro/v1.1-ultra",
+    "look": "kartun flat pastel",
+    "notes": [
+      "icons with transparent background",
+      "thick friendly outline",
+      "simple shapes, kid friendly",
+      "no text, no watermark"
+    ]
+  },
+  "outputs": {
+    "background": {"size": [1920, 1080], "format": "png"},
+    "icons": {"size": [512, 512], "format": "png"}
+  },
+  "assets": [
+    {
+      "id": "bg_findtap_transport",
+      "type": "background",
+      "out": "assets/textures/games/find_tap/bg_findtap_transport_1920x1080.png",
+      "prompt": "Flat pastel cartoon landscape background (16:9) for a toddler find-and-tap transportation game. Soft sky gradient, clouds, subtle road/sea hints at the bottom, playful confetti dots, big clean empty space center for UI, no text.",
+      "negative": "text, watermark, logo, realistic, dark, scary, clutter"
+    },
+    {
+      "id": "transport_mobil",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/transport/mobil_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a car (mobil) for toddlers, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "transport_bus",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/transport/bus_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a bus for toddlers, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "transport_kereta",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/transport/kereta_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a train (kereta) for toddlers, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "transport_pesawat",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/transport/pesawat_512.png",
+      "prompt": "Cute flat pastel cartoon icon of an airplane (pesawat) for toddlers, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "transport_kapal",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/transport/kapal_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a ship/boat (kapal) for toddlers, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "transport_sepeda",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/transport/sepeda_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a bicycle (sepeda) for toddlers, smiling face, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    }
+  ]
+}

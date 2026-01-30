@@ -47,6 +47,10 @@ var active_sounds: int = 0
 var inactivity_timer: float = 0.0
 var wayang_dancing: bool = false
 
+var _unique_keys_pressed := {} # key_id -> true
+var _target_unique := 5
+var _goal_rewarded := false
+
 ## Node References ##
 var keys_container: HBoxContainer = null
 var wayang_sprite: AnimatedSprite2D = null
@@ -56,6 +60,9 @@ func _ready() -> void:
 	# Set game name before calling parent _ready
 	game_name = "Piano Hewan"
 	super._ready()
+
+	# HUD
+	_update_hud()
 
 	# Set up the piano game
 	_setup_piano()
@@ -187,6 +194,15 @@ func _on_key_pressed(key_id: String) -> void:
 	if active_sounds < MAX_POLYPHONY:
 		active_sounds += 1
 
+	# Reward feedback + progress
+	var is_new := not _unique_keys_pressed.has(key_id)
+	if is_new:
+		_unique_keys_pressed[key_id] = true
+		RewardSystem.reward_success(_get_key_global_center(key_id), 0.9)
+	else:
+		RewardSystem.reward_tap(_get_key_global_center(key_id))
+	_update_hud()
+
 	# Start wayang dance
 	_start_wayang_dance()
 
@@ -228,6 +244,24 @@ func _update_wayang_dance() -> void:
 	# If no sounds are playing, stop dancing
 	if wayang_dancing and active_sounds <= 0:
 		_stop_wayang_dance()
+
+func _update_hud() -> void:
+	var obj := $GameContainer/TopBar/ObjectiveLabel
+	var prog := $GameContainer/TopBar/ProgressLabel
+	if obj:
+		obj.text = "Coba semua hewan"
+	if prog:
+		prog.text = str(_unique_keys_pressed.size()) + "/" + str(_target_unique)
+
+	if not _goal_rewarded and _unique_keys_pressed.size() >= _target_unique:
+		_goal_rewarded = true
+		RewardSystem.reward_success(get_viewport().get_visible_rect().size * 0.5, 1.6)
+
+func _get_key_global_center(key_id: String) -> Vector2:
+	for k in piano_keys:
+		if k and k.key_id == key_id:
+			return k.global_position + (k.size * 0.5)
+	return get_viewport().get_mouse_position()
 
 # Stop all sounds
 func _stop_all_sounds() -> void:

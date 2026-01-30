@@ -190,11 +190,13 @@ func _refresh_statistics() -> void:
 	var vbox = $DashboardContent/TabContainer/Statistics/StatisticsScroll/StatisticsVBox
 
 	# Update today's label
-	var today_seconds = session_stats.get("by_date", {}).get(OS.get_date()["string"], 0)
+	var today = Time.get_date_dict_from_system()
+	var today_str = "%04d-%02d-%02d" % [today.year, today.month, today.day]
+	var today_seconds = session_stats.get("by_date", {}).get(today_str, 0)
 	var today_hours = today_seconds / 3600.0
 	var today_plays = 0
 	for date in session_stats.get("by_date", {}):
-		if date == OS.get_date()["string"]:
+		if date == today_str:
 			today_plays += 1
 
 	vbox.get_node("TodayLabel").text = TranslationManager.get_text("pd_today") + ": %.1f %s (%d %s)" % [
@@ -569,7 +571,8 @@ func _on_chart_draw() -> void:
 	var days_values = []
 
 	for i in range(6, -1, -1):
-		var date_dict = OS.get_date() if i == 0 else OS.get_date_from_unix_time(Time.get_unix_time_from_system() - i * 86400)
+		var ts = Time.get_unix_time_from_system() - i * 86400
+		var date_dict = Time.get_date_dict_from_unix_time(ts)
 		var date_str = "%04d-%02d-%02d" % [date_dict.year, date_dict.month, date_dict.day]
 		days_labels.append(date_str)
 		var seconds = by_date.get(date_str, 0)
@@ -587,7 +590,7 @@ func _on_chart_draw() -> void:
 	# Draw bars
 	var bar_width = chart_width / 7.0
 	var current_locale = TranslationManager.get_locale()
-	var day_names = current_locale == "id" ? ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"] : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+	var day_names = ["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"] if current_locale == "id" else ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
 	for i in range(7):
 		var x_pos = origin.x + i * bar_width + bar_width * 0.1
@@ -598,5 +601,7 @@ func _on_chart_draw() -> void:
 		control.draw_rect(Rect2(x_pos, y_pos, bar_width * 0.8, bar_height), Color(0.2, 0.5, 0.8, 0.8))
 
 		# Draw day label
-		var day_of_week = (OS.get_date()["weekday"] + (7 - 6 + i)) % 7
+		# Day-of-week from system timestamp (fallback to index if unavailable)
+		var d = Time.get_date_dict_from_unix_time(Time.get_unix_time_from_system() - (6 - i) * 86400)
+		var day_of_week = int(d.get("weekday", i)) % 7
 		control.draw_string(ThemeDB.fallback_font, Vector2(x_pos + bar_width * 0.4 - 10, origin.y + chart_height + 15), day_names[day_of_week], HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0, 0, 0, 1))

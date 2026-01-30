@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://card"]
+[gd_scene load_steps=6 format=3 uid="uid://card"]
 
 [ext_resource type="Script" path="res://scripts/Card.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/memory_flip/card_front.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/memory_flip/card_back.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/memory_flip/question_mark.png" id="4"]
+[ext_resource type="Texture2D" path="res://assets/textures/ui/white_1x1.png" id="5"]
 
 [node name="Card" type="Control"]
 layout_mode = 3
@@ -15,47 +19,53 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 pivot_offset = Vector2(30, 30)
 
-[node name="Front" type="ColorRect" parent="CardPivot"]
+[node name="Front" type="TextureRect" parent="CardPivot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.2, 0.4, 0.8, 1)
+texture = ExtResource("2")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="QuestionIcon" type="Label" parent="CardPivot/Front"]
+[node name="QuestionIcon" type="TextureRect" parent="CardPivot/Front"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -10.0
-offset_top = -15.0
-offset_right = 10.0
-offset_bottom = 15.0
-theme_type_variation = &"HeaderLarge"
-text = "?"
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = -28.0
+offset_top = -36.0
+offset_right = 28.0
+offset_bottom = 36.0
+texture = ExtResource("4")
+expand_mode = 1
+stretch_mode = 5
 
-[node name="Back" type="ColorRect" parent="CardPivot"]
+[node name="Back" type="TextureRect" parent="CardPivot"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(1, 1, 1, 1)
+texture = ExtResource("3")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Content" type="ColorRect" parent="CardPivot/Back"]
+[node name="Content" type="TextureRect" parent="CardPivot/Back"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
+offset_left = 44.0
+offset_top = 44.0
+offset_right = -44.0
+offset_bottom = -44.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("5")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="GlowEffect" type="ColorRect" parent="CardPivot"]
 layout_mode = 1

@@ -2,7 +2,6 @@
   "app_name": "PlayTap",
   "app_tagline": "Game Edukasi Balita Indonesia",
   "tap_count_label": "Main %dx hari ini",
-
   "game_tap_pop_name": "Tap Pop",
   "game_tap_pop_description": "Ketuk balon untuk meletuskannya!",
   "game_drag_match_name": "Drag Match",
@@ -19,7 +18,6 @@
   "game_coloring_book_description": "Warnai gambar-gambar cantik!",
   "game_music_rhythm_name": "Music Rhythm",
   "game_rhythm_description": "Ketuk irama lagu bersama-sama!",
-
   "color_red": "merah",
   "color_blue": "biru",
   "color_yellow": "kuning",
@@ -28,19 +26,16 @@
   "color_orange": "orange",
   "color_purple": "ungu",
   "color_black": "hitam",
-
   "shape_circle": "lingkaran",
   "shape_square": "kotak",
   "shape_triangle": "segitiga",
   "shape_star": "bintang",
   "shape_heart": "hati",
-
   "animal_komodo": "komodo",
   "animal_orangutan": "orangutan",
   "animal_burung": "burung",
   "animal_paus": "paus",
   "animal_belalang": "belalang",
-
   "parent_dashboard": "Dashboard Orang Tua",
   "settings": "Pengaturan",
   "child_profile": "Profil Anak",
@@ -53,18 +48,15 @@
   "cancel": "Batal",
   "delete": "Hapus",
   "download": "Unduh",
-
   "message_wah_hebat": "Wah hebat!",
   "message_sampai_jumpa": "Sampai jumpa!",
   "message_gambar_tersimpan": "Gambar Tersimpan!",
   "message_hapus_gambar": "Hapus gambar?",
-
   "pin_title": "Masukkan PIN",
   "pin_incorrect": "PIN salah",
   "change_pin": "Ganti PIN",
   "privacy_policy": "Kebijakan Privasi",
   "terms_of_service": "Syarat dan Ketentuan",
-
   "pd_pin_title": "Masukkan PIN Orang Tua",
   "pd_pin_default": "PIN default: 1234",
   "pd_pin_change": "Ganti PIN",
@@ -73,7 +65,6 @@
   "pd_pin_confirm": "Konfirmasi PIN",
   "pd_pin_mismatch": "PIN tidak cocok",
   "pd_pin_changed": "PIN berhasil diubah",
-
   "pd_child_profile": "Profil Anak",
   "pd_child_name": "Nama Anak",
   "pd_child_age": "Usia Anak",
@@ -87,18 +78,15 @@
   "pd_game_shape_silhouette": "Shape Silhouette",
   "pd_game_coloring_book": "Coloring Book",
   "pd_game_music_rhythm": "Music Rhythm",
-
   "pd_statistics": "Statistik Bermain",
   "pd_last_7_days": "7 Hari Terakhir",
   "pd_today": "Hari Ini",
   "pd_hours": "jam",
   "pd_plays": "kali main",
   "pd_no_data": "Belum ada data",
-
   "pd_gallery": "Galeri Karya",
   "pd_no_paintings": "Belum ada karya",
   "pd_delete_confirm": "Hapus karya ini?",
-
   "pd_settings": "Pengaturan",
   "pd_language": "Bahasa",
   "pd_lang_indonesian": "Bahasa Indonesia",
@@ -116,9 +104,15 @@
   "pd_app_size_full": "Full (60MB)",
   "pd_cloud_sync": "Sinkronisasi Cloud",
   "pd_cloud_sync_coming_soon": "(segera hadir)",
-
   "pd_legal": "Legal",
   "pd_privacy_policy": "Kebijakan Privasi",
   "pd_terms": "Syarat dan Ketentuan",
-  "pd_close": "Tutup"
+  "pd_close": "Tutup",
+  "game_find_tap_name": "Cari & Tap",
+  "game_find_tap_description": "Tap benda yang diminta",
+  "game_sound_match_name": "Tebak Suara",
+  "game_sound_match_description": "Dengar suara, lalu tap gambar yang cocok",
+  "choose_theme": "Pilih Tema",
+  "theme_animals": "Hewan",
+  "theme_transport": "Transportasi"
 }

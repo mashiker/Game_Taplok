@@ -1,21 +1,24 @@
 extends "res://scripts/GameSceneBase.gd"
 
 # TapPopGame - A game where toddlers tap balloons to pop them
-# Balloon count and colors are age-gated for appropriate difficulty
+# Now includes a simple objective loop: pop a target color N times.
 
 ## Constants ##
 const MAX_BALLOONS_YOUNG: int = 2  # Ages 2-3
 const MAX_BALLOONS_OLDER: int = 3  # Ages 4-5
-const RESPAWN_DELAY: float = 1.0  # Seconds before respawn
-const SCREEN_MARGIN: int = 200    # Pixels from screen edge
-const POOL_SIZE: int = 6          # Pre-allocate balloons for performance
+const RESPAWN_DELAY: float = 0.7  # Faster pace
+const SCREEN_MARGIN: int = 40     # Pixels from container edge
+const POOL_SIZE: int = 10         # Slightly bigger pool
+
+# Round objective
+const TARGET_PER_ROUND: int = 5
 
 ## Balloon Colors ##
 const BALLOON_COLORS = {
-	"red": Color(0.91, 0.29, 0.24, 1),    # #E84A3D
-	"blue": Color(0.22, 0.74, 0.97, 1),   # #38BDF8
-	"yellow": Color(0.98, 0.75, 0.14, 1), # #FBBF24
-	"green": Color(0.2, 0.83, 0.6, 1)     # #34D399
+	"red": Color(0.91, 0.29, 0.24, 1),
+	"blue": Color(0.22, 0.74, 0.97, 1),
+	"yellow": Color(0.98, 0.75, 0.14, 1),
+	"green": Color(0.2, 0.83, 0.6, 1)
 }
 
 const COLOR_TRANSLATION_KEYS = {
@@ -32,69 +35,100 @@ const COLOR_WORD_PATH_TEMPLATE: String = "words/id/warna_{color}.ogg"
 ## Variables ##
 var balloon_scene: PackedScene = null
 var active_balloons: Array[Node] = []
-var balloon_pool: Array[Node] = []  # Object pool for balloons
+var balloon_pool: Array[Node] = []
 var max_balloons: int = MAX_BALLOONS_YOUNG
 var child_age: int = 3
 var available_colors: Array[String] = []
 var respawn_timer: Timer = null
+
+# Objective: pop a target color N times
+var target_color: String = "red"
+var target_goal: int = TARGET_PER_ROUND
+var target_progress: int = 0
 
 ## Built-in Functions ##
 func _ready() -> void:
 	game_name = "TapPop"
 	super._ready()
 
-	# Load balloon scene
 	balloon_scene = load("res://scenes/Balloon.tscn")
 	if not balloon_scene:
 		push_error("Failed to load Balloon scene")
 		return
 
-	# Get child age for age gating
 	child_age = _get_child_age()
 	_setup_age_gating()
-
-	# Initialize object pool for performance
 	_initialize_balloon_pool()
 
-	# Create respawn timer
 	respawn_timer = Timer.new()
 	respawn_timer.wait_time = RESPAWN_DELAY
 	respawn_timer.one_shot = true
 	respawn_timer.timeout.connect(_on_respawn_timeout)
 	add_child(respawn_timer)
 
-	# Start session
 	SessionManager.start_session(game_name, "cognitive")
 
-## Virtual Function Overrides ##
+	_setup_round()
+	_update_hud()
 
-# Called when game starts
+## Virtual Function Overrides ##
 func _on_game_start() -> void:
 	super._on_game_start()
 	_spawn_initial_balloons()
 
-# Called when game ends
 func _on_game_end() -> void:
-	# Return all balloons to pool
 	for balloon in active_balloons:
 		if is_instance_valid(balloon):
 			_return_balloon_to_pool(balloon)
 	active_balloons.clear()
 
-	# End session
 	SessionManager.end_session()
 	super._on_game_end()
 
-# Get game metrics
 func _get_game_metrics() -> Dictionary:
 	var base_metrics = super._get_game_metrics()
 	base_metrics["game_type"] = "tap_pop"
 	base_metrics["balloons_popped"] = SessionManager.get_tap_count()
+	base_metrics["target_color"] = target_color
+	base_metrics["target_progress"] = target_progress
 	return base_metrics
 
-## Private Functions ##
+## Round / HUD ##
+func _setup_round() -> void:
+	# Pick a target color from available pool
+	if available_colors.size() == 0:
+		available_colors = ["red", "blue", "yellow"]
+	target_color = available_colors.pick_random()
+	target_goal = TARGET_PER_ROUND
+	target_progress = 0
 
-# Initialize balloon object pool for performance optimization
+	# Optional: voice prompt (if audio exists)
+	var audio_path = COLOR_WORD_PATH_TEMPLATE.format({"color": _color_name_to_indonesian(target_color)})
+	AudioManager.play_voice(audio_path)
+
+func _update_hud() -> void:
+	var target_label = $GameContainer/HUD/TargetLabel
+	var progress_label = $GameContainer/HUD/ProgressLabel
+
+	if target_label:
+		var color_key = COLOR_TRANSLATION_KEYS.get(target_color, "")
+		var word = TranslationManager.get_text(color_key) if not color_key.is_empty() else target_color
+		target_label.text = "Pop: %s" % word
+
+	if progress_label:
+		progress_label.text = "%d/%d" % [target_progress, target_goal]
+
+func _on_round_complete() -> void:
+	# Celebrate bigger
+	RewardSystem.reward_success(get_viewport().get_visible_rect().size / 2.0, 2.0)
+	AudioManager.play_sfx(POP_SOUND_PATH)
+
+	# Start a new round after a short delay
+	await get_tree().create_timer(0.8).timeout
+	_setup_round()
+	_update_hud()
+
+## Pool / Spawning ##
 func _initialize_balloon_pool() -> void:
 	var container = $GameContainer/GameContent/BalloonContainer
 	if not container:
@@ -103,158 +137,120 @@ func _initialize_balloon_pool() -> void:
 
 	for i in range(POOL_SIZE):
 		var balloon = balloon_scene.instantiate()
-		balloon.visible = false  # Hide pooled balloons
-		balloon.set_process(false)  # Disable processing when pooled
+		balloon.visible = false
+		balloon.set_process(false)
 		balloon.set_physics_process(false)
 		container.add_child(balloon)
 		balloon_pool.append(balloon)
 
-	print("Balloon pool initialized with ", balloon_pool.size(), " balloons")
-
-# Get a balloon from pool or create new if pool empty
 func _get_balloon_from_pool() -> Node:
 	if balloon_pool.size() > 0:
 		var balloon = balloon_pool.pop_back()
 		balloon.visible = true
 		balloon.set_process(true)
 		balloon.set_physics_process(true)
+		balloon.modulate = Color.WHITE
+		balloon.scale = Vector2.ONE
 		return balloon
-
-	# Pool exhausted, create new (fallback)
 	return balloon_scene.instantiate()
 
-# Return balloon to pool for reuse
 func _return_balloon_to_pool(balloon: Node) -> void:
 	if balloon_pool.size() < POOL_SIZE:
 		balloon.visible = false
 		balloon.set_process(false)
 		balloon.set_physics_process(false)
-		balloon.position = Vector2(-1000, -1000)  # Move off-screen
+		balloon.position = Vector2(-1000, -1000)
 		balloon_pool.append(balloon)
 	else:
-		balloon.queue_free()  # Pool full, destroy
+		balloon.queue_free()
 
-# Get the child's age from GameManager (default to 3 if not set)
-func _get_child_age() -> int:
-	# Check if GameManager has get_child_age method
-	if GameManager.has_method("get_child_age"):
-		return GameManager.get_child_age()
-	return 3  # Default age
-
-# Set up age-gated content (balloon count and colors)
-func _setup_age_gating() -> void:
-	if child_age >= 4:
-		# Ages 4-5: 3 balloons, all colors
-		max_balloons = MAX_BALLOONS_OLDER
-		available_colors = ["red", "blue", "yellow", "green"]
-	else:
-		# Ages 2-3: 2 balloons, limited colors (no green)
-		max_balloons = MAX_BALLOONS_YOUNG
-		available_colors = ["red", "blue", "yellow"]
-
-	print("Tap Pop: Age ", child_age, " -> ", max_balloons, " balloons, colors: ", available_colors)
-
-# Spawn the initial set of balloons
 func _spawn_initial_balloons() -> void:
 	for i in range(max_balloons):
 		_spawn_balloon()
 
-# Spawn a single balloon at a random position
 func _spawn_balloon() -> void:
 	if not balloon_scene:
 		return
 
 	var balloon = _get_balloon_from_pool()
 	var container = $GameContainer/GameContent/BalloonContainer
-
 	if not container:
 		push_error("BalloonContainer not found")
 		balloon.queue_free()
 		return
 
-	# Connect pop signal (disconnect first to avoid duplicates)
+	# Connect pop signal
 	if balloon.balloon_popped.is_connected(_on_balloon_popped):
 		balloon.balloon_popped.disconnect(_on_balloon_popped)
-	balloon.balloon_popped.connect(_on_balloon_popped)
+	balloon.balloon_popped.connect(_on_balloon_popped.bind(balloon))
 
-	# Set random color from available options
+	# Color selection
 	var color_name = available_colors.pick_random()
 	balloon.set_balloon_color(BALLOON_COLORS[color_name], color_name)
 
-	# Get container bounds for random positioning
-	var container_size = container.get_size()
+	# Random position within bounds
+	var rect = container.get_rect()
 	var margin = float(SCREEN_MARGIN)
+	var random_x = randf_range(margin, rect.size.x - margin)
+	var random_y = randf_range(margin, rect.size.y - margin)
+	balloon.position = Vector2(random_x, random_y)
 
-	# Random position within bounds (keeping away from edges)
-	var x_range = container_size.x - (2.0 * BALLOON_COLORS.size() * 80.0)  # Approximate balloon spacing
-	var y_range = container_size.y - 200.0
-
-	if x_range > 0 and y_range > 0:
-		var random_x = randf_range(margin, container_size.x - margin - 80.0)
-		var random_y = randf_range(margin, container_size.y - margin - 80.0)
-		balloon.position = Vector2(random_x, random_y)
-	else:
-		# Fallback to center if bounds are too small
-		balloon.position = container_size / 2.0
-
-	# Only add to container if not already a child (pooled balloons are already in container)
 	if balloon.get_parent() != container:
 		container.add_child(balloon)
 	active_balloons.append(balloon)
 
-# Handle balloon pop event
-func _on_balloon_popped(color_name: String, balloon: Node = null) -> void:
-	# Record the tap
+# Handle balloon pop
+func _on_balloon_popped(color_name: String, balloon: Node) -> void:
 	SessionManager.record_tap()
 
-	# Find and remove the popped balloon from active list
-	var popped_balloon = balloon
-	if not popped_balloon:
-		for b in active_balloons:
-			if is_instance_valid(b) and b.has_method("get_color_name") and b.get_color_name() == color_name:
-				popped_balloon = b
-				break
+	# Remove from active
+	if balloon and is_instance_valid(balloon):
+		active_balloons.erase(balloon)
+		_await_and_return_balloon(balloon)
 
-	if popped_balloon:
-		active_balloons.erase(popped_balloon)
-		# Return balloon to pool after animation (delayed)
-		_await_and_return_balloon(popped_balloon)
+	# Objective progress
+	if color_name == target_color:
+		target_progress += 1
+		_update_hud()
+		RewardSystem.reward_success(balloon.global_position if balloon else get_viewport().get_mouse_position(), 1.3)
+		if target_progress >= target_goal:
+			_on_round_complete()
 
-	# Play pop sound
+	# Base feedback
+	RewardSystem.reward_tap(balloon.global_position if balloon else get_viewport().get_mouse_position())
+
 	AudioManager.play_sfx(POP_SOUND_PATH)
 
-	# Play color word audio
-	var color_key = COLOR_TRANSLATION_KEYS.get(color_name, "")
-	if not color_key.is_empty():
-		var word = TranslationManager.get_text(color_key)
-		print("Color popped: ", word)
-		# Audio path: sounds/words/id/warna_{color}.ogg
-		var audio_path = COLOR_WORD_PATH_TEMPLATE.format({"color": _color_name_to_indonesian(color_name)})
-		AudioManager.play_voice(audio_path)
+	# Voice callout (if exists)
+	var audio_path = COLOR_WORD_PATH_TEMPLATE.format({"color": _color_name_to_indonesian(color_name)})
+	AudioManager.play_voice(audio_path)
 
-	# Trigger Wayang celebration (if sprite has animations)
-	var wayang = $GameContainer/TopBar/WayangMascot
-	if wayang and wayang.has_method("play"):
-		if wayang.sprite_frames and wayang.sprite_frames.has_animation("celebrate"):
-			wayang.play("celebrate")
-
-	# Check auto-end conditions (60 taps or 10 minutes)
+	# Auto-end check
 	SessionManager.check_auto_end_conditions()
 	if not SessionManager.is_session_active():
-		# Session ended, return to menu after a brief delay
 		await get_tree().create_timer(1.0).timeout
 		GameManager.fade_to_scene("res://scenes/MainMenu.tscn")
 		return
 
-	# Start respawn timer
 	respawn_timer.start()
 
-# Respawn timer callback - spawn new balloon
 func _on_respawn_timeout() -> void:
 	if active_balloons.size() < max_balloons:
 		_spawn_balloon()
 
-# Convert color name to Indonesian for audio file path
+func _get_child_age() -> int:
+	if GameManager.has_method("get_child_age"):
+		return GameManager.get_child_age()
+	return 3
+
+func _setup_age_gating() -> void:
+	if child_age >= 4:
+		max_balloons = MAX_BALLOONS_OLDER
+		available_colors = ["red", "blue", "yellow", "green"]
+	else:
+		max_balloons = MAX_BALLOONS_YOUNG
+		available_colors = ["red", "blue", "yellow"]
+
 func _color_name_to_indonesian(color_name: String) -> String:
 	match color_name:
 		"red":
@@ -268,8 +264,7 @@ func _color_name_to_indonesian(color_name: String) -> String:
 		_:
 			return color_name
 
-# Wait for pop animation then return balloon to pool
 func _await_and_return_balloon(balloon: Node) -> void:
 	if is_instance_valid(balloon):
-		await get_tree().create_timer(0.3).timeout  # Wait for pop animation
+		await get_tree().create_timer(0.22).timeout
 		_return_balloon_to_pool(balloon)

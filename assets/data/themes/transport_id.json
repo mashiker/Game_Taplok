@@ -1,0 +1,13 @@
+{
+  "id": "transport_id",
+  "name": "Transportasi",
+  "background": "res://assets/textures/games/find_tap/bg_findtap_transport_1920x1080.png",
+  "items": [
+    {"id": "mobil", "label_id": "Mobil", "icon": "res://assets/textures/games/find_tap/transport/mobil_512.png"},
+    {"id": "bus", "label_id": "Bus", "icon": "res://assets/textures/games/find_tap/transport/bus_512.png"},
+    {"id": "kereta", "label_id": "Kereta", "icon": "res://assets/textures/games/find_tap/transport/kereta_512.png"},
+    {"id": "pesawat", "label_id": "Pesawat", "icon": "res://assets/textures/games/find_tap/transport/pesawat_512.png"},
+    {"id": "kapal", "label_id": "Kapal", "icon": "res://assets/textures/games/find_tap/transport/kapal_512.png"},
+    {"id": "sepeda", "label_id": "Sepeda", "icon": "res://assets/textures/games/find_tap/transport/sepeda_512.png"}
+  ]
+}

@@ -1,0 +1,33 @@
+Transport SFX (CC0)
+
+Sources:
+
+1) Car SFX
+- https://opengameart.org/content/car-sound-effects-pack-low-quality (License: CC0)
+  Author: GGBotNet
+  Files used:
+  - mobil_start.ogg (from Car_Engine_Start_Up.ogg)
+  - mobil_vroom.ogg (from Car_Acceleration.ogg)
+  - klakson.ogg (from Car_Horn.ogg)
+
+2) Train whistle
+- https://opengameart.org/content/steam-whistle (License: CC0)
+  Author: bart
+  Files used:
+  - kereta_whistle.wav (from steam_whistle.wav)
+
+3) Air whoosh (cartoony)
+- https://opengameart.org/content/swishes-sound-pack (License: CC0)
+  Author: (see OpenGameArt page)
+  Files used:
+  - pesawat_whoosh.wav (from swish-4.wav)
+
+4) Water splash (for boat)
+- https://opengameart.org/content/100-cc0-sfx (License: CC0)
+  Files used:
+  - kapal_splash.ogg (from splash_01.ogg)
+
+5) Bell (for bicycle)
+- https://opengameart.org/content/pleasing-bell-sound-effect (License: CC0)
+  Files used:
+  - sepeda_bell.wav (from pleasing-bell.wav)

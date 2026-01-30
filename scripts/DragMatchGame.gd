@@ -25,6 +25,8 @@ var active_shapes_count: int = 2  # Will be set based on progression
 @onready var shapes_container: HBoxContainer = $GameContainer/GameContent/ShapesContainer
 @onready var slots_container: GridContainer = $GameContainer/GameContent/SlotsContainer
 @onready var wayang_mascot: AnimatedSprite2D = $GameContainer/TopBar/WayangMascot
+@onready var objective_label: Label = $GameContainer/TopBar/ObjectiveLabel
+@onready var progress_label: Label = $GameContainer/TopBar/ProgressLabel
 
 ## Built-in Functions ##
 func _ready() -> void:
@@ -36,6 +38,9 @@ func _on_game_start() -> void:
 	super._on_game_start()
 	_determine_difficulty()
 	_spawn_shapes_and_slots()
+	_update_hud()
+	if objective_label:
+		objective_label.text = TranslationManager.get_text("game_drag_match_description")
 	SessionManager.start_session("DragMatch", "cognitive")
 	print("Drag Match game started with ", active_shapes_count, " shape pairs")
 
@@ -53,8 +58,9 @@ func _get_game_metrics() -> Dictionary:
 # Handle shape dropped on slot
 func on_shape_dropped(shape: Shape, slot: Slot) -> void:
 	if not slot or not slot.accepts_shape(shape):
-		# Invalid drop - bounce back
+		# Invalid drop - bounce back (soft error feedback)
 		shape.reset_position()
+		RewardSystem.reward_error(shape.global_position)
 		AudioManager.play_sfx("sfx/gentle.ogg")
 		return
 
@@ -88,9 +94,6 @@ func _spawn_shapes_and_slots() -> void:
 		slots.append(slot)
 		slots_container.add_child(slot)
 
-	# Connect slot signals
-	slot.shape_drag_ended.connect(_on_slot_shape_drag_ended)
-
 	# Create shapes (at bottom)
 	# Shuffle shapes so they don't align with slots
 	var shuffled_shapes = selected_shapes.duplicate()
@@ -118,6 +121,10 @@ func _get_random_shapes(count: int) -> Array[String]:
 
 	return result
 
+func _update_hud() -> void:
+	if progress_label:
+		progress_label.text = str(matched_count) + "/" + str(active_shapes_count)
+
 # Process a successful match
 func _process_match(shape: Shape, slot: Slot) -> void:
 	# Play success audio
@@ -128,15 +135,19 @@ func _process_match(shape: Shape, slot: Slot) -> void:
 	var word = TranslationManager.get_text(shape_key)
 	AudioManager.play_voice("words/id/bentuk_" + shape.shape_type + ".ogg")
 
+	# Reward feedback
+	RewardSystem.reward_success(slot.global_position, 1.0)
+
 	# Animate shape to slot center
 	var slot_global = slot.global_position
 	var shape_global = shape.get_parent().global_position
 	var relative_pos = slot_global - shape_global
 
 	var tween = create_tween()
-	tween.set_ease(Tween.EASE_OUT)
-	tween.set_trans(Tween.TRANS_QUAD)
-	tween.tween_property(shape, "position", relative_pos, 0.2)
+	tween.set_parallel(true)
+	tween.tween_property(shape, "position", relative_pos, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(shape, "scale", Vector2.ONE * 1.15, 0.10).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.tween_property(shape, "scale", Vector2.ONE, 0.12).set_delay(0.10).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 	# Mark slot as filled
 	slot.fill()
@@ -150,6 +161,7 @@ func _process_match(shape: Shape, slot: Slot) -> void:
 
 	# Increment match count
 	matched_count += 1
+	_update_hud()
 
 	# Record tap
 	SessionManager.record_tap()
@@ -186,8 +198,8 @@ func _play_mascot_celebration() -> void:
 
 # Check if game should end
 func _check_game_end() -> void:
-	# End after max matches
-	if matched_count >= MAX_MATCHES:
+	# End when all current pairs are matched
+	if matched_count >= active_shapes_count or slots.is_empty():
 		_end_game_victory()
 		return
 

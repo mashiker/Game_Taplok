@@ -1,0 +1,68 @@
+{
+  "style": {
+    "model": "fal-ai/flux-pro/v1.1-ultra",
+    "look": "kartun flat pastel",
+    "notes": [
+      "icons with transparent background",
+      "thick friendly outline",
+      "simple shapes, kid friendly",
+      "no text, no watermark"
+    ]
+  },
+  "outputs": {
+    "background": {"size": [1920, 1080], "format": "png"},
+    "icons": {"size": [512, 512], "format": "png"},
+    "ui": {"size": [512, 256], "format": "png"}
+  },
+  "assets": [
+    {
+      "id": "bg_findtap_animals",
+      "type": "background",
+      "out": "assets/textures/games/find_tap/bg_findtap_animals_1920x1080.png",
+      "prompt": "Flat pastel cartoon landscape background (16:9) for a toddler find-and-tap game. Soft sky gradient, rounded clouds, subtle floating bubbles and confetti dots, large clean empty area in center for UI, no text.",
+      "negative": "text, watermark, logo, realistic, dark, scary, clutter"
+    },
+    {
+      "id": "icon_findtap",
+      "type": "icon",
+      "out": "assets/textures/ui/icons/icon_find_tap_512.png",
+      "prompt": "Flat pastel cartoon icon (square) for a toddler mini-game: find and tap. A cute magnifying glass and a pointing finger over a smiling animal silhouette, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "animal_komodo",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/animals/komodo_512.png",
+      "prompt": "Cute flat pastel cartoon icon of an Indonesian komodo dragon, smiling, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "animal_orangutan",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/animals/orangutan_512.png",
+      "prompt": "Cute flat pastel cartoon icon of an orangutan, smiling, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "animal_burung",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/animals/burung_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a colorful bird, smiling, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "animal_paus",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/animals/paus_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a whale, smiling, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    },
+    {
+      "id": "animal_belalang",
+      "type": "icon",
+      "out": "assets/textures/games/find_tap/animals/belalang_512.png",
+      "prompt": "Cute flat pastel cartoon icon of a grasshopper, smiling, thick friendly outline, centered, transparent background, no text.",
+      "negative": "text, watermark, photo"
+    }
+  ]
+}

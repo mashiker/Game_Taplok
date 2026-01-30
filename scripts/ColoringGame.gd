@@ -53,6 +53,10 @@ var color_buttons: Array[Button] = []
 var template_buttons: Array[TextureButton] = []
 var is_transitioning: bool = false
 
+var _fills_done: int = 0
+var _target_fills: int = 10
+var _goal_rewarded: bool = false
+
 ## UI References ##
 @onready var template_list: HBoxContainer
 @onready var undo_button: Button
@@ -62,6 +66,7 @@ var is_transitioning: bool = false
 func _ready() -> void:
 	super._ready()
 	game_name = "Coloring"
+	_update_hud()
 	_setup_canvas()
 	_setup_template_selector()
 	_setup_color_palette()
@@ -97,6 +102,9 @@ func set_color(color_idx: int) -> void:
 # Load a specific template
 func load_template(template_data: Dictionary) -> void:
 	current_template = template_data
+	_fills_done = 0
+	_goal_rewarded = false
+	_update_hud()
 	_load_template_image(template_data["path"])
 
 # Undo last action
@@ -124,8 +132,8 @@ func save_painting() -> void:
 		push_error("Failed to save coloring: ", filepath)
 		return
 
-	# Save to database
-	Database.save_painting("Coloring", filepath, current_template.get("id", ""))
+	# Save to database (keep signature compatible)
+	Database.save_painting("Coloring", filepath)
 
 	# Show save confirmation
 	_show_save_confirmation()
@@ -280,28 +288,37 @@ func _handle_canvas_click(event: InputEventMouseButton) -> void:
 	# Save state for undo
 	_save_to_undo_stack()
 
-	# Perform flood fill
-	_flood_fill(canvas_image, x, y, current_color)
+	# Perform flood fill (count pixels changed)
+	var filled := _flood_fill(canvas_image, x, y, current_color)
 	_update_canvas_texture()
 
-	# Play sound and haptic
-	AudioManager.play_sfx("pop_soft.ogg")
-	OS.vibrate_msec(30)
+	# Feedback
+	if filled > 0:
+		_fills_done += 1
+		RewardSystem.reward_success(canvas.global_position + local_pos, 0.8)
+		AudioManager.play_sfx("pop_soft.ogg")
+		Input.vibrate_handheld(30)
+	else:
+		RewardSystem.reward_error(canvas.global_position + local_pos)
+		AudioManager.play_sfx("gentle.ogg")
+
+	_update_hud()
 
 	# Record tap
 	SessionManager.record_tap()
 
 # Flood fill algorithm
-func _flood_fill(image: Image, start_x: int, start_y: int, fill_color: Color) -> void:
+# Returns number of pixels changed.
+func _flood_fill(image: Image, start_x: int, start_y: int, fill_color: Color) -> int:
 	var target_color = image.get_pixel(start_x, start_y)
 
 	# Don't fill if same color
 	if _colors_match(target_color, fill_color):
-		return
+		return 0
 
 	# Don't fill black outline pixels
 	if _colors_match(target_color, Color.BLACK):
-		return
+		return 0
 
 	var width = image.get_width()
 	var height = image.get_height()
@@ -309,6 +326,7 @@ func _flood_fill(image: Image, start_x: int, start_y: int, fill_color: Color) ->
 	# Stack-based flood fill
 	var stack = [{x = start_x, y = start_y}]
 	var visited = {}
+	var filled_count := 0
 
 	while stack.size() > 0:
 		var pos = stack.pop_back()
@@ -327,12 +345,15 @@ func _flood_fill(image: Image, start_x: int, start_y: int, fill_color: Color) ->
 			continue
 
 		image.set_pixel(pos.x, pos.y, fill_color)
+		filled_count += 1
 
 		# Add neighbors to stack (4-way)
 		stack.append({x = pos.x + 1, y = pos.y})
 		stack.append({x = pos.x - 1, y = pos.y})
 		stack.append({x = pos.x, y = pos.y + 1})
 		stack.append({x = pos.x, y = pos.y - 1})
+
+	return filled_count
 
 # Check if two colors match (with tolerance)
 func _colors_match(c1: Color, c2: Color) -> bool:
@@ -418,6 +439,18 @@ func _create_paintings_directory() -> void:
 	if dir:
 		if not dir.dir_exists("paintings"):
 			dir.make_dir("paintings")
+
+func _update_hud() -> void:
+	var obj := $GameContainer/TopBar/ObjectiveLabel
+	var prog := $GameContainer/TopBar/ProgressLabel
+	if obj:
+		obj.text = "Warnai gambar"
+	if prog:
+		prog.text = str(min(_fills_done, _target_fills)) + "/" + str(_target_fills)
+
+	if not _goal_rewarded and _fills_done >= _target_fills:
+		_goal_rewarded = true
+		RewardSystem.reward_success(get_viewport().get_visible_rect().size * 0.5, 1.6)
 
 ## Signal Callbacks ##
 

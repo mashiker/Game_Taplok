@@ -15,6 +15,14 @@ const DRAG_DEADZONE: float = 10.0  # Pixels to move before drag activates
 const DRAG_OPACITY: float = 0.7
 const DRAG_SCALE: float = 1.1
 
+const SHAPE_TEXTURES := {
+	"circle": preload("res://assets/textures/games/drag_match/shapes/circle.png"),
+	"square": preload("res://assets/textures/games/drag_match/shapes/square.png"),
+	"triangle": preload("res://assets/textures/games/drag_match/shapes/triangle.png"),
+	"star": preload("res://assets/textures/games/drag_match/shapes/star.png"),
+	"heart": preload("res://assets/textures/games/drag_match/shapes/heart.png"),
+}
+
 ## Variables ##
 @export var shape_type: String = ""  # "circle", "square", "triangle", "star", "heart"
 @export var shape_color: Color = Color(1, 1, 1, 1)
@@ -26,7 +34,7 @@ var original_position: Vector2 = Vector2.ZERO
 var has_exceeded_deadzone: bool = false
 
 ## Node References ##
-@onready var color_rect: ColorRect = $ColorRect
+@onready var icon: TextureRect = $Icon
 @onready var area: Area2D = $Area2D
 @onready var collision_shape: CollisionShape2D = $Area2D/CollisionShape2D
 
@@ -54,11 +62,11 @@ func set_shape_type(type: String) -> void:
 	shape_type = type
 	_setup_shape()
 
-# Set the shape color
+# Set the shape color (tints the texture)
 func set_shape_color(color: Color) -> void:
 	shape_color = color
-	if color_rect:
-		color_rect.color = color
+	if icon:
+		icon.modulate = color
 
 # Mark shape as matched and prepare for removal
 func mark_matched() -> void:
@@ -84,23 +92,16 @@ func reset_position() -> void:
 
 # Set up the shape visual based on type
 func _setup_shape() -> void:
-	if not color_rect:
+	if not icon:
 		return
 
-	# Set default colors based on shape type
-	match shape_type:
-		"circle":
-			set_shape_color(Color(0.93, 0.29, 0.24))  # Red
-		"square":
-			set_shape_color(Color(0.22, 0.74, 0.97))  # Blue
-		"triangle":
-			set_shape_color(Color(0.98, 0.75, 0.14))  # Yellow
-		"star":
-			set_shape_color(Color(0.20, 0.83, 0.60))  # Green
-		"heart":
-			set_shape_color(Color(1.0, 0.41, 0.71))  # Pink
-		_:
-			set_shape_color(Color(0.5, 0.5, 0.5))  # Gray default
+	# Use kid-friendly pastel textures (flat style)
+	if SHAPE_TEXTURES.has(shape_type):
+		icon.texture = SHAPE_TEXTURES[shape_type]
+		icon.modulate = Color(1, 1, 1, 1)
+	else:
+		icon.texture = null
+		icon.modulate = Color(1, 1, 1, 1)
 
 # Connect signals
 func _connect_signals() -> void:

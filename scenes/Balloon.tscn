@@ -1,21 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://balloon"]
+[gd_scene load_steps=8 format=3 uid="uid://balloon"]
 
 [ext_resource type="Script" path="res://scripts/Balloon.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/tappop/balloon_red_256.png" id="2_red"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/tappop/balloon_blue_256.png" id="3_blue"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/tappop/balloon_yellow_256.png" id="4_yellow"]
+[ext_resource type="Texture2D" path="res://assets/textures/games/tappop/balloon_green_256.png" id="5_green"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]
-radius = 40.0
+radius = 44.0
 
 [node name="Balloon" type="Area2D"]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1")
 
-[node name="Sprite" type="ColorRect" parent="."]
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
-color = Color(0.91, 0.29, 0.24, 1)
+[node name="Sprite" type="Sprite2D" parent="."]
+texture = ExtResource("2_red")
+centered = true
+scale = Vector2(0.35, 0.35)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_1")

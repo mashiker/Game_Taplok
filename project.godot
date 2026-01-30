@@ -24,13 +24,19 @@ TranslationManager="*res://scripts/TranslationManager.gd"
 Database="*res://scripts/Database.gd"
 SessionManager="*res://scripts/SessionManager.gd"
 AudioManager="*res://scripts/AudioManager.gd"
+RewardSystem="*res://scripts/RewardSystem.gd"
 
 [display]
 
-window/size/viewport_width=540
-window/size/viewport_height=960
+; Landscape base resolution
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/size/mode=2
 window/stretch/mode="canvas_items"
+
+; Lock mobile orientation to landscape
+; 1 = landscape (DisplayServer.ScreenOrientation)
+window/handheld/orientation=1
 
 [input]
 

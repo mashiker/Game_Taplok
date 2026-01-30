@@ -31,11 +31,14 @@ var grid_rows: int = 2
 var grid_cols: int = 2
 var total_pairs: int = 0
 var matched_pairs: int = 0
+var is_active: bool = false
 
 ## Node References ##
 @onready var game_scene_base: Control = $GameSceneBase
 @onready var card_container: GridContainer = $GameSceneBase/CardContainer
 @onready var win_label: Label = $GameSceneBase/WinLabel
+@onready var objective_label: Label = $GameSceneBase/GameContainer/TopBar/ObjectiveLabel
+@onready var progress_label: Label = $GameSceneBase/GameContainer/TopBar/ProgressLabel
 @onready var check_timer: Timer = $CheckTimer
 @onready var reset_timer: Timer = $ResetTimer
 @onready var win_timer: Timer = $WinTimer
@@ -46,6 +49,9 @@ func _ready() -> void:
 	_load_child_age()
 	_setup_game()
 	_connect_signals()
+	_update_hud()
+	if objective_label:
+		objective_label.text = "Cari pasangan yang sama"  # TODO: localize
 
 ## Virtual Function Overrides ##
 
@@ -129,6 +135,10 @@ func _setup_game() -> void:
 		cards.append(card)
 		card_container.add_child(card)
 
+func _update_hud() -> void:
+	if progress_label:
+		progress_label.text = str(matched_pairs) + "/" + str(total_pairs)
+
 # Connect timer signals
 func _connect_signals() -> void:
 	check_timer.timeout.connect(_on_match_check)
@@ -172,6 +182,7 @@ func _on_match_check() -> void:
 # Handle matched cards
 func _on_match_found(card1: Card, card2: Card) -> void:
 	matched_pairs += 1
+	_update_hud()
 
 	# Play match success sound
 	AudioManager.play_sfx("match_success.ogg")
@@ -194,6 +205,9 @@ func _on_match_found(card1: Card, card2: Card) -> void:
 	card1.show_glow()
 	card2.show_glow()
 
+	# Reward feedback
+	RewardSystem.reward_success((card1.global_position + card2.global_position) * 0.5, 1.0)
+
 	# Clear flipped cards
 	flipped_cards.clear()
 
@@ -209,6 +223,7 @@ func _on_no_match(card1: Card, card2: Card) -> void:
 
 	# Play gentle SFX for no match
 	AudioManager.play_sfx("match_fail.ogg")
+	RewardSystem.reward_error((card1.global_position + card2.global_position) * 0.5)
 
 	# Flip back after delay
 	reset_timer.start()

@@ -16,6 +16,9 @@ var current_game: String = ""
 var is_transitioning: bool = false
 var child_age: int = 3  # Default age for age-gating content
 
+# Find & Tap selection (set by FindTapThemeSelect)
+var findtap_theme_path: String = ""  # res://assets/data/themes/<...>.json
+
 ## Built-in Functions ##
 func _ready() -> void:
 	Engine.max_fps = 30  # Cap FPS for consistent performance and battery saving
