@@ -76,6 +76,9 @@ func play_voice(path: String) -> void:
 		push_warning("AudioManager.play_voice: empty path")
 		return
 
+	if _voice_player == null:
+		push_warning("AudioManager.play_voice: voice player not initialized yet")
+		return
 	# Don't interrupt current voice
 	if _voice_player.playing:
 		push_warning("AudioManager.play_voice: voice already playing")
@@ -194,12 +197,8 @@ func _load_audio_stream(path: String) -> AudioStream:
 
 	match ext:
 		"ogg":
-			var loader = AudioStreamOggVorbis.new()
-			var file = FileAccess.open(path, FileAccess.READ)
-			if file:
-				loader.data = file.get_buffer(file.get_length())
-				file.close()
-				return loader
+			# In Godot 4.x, OGG is imported as a resource; just load it.
+			return load(path) as AudioStream
 		"mp3":
 			return load(path) as AudioStreamMP3
 		"wav":

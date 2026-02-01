@@ -50,6 +50,11 @@ var wayang_dancing: bool = false
 var _unique_keys_pressed := {} # key_id -> true
 var _target_unique := 5
 var _goal_rewarded := false
+const GAME_ID := "piano_hewan"
+const SCENE_PATH := "res://scenes/PianoGame.tscn"
+var current_level: int = 1
+var sequence_length: int = 1
+var animals_in_pool: Array[String] = []
 
 ## Node References ##
 var keys_container: HBoxContainer = null
@@ -65,6 +70,7 @@ func _ready() -> void:
 	_update_hud()
 
 	# Set up the piano game
+	_apply_level_config()
 	_setup_piano()
 	_start_inactivity_timer()
 
@@ -95,6 +101,22 @@ func _on_game_end() -> void:
 
 ## Private Functions ##
 
+func _apply_level_config() -> void:
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	current_level = int(pm.get_level(GAME_ID)) if pm else 1
+	var cfg: Dictionary = pm.get_level_config(GAME_ID, current_level) if pm else {}
+	if cfg.is_empty():
+		# Default level 1 values
+		sequence_length = 1
+		animals_in_pool = ["kucing"]
+	else:
+		sequence_length = int(cfg.get("sequence_length", sequence_length))
+		var pool = cfg.get("animals_in_pool", [])
+		if typeof(pool) == TYPE_ARRAY and pool.size() > 0:
+			animals_in_pool.clear()
+			for a in pool:
+				animals_in_pool.append(str(a))
+
 # Set up the piano keyboard
 func _setup_piano() -> void:
 	# Get the game content container
@@ -122,9 +144,11 @@ func _setup_piano() -> void:
 	keys_container.add_theme_constant_override("separation", KEY_SPACING)
 	main_container.add_child(keys_container)
 
-	# Create piano keys
+	# Create piano keys (only from animals_in_pool for this level)
 	for key_id in KEY_DATA.keys():
-		_create_piano_key(key_id)
+		var animal_name: String = KEY_DATA[key_id].animal
+		if animals_in_pool.has(animal_name):
+			_create_piano_key(key_id)
 
 	# Add spacer at bottom
 	var bottom_spacer = Control.new()
@@ -256,12 +280,37 @@ func _update_hud() -> void:
 	if not _goal_rewarded and _unique_keys_pressed.size() >= _target_unique:
 		_goal_rewarded = true
 		RewardSystem.reward_success(get_viewport().get_visible_rect().size * 0.5, 1.6)
+		await _handle_level_complete(true)
 
 func _get_key_global_center(key_id: String) -> Vector2:
 	for k in piano_keys:
 		if k and k.key_id == key_id:
 			return k.global_position + (k.size * 0.5)
 	return get_viewport().get_mouse_position()
+
+func _handle_level_complete(success: bool) -> void:
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	var res: Dictionary = pm.complete_level(GAME_ID, success) if pm else {"leveled_up": false, "new_level": current_level, "max_level": current_level}
+	var leveled_up: bool = bool(res.get("leveled_up", false))
+	var new_level: int = int(res.get("new_level", current_level))
+	var max_level: int = int(res.get("max_level", pm.get_max_level(GAME_ID) if pm else current_level))
+
+	var overlay_ps: PackedScene = preload("res://scenes/ui/LevelUpOverlay.tscn")
+	var overlay = overlay_ps.instantiate()
+	get_tree().root.add_child(overlay)
+	if overlay.has_method("setup"):
+		overlay.setup(new_level, new_level >= max_level)
+	await overlay.finished
+
+	if leveled_up:
+		var gm: Node = get_node_or_null("/root/GameManager")
+		if gm:
+			gm.fade_to_scene(SCENE_PATH)
+	else:
+		await get_tree().create_timer(0.6).timeout
+		var gm: Node = get_node_or_null("/root/GameManager")
+		if gm:
+			gm.fade_to_scene("res://scenes/MainMenu.tscn")
 
 # Stop all sounds
 func _stop_all_sounds() -> void:

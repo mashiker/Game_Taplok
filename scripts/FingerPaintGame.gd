@@ -47,6 +47,11 @@ var brush_size_buttons: Array[Button] = []
 var _strokes_done: int = 0
 var _target_strokes: int = 5
 var _goal_rewarded: bool = false
+const GAME_ID := "finger_paint"
+const SCENE_PATH := "res://scenes/FingerPaintGame.tscn"
+var current_level: int = 1
+var goal_type: String = "free"
+var goal_value: int = 0
 
 ## UI References ##
 @onready var color_palette_container: HBoxContainer
@@ -61,6 +66,7 @@ func _ready() -> void:
 	game_name = "FingerPaint"
 	Engine.max_fps = 30  # Cap FPS for drawing performance
 	_update_hud()
+	_apply_level_config()
 	_setup_canvas()
 	_setup_ui_elements()
 	_create_paintings_directory()
@@ -132,11 +138,39 @@ func save_painting() -> void:
 	# Show save confirmation
 	_show_save_confirmation()
 
+	# Trigger level completion on successful save
+	if _strokes_done >= _target_strokes:
+		await _handle_level_complete(true)
+
 # Cancel clear dialog
 func _on_clear_dialog_cancelled() -> void:
 	pass
 
 ## Private Functions ##
+
+func _apply_level_config() -> void:
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	current_level = int(pm.get_level(GAME_ID)) if pm else 1
+	var cfg: Dictionary = pm.get_level_config(GAME_ID, current_level) if pm else {}
+	if cfg.is_empty():
+		# Default level 1: free mode
+		goal_type = "free"
+		goal_value = 0
+	else:
+		goal_type = str(cfg.get("goal_type", "free"))
+		goal_value = int(cfg.get("goal_value", 0))
+		# Reset goal tracking based on new goal type
+		_strokes_done = 0
+		_goal_rewarded = false
+		match goal_type:
+			"free":
+				_target_strokes = 999999
+			"dot_count":
+				_target_strokes = goal_value
+			"line_count":
+				_target_strokes = goal_value
+			"fill_area":
+				_target_strokes = 999999
 
 # Set up the drawing canvas
 func _setup_canvas() -> void:
@@ -511,6 +545,32 @@ func _show_save_confirmation() -> void:
 func _hide_save_confirmation(timer: Timer) -> void:
 	save_label.visible = false
 	timer.queue_free()
+
+func _handle_level_complete(success: bool) -> void:
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	var res: Dictionary = pm.complete_level(GAME_ID, success) if pm else {"leveled_up": false, "new_level": current_level, "max_level": current_level}
+	var leveled_up: bool = bool(res.get("leveled_up", false))
+	var new_level: int = int(res.get("new_level", current_level))
+	var max_level: int = int(res.get("max_level", pm.get_max_level(GAME_ID) if pm else current_level))
+
+	var overlay_ps: PackedScene = preload("res://scenes/ui/LevelUpOverlay.tscn")
+	var overlay = overlay_ps.instantiate()
+	get_tree().root.add_child(overlay)
+	if overlay.has_method("setup"):
+		overlay.setup(new_level, new_level >= max_level)
+	await overlay.finished
+
+	if leveled_up:
+		var gm: Node = get_node_or_null("/root/GameManager")
+		if gm:
+			gm.fade_to_scene(SCENE_PATH)
+	else:
+		await get_tree().create_timer(0.6).timeout
+		var gm: Node = get_node_or_null("/root/GameManager")
+		if gm:
+			gm.fade_to_scene("res://scenes/MainMenu.tscn")
+
+# Trigger level completion on successful save
 
 # Create paintings directory if it doesn't exist
 func _create_paintings_directory() -> void:

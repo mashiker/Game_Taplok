@@ -26,14 +26,18 @@ func _exit_tree() -> void:
 # Called when game starts - override for game-specific initialization
 func _on_game_start() -> void:
 	is_active = true
-	GameManager.start_game(game_name)
+	var gm: Node = get_node_or_null("/root/GameManager")
+	if gm:
+		gm.start_game(game_name)
 	print("Game started: ", game_name)
 
 # Called when game ends - override for cleanup
 func _on_game_end() -> void:
 	is_active = false
 	var metrics = _get_game_metrics()
-	GameManager.end_game(metrics)
+	var gm: Node = get_node_or_null("/root/GameManager")
+	if gm:
+		gm.end_game(metrics)
 	print("Game ended: ", game_name, " metrics: ", metrics)
 
 # Get game metrics for session tracking - override as needed
@@ -46,7 +50,8 @@ func _get_game_metrics() -> Dictionary:
 func _setup_ui() -> void:
 	var back_button = $GameContainer/TopBar/BackButton
 	if back_button:
-		back_button.text = TranslationManager.get_text("back")
+		var tm: Node = get_node_or_null("/root/TranslationManager")
+		back_button.text = tm.get_text("back") if tm else "Back"
 
 # Connect button signals
 func _connect_signals() -> void:
@@ -59,4 +64,6 @@ func _connect_signals() -> void:
 # Handle back button press
 func _on_back_pressed() -> void:
 	game_exited.emit()
-	GameManager.fade_to_scene("res://scenes/MainMenu.tscn")
+	var gm: Node = get_node_or_null("/root/GameManager")
+	if gm:
+		gm.fade_to_scene("res://scenes/MainMenu.tscn")

@@ -120,6 +120,31 @@ func _show_dashboard() -> void:
 	$PINLoginPanel.visible = false
 	$DashboardContent.visible = true
 	_refresh_dashboard()
+	_maybe_add_qa_button()
+
+func _maybe_add_qa_button() -> void:
+	# Only show in debug/editor builds (so production release stays clean)
+	if not (OS.is_debug_build() or Engine.is_editor_hint()):
+		return
+	var header: HBoxContainer = $DashboardContent/HeaderBar/HeaderHBox
+	if not header:
+		return
+	if header.has_node("QAButton"):
+		return
+	var b := Button.new()
+	b.name = "QAButton"
+	b.text = "QA"
+	b.custom_minimum_size = Vector2(70, 44)
+	b.pressed.connect(func():
+		GameManager.fade_to_scene("res://scenes/QARunner.tscn")
+	)
+	# Insert before BackButton for nicer layout
+	var back_btn: Node = header.get_node("BackButton")
+	if back_btn:
+		header.add_child(b)
+		header.move_child(b, max(0, header.get_child_count() - 2))
+	else:
+		header.add_child(b)
 
 # Clear PIN input fields
 func _clear_pin_inputs() -> void:

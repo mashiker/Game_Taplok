@@ -151,6 +151,8 @@ func _setup_canvas() -> void:
 	# Create initial white canvas
 	canvas_image = Image.create(CANVAS_WIDTH, CANVAS_HEIGHT, false, Image.FORMAT_RGBA8)
 	canvas_image.fill(Color.WHITE)
+	# Ensure template image is initialized
+	template_image = Image.new()
 
 	canvas_texture = ImageTexture.new()
 	canvas_texture.set_image(canvas_image)
@@ -175,15 +177,10 @@ func _setup_template_selector() -> void:
 		btn.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
 		btn.ignore_texture_size = true
 
-		# Load template as thumbnail
-		var template_img = Image.new()
-		var error = template_img.load(template_data["path"])
-		if error == OK:
-			var thumb = template_img.duplicate()
-			thumb.resize(100, 100, Image.INTERPOLATE_NEAREST)
-			var thumb_tex = ImageTexture.new()
-			thumb_tex.set_image(thumb)
-			btn.texture_normal = thumb_tex
+		# Load template thumbnail as Texture2D (export-safe)
+		var tex_path: String = template_data.get("path", "")
+		if not tex_path.is_empty() and ResourceLoader.exists(tex_path):
+			btn.texture_normal = load(tex_path)
 
 		btn.pressed.connect(_on_template_pressed.bind(template_data))
 		template_list.add_child(btn)
@@ -254,10 +251,18 @@ func _load_template_by_age() -> void:
 
 # Load template image onto canvas
 func _load_template_image(path: String) -> void:
-	var error = template_image.load(path)
-	if error != OK:
-		push_error("Failed to load template: ", path)
+	if path.is_empty() or not ResourceLoader.exists(path):
+		push_error("Failed to load template (missing): ", path)
 		return
+	var tex := load(path)
+	if not (tex is Texture2D):
+		push_error("Failed to load template (not Texture2D): ", path)
+		return
+	var img := (tex as Texture2D).get_image()
+	if not img:
+		push_error("Failed to load template image data: ", path)
+		return
+	template_image = img
 
 	# Resize template to canvas size
 	template_image.resize(CANVAS_WIDTH, CANVAS_HEIGHT, Image.INTERPOLATE_NEAREST)

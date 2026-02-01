@@ -21,6 +21,10 @@ var slots: Array[Slot] = []
 var matched_count: int = 0
 var active_shapes_count: int = 2  # Will be set based on progression
 
+const GAME_ID := "drag_match"
+const SCENE_PATH := "res://scenes/DragMatchGame.tscn"
+var current_level: int = 1
+
 ## Node References ##
 @onready var shapes_container: HBoxContainer = $GameContainer/GameContent/ShapesContainer
 @onready var slots_container: GridContainer = $GameContainer/GameContent/SlotsContainer
@@ -71,16 +75,10 @@ func on_shape_dropped(shape: Shape, slot: Slot) -> void:
 
 # Determine difficulty based on progression
 func _determine_difficulty() -> void:
-	var times_played = Database.get_game_play_count("DragMatch")
-
-	if times_played < 3:
-		active_shapes_count = 2  # Sessions 1-3: 2 shapes
-	elif times_played < 8:
-		active_shapes_count = 3  # Sessions 4-7: 3 shapes
-	else:
-		active_shapes_count = 4  # Sessions 8+: 4 shapes
-
-	print("Drag Match difficulty: ", active_shapes_count, " shapes (session #", times_played + 1, ")")
+	current_level = ProgressManager.get_level(GAME_ID)
+	var cfg := ProgressManager.get_level_config(GAME_ID, current_level)
+	active_shapes_count = int(cfg.get("pairs", active_shapes_count))
+	print("Drag Match level: ", current_level, " => ", active_shapes_count, " pairs")
 
 # Spawn shape pairs and arrange in scene
 func _spawn_shapes_and_slots() -> void:
@@ -227,9 +225,27 @@ func _show_completion_message() -> void:
 	# End session
 	SessionManager.end_session()
 
-	# Fade back to menu after delay
-	await get_tree().create_timer(3.0).timeout
-	GameManager.fade_to_scene("res://scenes/MainMenu.tscn")
+	# Level completion flow
+	await _handle_level_complete(true)
+
+func _handle_level_complete(success: bool) -> void:
+	var res := ProgressManager.complete_level(GAME_ID, success)
+	var leveled_up: bool = bool(res.get("leveled_up", false))
+	var new_level: int = int(res.get("new_level", current_level))
+	var max_level: int = int(res.get("max_level", ProgressManager.get_max_level(GAME_ID)))
+
+	var overlay_ps: PackedScene = preload("res://scenes/ui/LevelUpOverlay.tscn")
+	var overlay = overlay_ps.instantiate()
+	get_tree().root.add_child(overlay)
+	if overlay.has_method("setup"):
+		overlay.setup(new_level, new_level >= max_level)
+	await overlay.finished
+
+	if leveled_up:
+		GameManager.fade_to_scene(SCENE_PATH)
+	else:
+		await get_tree().create_timer(0.6).timeout
+		GameManager.fade_to_scene("res://scenes/MainMenu.tscn")
 
 ## Signal Callbacks ##
 

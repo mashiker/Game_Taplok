@@ -1,0 +1,7 @@
+[
+  {"max_balloons": 6, "colors": ["red","blue"], "target_goal": 3, "rounds_per_level": 2, "respawn_delay": 0.85},
+  {"max_balloons": 8, "colors": ["red","blue"], "target_goal": 4, "rounds_per_level": 2, "respawn_delay": 0.75},
+  {"max_balloons": 10, "colors": ["red","blue","yellow"], "target_goal": 4, "rounds_per_level": 2, "respawn_delay": 0.70},
+  {"max_balloons": 12, "colors": ["red","blue","yellow"], "target_goal": 5, "rounds_per_level": 2, "respawn_delay": 0.65},
+  {"max_balloons": 14, "colors": ["red","blue","yellow","green"], "target_goal": 6, "rounds_per_level": 2, "respawn_delay": 0.60}
+]

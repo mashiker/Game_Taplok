@@ -1,0 +1,7 @@
+[
+  {"bpm": 80, "tolerance_ms": 240},
+  {"bpm": 90, "tolerance_ms": 220},
+  {"bpm": 100, "tolerance_ms": 200},
+  {"bpm": 110, "tolerance_ms": 180},
+  {"bpm": 120, "tolerance_ms": 170}
+]

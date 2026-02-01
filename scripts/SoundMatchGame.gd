@@ -11,7 +11,7 @@ const OPTIONS_PER_ROUND := 4
 @onready var objective_label: Label = $GameContainer/TopBar/ObjectiveLabel
 @onready var progress_label: Label = $GameContainer/TopBar/ProgressLabel
 
-var theme: Dictionary = {}
+var theme_data: Dictionary = {}
 var items: Array = []
 
 var _target_id: String = ""
@@ -39,10 +39,10 @@ func _load_theme() -> void:
 		push_error("Invalid theme JSON: %s" % THEME_PATH)
 		return
 
-	theme = data
-	items = theme.get("items", [])
+	theme_data = data
+	items = theme_data.get("items", [])
 
-	var bg_path: String = theme.get("background", "")
+	var bg_path: String = theme_data.get("background", "")
 	if background and not bg_path.is_empty() and ResourceLoader.exists(bg_path):
 		background.texture = load(bg_path)
 

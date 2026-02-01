@@ -1,0 +1,7 @@
+[
+  {"template_complexity": "simple", "color_count": 3, "hint_enabled": true},
+  {"template_complexity": "simple", "color_count": 4, "hint_enabled": true},
+  {"template_complexity": "medium", "color_count": 4, "hint_enabled": false},
+  {"template_complexity": "medium", "color_count": 6, "hint_enabled": false},
+  {"template_complexity": "complex", "color_count": 8, "hint_enabled": false}
+]

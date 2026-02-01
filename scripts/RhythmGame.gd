@@ -16,9 +16,9 @@ const PARTICLE_COUNT: int = 8  # Number of particles on correct tap
 
 ## Song Configuration ##
 const SONGS: Array = [
-	{"name": "Twinkle Twinkle ID", "path": "res://assets/sounds/music/twinkle_twinkle.ogg", "beats": 12},
-	{"name": "Cicak-cicak di Dinding", "path": "res://assets/sounds/music/cicak_cicak.ogg", "beats": 16},
-	{"name": "Lihat Lihat Penyu", "path": "res://assets/sounds/music/lihat_lihat_penyu.ogg", "beats": 14}
+	{"name": "Twinkle Twinkle ID", "path": "res://assets/sounds/music/twinkle_twinkle.wav", "beats": 12},
+	{"name": "Cicak-cicak di Dinding", "path": "res://assets/sounds/music/cicak_cicak.wav", "beats": 16},
+	{"name": "Lihat Lihat Penyu", "path": "res://assets/sounds/music/lihat_lihat_penyu.wav", "beats": 14}
 ]
 
 ## Circle Colors ##

@@ -1,0 +1,7 @@
+[
+  {"goal_type": "free", "goal_value": 0},
+  {"goal_type": "dot_count", "goal_value": 5},
+  {"goal_type": "line_count", "goal_value": 3},
+  {"goal_type": "fill_area", "goal_value": 30},
+  {"goal_type": "fill_area", "goal_value": 50}
+]

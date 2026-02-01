@@ -1,0 +1,7 @@
+[
+  {"sequence_length": 1, "animals_in_pool": ["kucing"]},
+  {"sequence_length": 2, "animals_in_pool": ["kucing", "anjing"]},
+  {"sequence_length": 3, "animals_in_pool": ["kucing", "anjing", "ayam"]},
+  {"sequence_length": 4, "animals_in_pool": ["kucing", "anjing", "ayam", "sapi"]},
+  {"sequence_length": 5, "animals_in_pool": ["kucing", "anjing", "ayam", "sapi", "bebek"]}
+]

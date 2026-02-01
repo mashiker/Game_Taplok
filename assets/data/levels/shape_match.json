@@ -1,0 +1,7 @@
+[
+  {"shape_count": 2, "distractors": 0, "similarity": "low"},
+  {"shape_count": 3, "distractors": 1, "similarity": "low"},
+  {"shape_count": 4, "distractors": 2, "similarity": "medium"},
+  {"shape_count": 5, "distractors": 3, "similarity": "medium"},
+  {"shape_count": 6, "distractors": 4, "similarity": "high"}
+]

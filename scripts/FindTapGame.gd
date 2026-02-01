@@ -14,7 +14,7 @@ const TARGET_PER_ROUND := 5
 @onready var progress_label: Label = $GameContainer/TopBar/ProgressLabel
 @onready var background: TextureRect = $Background
 
-var theme: Dictionary = {}
+var theme_data: Dictionary = {}
 var items: Array = []
 var target_id: String = ""
 var progress: int = 0
@@ -53,10 +53,10 @@ func _load_theme(path: String) -> void:
 	var f = FileAccess.open(path, FileAccess.READ)
 	var data = JSON.parse_string(f.get_as_text())
 	if typeof(data) == TYPE_DICTIONARY:
-		theme = data
-		items = theme.get("items", [])
+		theme_data = data
+		items = theme_data.get("items", [])
 		# Optional background override per theme
-		var bg_path: String = theme.get("background", "")
+		var bg_path: String = theme_data.get("background", "")
 		if background and not bg_path.is_empty() and ResourceLoader.exists(bg_path):
 			background.texture = load(bg_path)
 
@@ -90,14 +90,14 @@ func _apply_responsive_layout() -> void:
 
 	# Keep it readable on 1280x720.
 	if is_landscape:
-		grid.theme_override_constants.h_separation = 18
-		grid.theme_override_constants.v_separation = 18
+		grid.add_theme_constant_override("h_separation", 18)
+		grid.add_theme_constant_override("v_separation", 18)
 		# If we have few items, keep them on one row. Otherwise wrap.
 		grid.columns = clampi(items.size(), 4, 6)
 		_set_button_min_size(Vector2(160, 160))
 	else:
-		grid.theme_override_constants.h_separation = 16
-		grid.theme_override_constants.v_separation = 16
+		grid.add_theme_constant_override("h_separation", 16)
+		grid.add_theme_constant_override("v_separation", 16)
 		grid.columns = clampi(items.size(), 3, 5)
 		_set_button_min_size(Vector2(180, 180))
 
@@ -119,9 +119,11 @@ func _update_hud() -> void:
 	if objective_label:
 		var label = _label_for_id(target_id)
 		objective_label.text = "Tap: %s" % label
-		# Prompt voice (best-effort, currently transport phrases)
-		var voice_path = "words/id/transport/tap_%s.wav" % target_id
-		AudioManager.play_voice(voice_path)
+		# Prompt voice (best-effort). Only play if file exists to avoid noisy warnings.
+		var voice_path := "words/id/transport/tap_%s.wav" % target_id
+		var full_path := voice_path if voice_path.begins_with("res://") or voice_path.begins_with("user://") else ("res://assets/sounds/" + voice_path)
+		if FileAccess.file_exists(full_path):
+			AudioManager.play_voice(voice_path)
 
 func _label_for_id(id: String) -> String:
 	for it in items:

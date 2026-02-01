@@ -5,8 +5,19 @@ extends SceneTree
 #   godot --headless --path . -s res://scripts/tests/smoke_test.gd
 
 const SCENES := [
+	# "res://scenes/MainMenu.tscn", # skipped in smoke_test (autoload reference)
+	"res://scenes/TapPopGame.tscn",
 	"res://scenes/DragMatchGame.tscn",
 	"res://scenes/MemoryFlipGame.tscn",
+	"res://scenes/PianoGame.tscn",
+	"res://scenes/FingerPaintGame.tscn",
+	"res://scenes/ColoringGame.tscn",
+	"res://scenes/ShapeMatchGame.tscn",
+	"res://scenes/RhythmGame.tscn",
+	"res://scenes/FindTapThemeSelect.tscn",
+	"res://scenes/FindTapGame.tscn",
+	"res://scenes/SoundMatchGame.tscn",
+	"res://scenes/ParentDashboard.tscn",
 ]
 
 func _init() -> void:

@@ -23,6 +23,9 @@ enum GameState {
 
 ## Variables ##
 var game_name: String = "Memory Flip"
+const GAME_ID := "memory_flip"
+const SCENE_PATH := "res://scenes/MemoryFlipGame.tscn"
+var current_level: int = 1
 var cards: Array[Card] = []
 var flipped_cards: Array[Card] = []
 var game_state: GameState = GameState.IDLE
@@ -91,13 +94,20 @@ func _load_child_age() -> void:
 				if data.has("age"):
 					child_age = data["age"]
 
-	# Set grid size based on age
+	# Base grid size based on age
 	if child_age >= 4:
 		grid_rows = 2
 		grid_cols = 3  # 6 cards for ages 4+
 	else:
 		grid_rows = 2
 		grid_cols = 2  # 4 cards for ages 2-3
+
+	# Override by level config
+	current_level = ProgressManager.get_level(GAME_ID)
+	var cfg := ProgressManager.get_level_config(GAME_ID, current_level)
+	if not cfg.is_empty():
+		grid_rows = int(cfg.get("rows", grid_rows))
+		grid_cols = int(cfg.get("cols", grid_cols))
 
 	total_pairs = (grid_rows * grid_cols) / 2
 
@@ -252,4 +262,22 @@ func _on_game_won() -> void:
 
 # Transition to menu after win
 func _on_win_transition() -> void:
-	GameManager.fade_to_scene("res://scenes/MainMenu.tscn")
+	await _handle_level_complete(true)
+
+func _handle_level_complete(success: bool) -> void:
+	var res := ProgressManager.complete_level(GAME_ID, success)
+	var leveled_up: bool = bool(res.get("leveled_up", false))
+	var new_level: int = int(res.get("new_level", current_level))
+	var max_level: int = int(res.get("max_level", ProgressManager.get_max_level(GAME_ID)))
+
+	var overlay_ps: PackedScene = preload("res://scenes/ui/LevelUpOverlay.tscn")
+	var overlay = overlay_ps.instantiate()
+	get_tree().root.add_child(overlay)
+	if overlay.has_method("setup"):
+		overlay.setup(new_level, new_level >= max_level)
+	await overlay.finished
+
+	if leveled_up:
+		GameManager.fade_to_scene(SCENE_PATH)
+	else:
+		GameManager.fade_to_scene("res://scenes/MainMenu.tscn")

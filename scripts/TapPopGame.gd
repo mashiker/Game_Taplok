@@ -10,8 +10,11 @@ const RESPAWN_DELAY: float = 0.7  # Faster pace
 const SCREEN_MARGIN: int = 40     # Pixels from container edge
 const POOL_SIZE: int = 10         # Slightly bigger pool
 
-# Round objective
+# Round objective (default; overridden by level config)
 const TARGET_PER_ROUND: int = 5
+
+const GAME_ID := "tap_pop"
+const SCENE_PATH := "res://scenes/TapPopGame.tscn"
 
 ## Balloon Colors ##
 const BALLOON_COLORS = {
@@ -30,7 +33,7 @@ const COLOR_TRANSLATION_KEYS = {
 
 ## Audio Paths ##
 const POP_SOUND_PATH: String = "sfx/pop_success.ogg"
-const COLOR_WORD_PATH_TEMPLATE: String = "words/id/warna_{color}.ogg"
+const COLOR_WORD_PATH_TEMPLATE: String = "words/id/warna_{color}.wav"
 
 ## Variables ##
 var balloon_scene: PackedScene = null
@@ -46,6 +49,11 @@ var target_color: String = "red"
 var target_goal: int = TARGET_PER_ROUND
 var target_progress: int = 0
 
+# Level progression
+var current_level: int = 1
+var rounds_per_level: int = 2
+var rounds_completed: int = 0
+
 ## Built-in Functions ##
 func _ready() -> void:
 	game_name = "TapPop"
@@ -58,15 +66,20 @@ func _ready() -> void:
 
 	child_age = _get_child_age()
 	_setup_age_gating()
+	_apply_level_config()
 	_initialize_balloon_pool()
 
 	respawn_timer = Timer.new()
-	respawn_timer.wait_time = RESPAWN_DELAY
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	var cfg: Dictionary = pm.get_level_config(GAME_ID, current_level) if pm else {}
+	respawn_timer.wait_time = float(cfg.get("respawn_delay", RESPAWN_DELAY))
 	respawn_timer.one_shot = true
 	respawn_timer.timeout.connect(_on_respawn_timeout)
 	add_child(respawn_timer)
 
-	SessionManager.start_session(game_name, "cognitive")
+	var sm: Node = get_node_or_null("/root/SessionManager")
+	if sm:
+		sm.start_session(game_name, "cognitive")
 
 	_setup_round()
 	_update_hud()
@@ -82,13 +95,16 @@ func _on_game_end() -> void:
 			_return_balloon_to_pool(balloon)
 	active_balloons.clear()
 
-	SessionManager.end_session()
+	var sm: Node = get_node_or_null("/root/SessionManager")
+	if sm:
+		sm.end_session()
 	super._on_game_end()
 
 func _get_game_metrics() -> Dictionary:
 	var base_metrics = super._get_game_metrics()
 	base_metrics["game_type"] = "tap_pop"
-	base_metrics["balloons_popped"] = SessionManager.get_tap_count()
+	var sm: Node = get_node_or_null("/root/SessionManager")
+	base_metrics["balloons_popped"] = int(sm.get_tap_count()) if sm else 0
 	base_metrics["target_color"] = target_color
 	base_metrics["target_progress"] = target_progress
 	return base_metrics
@@ -99,12 +115,16 @@ func _setup_round() -> void:
 	if available_colors.size() == 0:
 		available_colors = ["red", "blue", "yellow"]
 	target_color = available_colors.pick_random()
-	target_goal = TARGET_PER_ROUND
+	# target_goal may be overridden by level config
+	# (still reset progress every round)
+	# keep current target_goal value
 	target_progress = 0
 
 	# Optional: voice prompt (if audio exists)
 	var audio_path = COLOR_WORD_PATH_TEMPLATE.format({"color": _color_name_to_indonesian(target_color)})
-	AudioManager.play_voice(audio_path)
+	var am: Node = get_node_or_null("/root/AudioManager")
+	if am:
+		am.play_voice(audio_path)
 
 func _update_hud() -> void:
 	var target_label = $GameContainer/HUD/TargetLabel
@@ -112,7 +132,8 @@ func _update_hud() -> void:
 
 	if target_label:
 		var color_key = COLOR_TRANSLATION_KEYS.get(target_color, "")
-		var word = TranslationManager.get_text(color_key) if not color_key.is_empty() else target_color
+		var tm: Node = get_node_or_null("/root/TranslationManager")
+		var word = tm.get_text(color_key) if (tm and not color_key.is_empty()) else target_color
 		target_label.text = "Pop: %s" % word
 
 	if progress_label:
@@ -120,13 +141,47 @@ func _update_hud() -> void:
 
 func _on_round_complete() -> void:
 	# Celebrate bigger
-	RewardSystem.reward_success(get_viewport().get_visible_rect().size / 2.0, 2.0)
-	AudioManager.play_sfx(POP_SOUND_PATH)
+	var rs: Node = get_node_or_null("/root/RewardSystem")
+	if rs:
+		rs.reward_success(get_viewport().get_visible_rect().size / 2.0, 2.0)
+	var am: Node = get_node_or_null("/root/AudioManager")
+	if am:
+		am.play_sfx(POP_SOUND_PATH)
+
+	rounds_completed += 1
+	if rounds_completed >= rounds_per_level:
+		await _handle_level_complete(true)
+		return
 
 	# Start a new round after a short delay
 	await get_tree().create_timer(0.8).timeout
 	_setup_round()
 	_update_hud()
+
+func _handle_level_complete(success: bool) -> void:
+	# Level-up flow with mascot overlay
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	var res: Dictionary = pm.complete_level(GAME_ID, success) if pm else {"leveled_up": false, "new_level": current_level, "max_level": current_level}
+	var leveled_up: bool = bool(res.get("leveled_up", false))
+	var new_level: int = int(res.get("new_level", current_level))
+	var max_level: int = int(res.get("max_level", pm.get_max_level(GAME_ID) if pm else current_level))
+
+	var overlay_ps: PackedScene = preload("res://scenes/ui/LevelUpOverlay.tscn")
+	var overlay = overlay_ps.instantiate()
+	get_tree().root.add_child(overlay)
+	if overlay.has_method("setup"):
+		overlay.setup(new_level, new_level >= max_level)
+	await overlay.finished
+
+	var gm: Node = get_node_or_null("/root/GameManager")
+	if leveled_up:
+		if gm:
+			gm.fade_to_scene(SCENE_PATH)
+	else:
+		# If already max level, go back to menu after celebration
+		await get_tree().create_timer(0.6).timeout
+		if gm:
+			gm.fade_to_scene("res://scenes/MainMenu.tscn")
 
 ## Pool / Spawning ##
 func _initialize_balloon_pool() -> void:
@@ -201,7 +256,9 @@ func _spawn_balloon() -> void:
 
 # Handle balloon pop
 func _on_balloon_popped(color_name: String, balloon: Node) -> void:
-	SessionManager.record_tap()
+	var sm: Node = get_node_or_null("/root/SessionManager")
+	if sm:
+		sm.record_tap()
 
 	# Remove from active
 	if balloon and is_instance_valid(balloon):
@@ -212,24 +269,34 @@ func _on_balloon_popped(color_name: String, balloon: Node) -> void:
 	if color_name == target_color:
 		target_progress += 1
 		_update_hud()
-		RewardSystem.reward_success(balloon.global_position if balloon else get_viewport().get_mouse_position(), 1.3)
+		var rs: Node = get_node_or_null("/root/RewardSystem")
+		if rs:
+			rs.reward_success(balloon.global_position if balloon else get_viewport().get_mouse_position(), 1.3)
 		if target_progress >= target_goal:
 			_on_round_complete()
 
 	# Base feedback
-	RewardSystem.reward_tap(balloon.global_position if balloon else get_viewport().get_mouse_position())
+	var rs: Node = get_node_or_null("/root/RewardSystem")
+	if rs:
+		rs.reward_tap(balloon.global_position if balloon else get_viewport().get_mouse_position())
 
-	AudioManager.play_sfx(POP_SOUND_PATH)
+	var am: Node = get_node_or_null("/root/AudioManager")
+	if am:
+		am.play_sfx(POP_SOUND_PATH)
 
 	# Voice callout (if exists)
 	var audio_path = COLOR_WORD_PATH_TEMPLATE.format({"color": _color_name_to_indonesian(color_name)})
-	AudioManager.play_voice(audio_path)
+	if am:
+		am.play_voice(audio_path)
 
 	# Auto-end check
-	SessionManager.check_auto_end_conditions()
-	if not SessionManager.is_session_active():
+	if sm:
+		sm.check_auto_end_conditions()
+	if sm and not sm.is_session_active():
 		await get_tree().create_timer(1.0).timeout
-		GameManager.fade_to_scene("res://scenes/MainMenu.tscn")
+		var gm: Node = get_node_or_null("/root/GameManager")
+		if gm:
+			gm.fade_to_scene("res://scenes/MainMenu.tscn")
 		return
 
 	respawn_timer.start()
@@ -239,17 +306,35 @@ func _on_respawn_timeout() -> void:
 		_spawn_balloon()
 
 func _get_child_age() -> int:
-	if GameManager.has_method("get_child_age"):
-		return GameManager.get_child_age()
+	var gm: Node = get_node_or_null("/root/GameManager")
+	if gm and gm.has_method("get_child_age"):
+		return int(gm.get_child_age())
 	return 3
 
 func _setup_age_gating() -> void:
+	# Base defaults by age; can be overridden by level config.
 	if child_age >= 4:
 		max_balloons = MAX_BALLOONS_OLDER
 		available_colors = ["red", "blue", "yellow", "green"]
 	else:
 		max_balloons = MAX_BALLOONS_YOUNG
 		available_colors = ["red", "blue", "yellow"]
+
+func _apply_level_config() -> void:
+	var pm: Node = get_node_or_null("/root/ProgressManager")
+	current_level = int(pm.get_level(GAME_ID)) if pm else 1
+	rounds_completed = 0
+	var cfg: Dictionary = pm.get_level_config(GAME_ID, current_level) if pm else {}
+	if cfg.is_empty():
+		return
+	max_balloons = int(cfg.get("max_balloons", max_balloons))
+	target_goal = int(cfg.get("target_goal", TARGET_PER_ROUND))
+	rounds_per_level = int(cfg.get("rounds_per_level", rounds_per_level))
+	var cols = cfg.get("colors", [])
+	if typeof(cols) == TYPE_ARRAY and cols.size() > 0:
+		available_colors.clear()
+		for c in cols:
+			available_colors.append(str(c))
 
 func _color_name_to_indonesian(color_name: String) -> String:
 	match color_name:
